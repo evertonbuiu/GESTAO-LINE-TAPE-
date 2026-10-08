@@ -1,0 +1,97 @@
+# GESTÃO LINE TAPE no Cloudflare
+
+Esta pasta tem tudo o que o sistema precisa para rodar fora do Lovable e do Supabase:
+
+- **Worker** (`worker/`): o servidor. Responde nos mesmos endereços do Supabase, então as telas do app funcionam sem mudanças.
+  - Login próprio (usuário e senha, com os mesmos perfis: admin, financeiro, funcionário, depósito).
+  - Dados no **Cloudflare D1**: 81 tabelas iguais às de hoje.
+  - Arquivos (logos, fotos, comprovantes, PDFs, certificado) no **Cloudflare R2**.
+  - **135 regras automáticas** reescritas a partir das originais: saldos bancários, lançamentos de vales e adiantamentos, despesas fixas, estoque, manutenção, diárias, totais de eventos, financeiro, contratos, documentos fiscais e auditoria.
+  - **Permissões por perfil** iguais às do banco atual.
+  - As **16 funções de servidor** (NFS-e, C6, Pluggy, WhatsApp, PDFs, usuários, orçamentos e documentos fiscais) com o código original.
+- **Telas** (a raiz do repositório): o mesmo app React, publicado no **Cloudflare Pages**.
+
+---
+
+## Passo a passo para colocar no ar
+
+Tudo é feito pelo painel do Cloudflare (https://dash.cloudflare.com), sem instalar nada no computador.
+
+### 1. Criar a conta e os recursos
+
+1. Crie uma conta gratuita no Cloudflare.
+2. **Banco de dados:** menu *Storage & Databases → D1 → Create database*.
+   - Nome: `gestao-line-tape`
+   - Depois de criado, copie o **Database ID**.
+3. **Arquivos:** menu *R2 → Create bucket*.
+   - Nome: `gestao-line-tape-arquivos`
+   - O R2 pode pedir um cartão para ativar. O uso de uma empresa do seu porte costuma ficar dentro da faixa gratuita.
+4. No GitHub, abra `cloudflare/worker/wrangler.toml` e troque `COLE_AQUI_O_ID_DO_BANCO_D1` pelo ID copiado. Se preferir, mande o ID e eu faço a troca.
+
+### 2. Publicar o servidor (Worker)
+
+1. Menu *Workers & Pages → Create → Workers → Import a repository*.
+2. Conecte o GitHub e escolha o repositório **GESTAO-LINE-TAPE-**.
+3. Configure:
+   - **Root directory:** `cloudflare/worker`
+   - **Build command:** `npm install`
+   - **Deploy command:** `npm run deploy` (cria as tabelas e as regras e publica o servidor)
+4. Depois do primeiro deploy, vá em *Settings → Variables and Secrets* e cadastre os **segredos**:
+
+| Nome | O que colocar |
+|---|---|
+| `JWT_SECRET` | um texto longo e aleatório (mínimo de 32 caracteres) |
+| `SETUP_TOKEN` | qualquer senha temporária, usada só no passo 3 |
+| `SERVICE_ROLE_KEY` | outro texto longo e aleatório |
+
+5. Ainda em variáveis, preencha `PUBLIC_API_URL` com o endereço do Worker (aparece no topo da página do Worker, algo como `https://gestao-line-tape-api.SUA-CONTA.workers.dev`).
+
+### 3. Criar o primeiro administrador
+
+Abra no navegador: `https://ENDEREÇO-DO-WORKER/setup`
+
+Informe o `SETUP_TOKEN`, seu nome, um usuário e uma senha. Isso só funciona enquanto não existe nenhum usuário. Os demais funcionários você cria depois, pela tela de usuários do sistema, como hoje.
+
+### 4. Publicar as telas (Pages)
+
+1. Menu *Workers & Pages → Create → Pages → Connect to Git*. Escolha o mesmo repositório.
+2. Configure:
+   - **Framework preset:** Vite
+   - **Build command:** `npm run build`
+   - **Build output directory:** `dist`
+   - **Variável de ambiente:** `VITE_API_URL` = endereço do Worker (o mesmo do passo 2.5)
+3. Ao terminar, o sistema fica em um endereço como `https://gestao-line-tape.pages.dev`. Também dá para ligar um domínio próprio.
+4. **Segurança:** volte ao Worker e troque `ALLOWED_ORIGINS` de `*` para o endereço do Pages.
+
+### 5. Integrações (opcional, uma por vez)
+
+| Integração | O que configurar no Worker |
+|---|---|
+| **NFS-e** (Goiânia e Nacional) | segredo `NFSE_CERT_PASSWORD`; o arquivo .pfx é enviado pela tela de configuração de NFS-e do sistema |
+| **Banco C6** | segredos `C6_CLIENT_ID` e `C6_CLIENT_SECRET`; variável `C6_API_ENV` (`sandbox` ou `production`); certificado mTLS (veja `wrangler.toml`) |
+| **Pluggy** | segredos `PLUGGY_CLIENT_ID` e `PLUGGY_CLIENT_SECRET` |
+| **WhatsApp** | segredos `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_APP_SECRET`, `WHATSAPP_VERIFY_TOKEN` e `OPENAI_API_KEY`; no painel da Meta, troque a URL do webhook para `https://ENDEREÇO-DO-WORKER/functions/v1/whatsapp-webhook` |
+
+---
+
+## Diferenças em relação ao sistema atual
+
+- **Atualização automática das telas:** no lugar do Supabase Realtime, o app consulta o servidor a cada 4 segundos. O efeito é o mesmo.
+- **Mensagens de erro das regras** têm o mesmo texto, mas sem os valores variáveis. Exemplo: "Transição de status inválida." em vez de "Transição de status inválida: pago -> rascunho".
+- **Busca sem diferenciar maiúsculas** (filtros "contém") não iguala letras acentuadas maiúsculas e minúsculas, como "É" e "é".
+- **Correções feitas na cópia:**
+  - O original não recalculava o saldo da conta antiga quando um lançamento mudava de conta. A cópia recalcula as duas.
+  - O mesmo vale para o total do evento antigo quando uma despesa muda de evento.
+  - Duas permissões antigas deixavam qualquer pessoa, **mesmo sem login**, ler e alterar usuários e perfis (`user_credentials` e `user_roles`). Elas não foram copiadas.
+- **Regra herdada do original:** o banco exige que cada origem (`reference_id`) tenha um único lançamento bancário. Um evento com pagamento principal **e** restante gera dois lançamentos com a mesma origem, e a sincronização automática falha em silêncio. Isso acontece igual no sistema atual. Dá para corrigir depois, se você quiser.
+
+## Para quem for mexer no código
+
+- `tools/replay_migrations.py`: lê as 307 migrações do Supabase e monta o modelo final do banco.
+- `tools/gen_d1_schema.py`: gera `worker/migrations/0001_schema.sql` (tabelas do D1).
+- `tools/gen_policies.py`: gera as permissões por perfil.
+- `tools/gen_rules.py` + `rules/functions.py`: geram `worker/migrations/0002_rules.sql` (regras automáticas).
+- `tools/port_functions.py`: copia as funções de `supabase/functions` para `worker/src/edge`.
+- Testes: `cd cloudflare/worker && npm test` (precisa do Node 22.6 ou mais novo).
+
+Se o banco atual tiver regras diferentes das migrações, salve a lista real em `rules/active_triggers.json` e rode `python3 cloudflare/tools/gen_rules.py`. Só as regras dessa lista serão criadas.

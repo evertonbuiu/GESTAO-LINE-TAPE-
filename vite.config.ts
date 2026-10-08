@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { fileURLToPath } from "node:url";
@@ -11,7 +11,23 @@ const appVersion = new Date()
   .replace(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}).*$/, '$1.$2.$3.$4$5');
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+// Endereço do servidor (Worker no Cloudflare). As regras de cache do app
+// instalado (PWA) usam o host dele no lugar de *.supabase.co.
+const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, projectRoot, '');
+  let apiHost = 'invalid.local';
+  try {
+    apiHost = new URL(env.VITE_API_URL || process.env.VITE_API_URL || '').hostname || apiHost;
+  } catch {
+    // sem VITE_API_URL: regras de cache ficam inativas
+  }
+  const H = escapeRe(apiHost);
+  const apiRest = new RegExp(`^https?://${H}/rest/v1/`);
+  const apiFiles = new RegExp(`^https?://${H}/storage/v1/object/`);
+  const apiAny = new RegExp(`^https?://${H}/`);
+  return {
   define: {
     __APP_VERSION__: JSON.stringify(appVersion),
   },
@@ -83,9 +99,7 @@ export default defineConfig(({ mode }) => ({
             // Toda gravação feita sem internet fica numa fila persistente do
             // Service Worker. O Workbox reenvia na mesma ordem quando a rede
             // voltar, mesmo após fechar e abrir o aplicativo.
-            urlPattern: ({ url }) =>
-              url.hostname.endsWith('.supabase.co') &&
-              url.pathname.startsWith('/rest/v1/'),
+            urlPattern: apiRest,
             method: 'POST',
             handler: 'NetworkOnly',
             options: {
@@ -97,9 +111,7 @@ export default defineConfig(({ mode }) => ({
             },
           },
           {
-            urlPattern: ({ url }) =>
-              url.hostname.endsWith('.supabase.co') &&
-              url.pathname.startsWith('/rest/v1/'),
+            urlPattern: apiRest,
             method: 'PATCH',
             handler: 'NetworkOnly',
             options: {
@@ -111,9 +123,7 @@ export default defineConfig(({ mode }) => ({
             },
           },
           {
-            urlPattern: ({ url }) =>
-              url.hostname.endsWith('.supabase.co') &&
-              url.pathname.startsWith('/rest/v1/'),
+            urlPattern: apiRest,
             method: 'DELETE',
             handler: 'NetworkOnly',
             options: {
@@ -127,10 +137,8 @@ export default defineConfig(({ mode }) => ({
           {
             // Mantém no aparelho as últimas consultas bem-sucedidas. Cada URL
             // conserva sua própria resposta e a rede sempre tem prioridade.
-            urlPattern: ({ url, request }) =>
-              request.method === 'GET' &&
-              url.hostname.endsWith('.supabase.co') &&
-              url.pathname.startsWith('/rest/v1/'),
+            urlPattern: apiRest,
+            method: 'GET',
             handler: 'NetworkFirst',
             options: {
               cacheName: 'supabase-consultas',
@@ -140,10 +148,8 @@ export default defineConfig(({ mode }) => ({
             },
           },
           {
-            urlPattern: ({ url, request }) =>
-              request.method === 'GET' &&
-              url.hostname.endsWith('.supabase.co') &&
-              url.pathname.startsWith('/storage/v1/object/'),
+            urlPattern: apiFiles,
+            method: 'GET',
             handler: 'CacheFirst',
             options: {
               cacheName: 'supabase-anexos',
@@ -163,7 +169,7 @@ export default defineConfig(({ mode }) => ({
           {
             // Auth, Edge Functions e demais endpoints sensíveis continuam
             // sempre online. REST e anexos já foram tratados acima.
-            urlPattern: ({ url }) => url.hostname.endsWith('.supabase.co'),
+            urlPattern: apiAny,
             handler: 'NetworkOnly',
           },
           {
@@ -185,4 +191,5 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(projectRoot, "./src"),
     },
   },
-}));
+};
+});

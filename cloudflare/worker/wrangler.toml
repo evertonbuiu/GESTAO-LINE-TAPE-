@@ -1,0 +1,57 @@
+# Servidor da GESTÃO LINE TAPE no Cloudflare Workers.
+# Passo a passo completo em cloudflare/README.md.
+
+name = "gestao-line-tape-api"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Banco de dados (Cloudflare D1). Crie o banco no painel do Cloudflare
+# (Storage & Databases > D1 > Create) com o nome abaixo e cole o ID aqui.
+[[d1_databases]]
+binding = "DB"
+database_name = "gestao-line-tape"
+database_id = "COLE_AQUI_O_ID_DO_BANCO_D1"
+migrations_dir = "migrations"
+
+# Arquivos: logos, fotos, comprovantes, PDFs (Cloudflare R2).
+# Crie o bucket no painel (R2 > Create bucket) com o nome abaixo.
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "gestao-line-tape-arquivos"
+
+[vars]
+# Endereço público deste Worker (usado em links de arquivos e no webhook do WhatsApp).
+# Ex.: "https://gestao-line-tape-api.SUA-CONTA.workers.dev"
+PUBLIC_API_URL = ""
+# Sites que podem usar a API (separados por vírgula). Ex.: "https://gestao-line-tape.pages.dev"
+ALLOWED_ORIGINS = "*"
+# Ambiente do banco C6: "sandbox" ou "production"
+C6_API_ENV = "sandbox"
+# Funções que rodam sozinhas no horário de [triggers] (separadas por vírgula).
+# Ex.: "c6-statement-sync,pluggy-sync"
+SCHEDULED_FUNCTIONS = ""
+
+# Segredos (NÃO coloque aqui; cadastre em Settings > Variables and Secrets):
+#   JWT_SECRET            texto longo e aleatório (assina os logins)
+#   SETUP_TOKEN           texto qualquer, usado só para criar o primeiro admin
+#   SERVICE_ROLE_KEY      texto longo e aleatório (uso interno das funções)
+#   NFSE_CERT_PASSWORD    senha do certificado digital A1 (.pfx)
+#   C6_CLIENT_ID, C6_CLIENT_SECRET
+#   PLUGGY_CLIENT_ID, PLUGGY_CLIENT_SECRET
+#   WHATSAPP_ACCESS_TOKEN, WHATSAPP_APP_SECRET, WHATSAPP_VERIFY_TOKEN
+#   OPENAI_API_KEY
+
+# Certificado de cliente do banco C6 (mTLS). Depois de enviar o certificado
+# com "npx wrangler mtls-certificate upload --cert c6.pem --key c6.key --name c6",
+# descomente e cole o ID:
+# [[mtls_certificates]]
+# binding = "C6_MTLS"
+# certificate_id = "COLE_AQUI_O_ID_DO_CERTIFICADO"
+
+# Execução automática (ex.: sincronizar extrato do C6 a cada 6 horas).
+# [triggers]
+# crons = ["0 */6 * * *"]
+
+[observability]
+enabled = true

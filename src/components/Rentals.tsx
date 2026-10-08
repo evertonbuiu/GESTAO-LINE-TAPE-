@@ -989,8 +989,8 @@ export const Rentals = () => {
       let fileName = pdfPath;
       
       // Handle full Supabase URLs
-      if (pdfPath.includes('supabase.co/storage/v1/object/public/budget-pdfs/')) {
-        fileName = pdfPath.split('supabase.co/storage/v1/object/public/budget-pdfs/')[1];
+      if (pdfPath.includes('/storage/v1/object/public/budget-pdfs/')) {
+        fileName = pdfPath.split('/storage/v1/object/public/budget-pdfs/')[1];
       } else if (pdfPath.includes('/budget-pdfs/')) {
         fileName = pdfPath.split('/budget-pdfs/')[1];
       } else if (pdfPath.includes('public/budget-pdfs/')) {

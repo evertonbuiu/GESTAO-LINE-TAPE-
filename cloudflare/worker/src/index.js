@@ -38,6 +38,57 @@ export async function buildContext(request, env, db) {
   return { uid: s.sub, email: s.email, role: [...roleSet][0] || null, roles: roleSet, permissions };
 }
 
+// Página simples para criar o primeiro administrador pelo navegador.
+const SETUP_PAGE = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Configuração inicial</title>
+<style>body{font-family:system-ui,sans-serif;background:#0f1220;color:#e8e8f0;display:grid;place-items:center;min-height:100vh;margin:0}
+form{background:#171a2b;padding:28px;border-radius:12px;width:min(360px,90vw);display:grid;gap:12px}
+h1{font-size:18px;margin:0 0 4px}p{margin:0;font-size:13px;color:#a8abc0}
+input,button{padding:10px;border-radius:8px;border:1px solid #2c3050;background:#0f1220;color:inherit;font-size:14px}
+button{background:#6d5dfc;border:0;cursor:pointer;font-weight:600}#msg{font-size:13px;min-height:18px}</style></head>
+<body><form id="f"><h1>GESTÃO LINE TAPE</h1><p>Criar o primeiro administrador. Só funciona enquanto não existe nenhum usuário.</p>
+<input name="token" placeholder="Token de configuração (SETUP_TOKEN)" required>
+<input name="name" placeholder="Seu nome" required>
+<input name="username" placeholder="Usuário" value="admin" required>
+<input name="password" type="password" placeholder="Senha (mín. 6)" minlength="6" required>
+<button>Criar administrador</button><div id="msg"></div></form>
+<script>document.getElementById('f').onsubmit=async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.target));
+const m=document.getElementById('msg');m.textContent='Enviando...';
+const r=await fetch('/setup/first-admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
+const j=await r.json().catch(()=>({}));m.textContent=r.ok?j.message:(j.message||'Erro');}</script></body></html>`;
+
+/**
+ * Cria o primeiro administrador. Só funciona enquanto não existe nenhum
+ * usuário e exige o segredo SETUP_TOKEN (cadastrado no Cloudflare).
+ * Corpo: { "token": "...", "username": "admin", "password": "...", "name": "..." }
+ */
+async function firstAdmin(request, env, db) {
+  const body = (await request.json().catch(() => null)) || {};
+  if (!env.SETUP_TOKEN || body.token !== env.SETUP_TOKEN) {
+    throw new ApiError(403, '42501', 'Token de configuração inválido');
+  }
+  const any = await db.first('SELECT COUNT(*) AS n FROM auth_users');
+  if (any && any.n > 0) throw new ApiError(409, '23505', 'Já existe usuário cadastrado; use a tela de usuários.');
+  const username = String(body.username || 'admin').trim().toLowerCase();
+  if (!body.password || String(body.password).length < 6) {
+    throw new ApiError(400, '22023', 'Informe uma senha com pelo menos 6 caracteres');
+  }
+  const { adminCreateUser } = await import('./auth.js');
+  const user = await adminCreateUser(db, {
+    email: `${username}@linetape.local`,
+    password: String(body.password),
+    user_metadata: { username, name: body.name || username },
+  });
+  await db.tx([
+    {
+      sql: "INSERT INTO user_credentials (id, username, password_hash, name, is_active) VALUES (?, ?, 'managed-by-auth', ?, 1)",
+      params: [user.id, username, body.name || username],
+    },
+    { sql: "INSERT INTO user_roles (user_id, role) VALUES (?, 'admin')", params: [user.id] },
+  ]);
+  return json({ ok: true, username, message: 'Administrador criado. Entre no sistema com esse usuário.' });
+}
+
 async function route(request, env, ctxExec) {
   const url = new URL(request.url);
   const path = url.pathname.replace(/\/+$/, '');
@@ -48,6 +99,12 @@ async function route(request, env, ctxExec) {
   }
 
   let m;
+  if (path === '/setup/first-admin' && request.method === 'POST') {
+    return firstAdmin(request, env, baseDb);
+  }
+  if (path === '/setup' && request.method === 'GET') {
+    return new Response(SETUP_PAGE, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+  }
   if ((m = path.match(/^\/auth\/v1\/(.+)$/))) {
     return handleAuth(request, env, baseDb, m[1]);
   }

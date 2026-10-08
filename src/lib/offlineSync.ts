@@ -20,7 +20,10 @@ export type OfflineSyncState = {
 const isSupabaseRestMutation = (url: string, method: string) => {
   try {
     const parsed = new URL(url, window.location.origin);
-    return parsed.hostname.endsWith(".supabase.co") &&
+    const apiHost = (() => {
+      try { return new URL(String(import.meta.env.VITE_API_URL || "")).hostname; } catch { return ""; }
+    })();
+    return (apiHost ? parsed.hostname === apiHost : parsed.hostname.endsWith(".supabase.co")) &&
       parsed.pathname.startsWith("/rest/v1/") &&
       MUTATION_METHODS.has(method.toUpperCase());
   } catch {

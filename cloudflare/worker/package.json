@@ -1,0 +1,23 @@
+{
+  "name": "gestao-line-tape-api",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Servidor da GESTÃO LINE TAPE no Cloudflare Workers (substitui o Supabase)",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler d1 migrations apply DB --remote && wrangler deploy",
+    "db:migrate": "wrangler d1 migrations apply DB --remote",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "test": "node --no-warnings test/run.mjs core rules policies functions setup"
+  },
+  "dependencies": {
+    "node-forge": "^1.3.1"
+  },
+  "devDependencies": {
+    "wrangler": "^4.40.0"
+  },
+  "engines": {
+    "node": ">=22.6"
+  }
+}

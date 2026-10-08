@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, API_URL } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -123,7 +123,7 @@ export const WhatsAppMessages = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeTab, setActiveTab] = useState("pending");
 
-  const webhookUrl = `https://bvmadmmeheyclurvgrju.supabase.co/functions/v1/whatsapp-webhook`;
+  const webhookUrl = `${API_URL}/functions/v1/whatsapp-webhook`;
   const eventYears = Array.from(new Set([
     new Date().getFullYear(),
     ...events.map(event => Number(event.event_date.slice(0, 4))),
