@@ -981,7 +981,7 @@ Série: ${invoice.rps_series || 'RPS'}
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       {/* Header */}
       <PageActions>
         <div className="flex flex-wrap gap-2">

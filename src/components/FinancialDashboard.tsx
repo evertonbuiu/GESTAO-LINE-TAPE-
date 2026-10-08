@@ -936,7 +936,7 @@ export const FinancialDashboard = () => {
       </div>
 
       {/* Gráficos */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 xl:grid-cols-2">
         <Card>
           <CardHeader>
             <div className="flex flex-wrap items-center justify-between gap-3">
