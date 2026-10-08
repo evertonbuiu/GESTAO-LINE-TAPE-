@@ -47,7 +47,7 @@ h1{font-size:18px;margin:0 0 4px}p{margin:0;font-size:13px;color:#a8abc0}
 input,button{padding:10px;border-radius:8px;border:1px solid #2c3050;background:#0f1220;color:inherit;font-size:14px}
 button{background:#6d5dfc;border:0;cursor:pointer;font-weight:600}#msg{font-size:13px;min-height:18px}</style></head>
 <body><form id="f"><h1>GESTÃO LINE TAPE</h1><p>Criar o primeiro administrador. Só funciona enquanto não existe nenhum usuário.</p>
-<input name="token" placeholder="Token de configuração (SETUP_TOKEN)" required>
+<input name="token" placeholder="Token de configuração (se tiver cadastrado)">
 <input name="name" placeholder="Seu nome" required>
 <input name="username" placeholder="Usuário" value="admin" required>
 <input name="password" type="password" placeholder="Senha (mín. 6)" minlength="6" required>
@@ -64,7 +64,9 @@ const j=await r.json().catch(()=>({}));m.textContent=r.ok?j.message:(j.message||
  */
 async function firstAdmin(request, env, db) {
   const body = (await request.json().catch(() => null)) || {};
-  if (!env.SETUP_TOKEN || body.token !== env.SETUP_TOKEN) {
+  // Com SETUP_TOKEN cadastrado, ele é exigido. Sem ele, a criação só é
+  // possível enquanto não existe nenhum usuário (fecha sozinha em seguida).
+  if (env.SETUP_TOKEN && body.token !== env.SETUP_TOKEN) {
     throw new ApiError(403, '42501', 'Token de configuração inválido');
   }
   const any = await db.first('SELECT COUNT(*) AS n FROM auth_users');
@@ -135,9 +137,37 @@ async function route(request, env, ctxExec) {
   throw new ApiError(404, 'PGRST000', `Rota não encontrada: ${path}`);
 }
 
+/**
+ * Chave que assina os logins: usa o segredo JWT_SECRET se existir; senão,
+ * gera uma chave aleatória na primeira vez e guarda no banco (_settings).
+ */
+let cachedSecret = null;
+async function ensureSecrets(env) {
+  if (env.JWT_SECRET) return;
+  if (!cachedSecret) {
+    const row = await env.DB.prepare("SELECT v FROM _settings WHERE k = 'jwt_secret'").first().catch(() => null);
+    if (row && row.v) {
+      cachedSecret = row.v;
+    } else {
+      const a = new Uint8Array(48);
+      crypto.getRandomValues(a);
+      const fresh = [...a].map((b) => b.toString(16).padStart(2, '0')).join('');
+      await env.DB.prepare("INSERT INTO _settings (k, v) VALUES ('jwt_secret', ?) ON CONFLICT (k) DO NOTHING").bind(fresh).run();
+      const again = await env.DB.prepare("SELECT v FROM _settings WHERE k = 'jwt_secret'").first();
+      cachedSecret = again.v;
+    }
+  }
+  env.JWT_SECRET = cachedSecret;
+}
+
 export default {
   async fetch(request, env, ctxExec) {
     const cors = corsHeaders(env, request);
+    try {
+      await ensureSecrets(env);
+    } catch (e) {
+      return errorResponse(e);
+    }
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
     let res;
     try {

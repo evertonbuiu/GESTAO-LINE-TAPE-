@@ -23,7 +23,7 @@ bucket_name = "gestao-line-tape-arquivos"
 [vars]
 # Endereço público deste Worker (usado em links de arquivos e no webhook do WhatsApp).
 # Ex.: "https://gestao-line-tape-api.SUA-CONTA.workers.dev"
-PUBLIC_API_URL = ""
+PUBLIC_API_URL = "https://gestao-line-tape-api.evertonbuiu0.workers.dev"
 # Sites que podem usar a API (separados por vírgula). Ex.: "https://gestao-line-tape.pages.dev"
 ALLOWED_ORIGINS = "*"
 # Ambiente do banco C6: "sandbox" ou "production"
@@ -33,9 +33,9 @@ C6_API_ENV = "sandbox"
 SCHEDULED_FUNCTIONS = ""
 
 # Segredos (NÃO coloque aqui; cadastre em Settings > Variables and Secrets):
-#   JWT_SECRET            texto longo e aleatório (assina os logins)
-#   SETUP_TOKEN           texto qualquer, usado só para criar o primeiro admin
-#   SERVICE_ROLE_KEY      texto longo e aleatório (uso interno das funções)
+#   JWT_SECRET            opcional: sem ele o servidor gera e guarda uma chave no banco
+#   SETUP_TOKEN           opcional: protege a página /setup do primeiro admin
+#   SERVICE_ROLE_KEY      opcional: só para chamadas externas às funções
 #   NFSE_CERT_PASSWORD    senha do certificado digital A1 (.pfx)
 #   C6_CLIENT_ID, C6_CLIENT_SECRET
 #   PLUGGY_CLIENT_ID, PLUGGY_CLIENT_SECRET

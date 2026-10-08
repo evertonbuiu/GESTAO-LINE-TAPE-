@@ -42,6 +42,7 @@ export async function setup() {
   const d1 = new D1Shim();
   d1.applyFile(path.join(migrations, '0001_schema.sql'));
   d1.applyFile(path.join(migrations, '0002_rules.sql'));
+  d1.applyFile(path.join(migrations, '0003_settings.sql'));
   const env = { DB: d1, JWT_SECRET: 'segredo-de-teste-com-mais-de-32-caracteres', FILES: new R2Mock(), ALLOWED_ORIGINS: '*' };
   const db = new Db(d1);
   async function mkUser(username, role, password = 'senha123') {
