@@ -114,8 +114,9 @@ export async function handleStorage(request, env, db, ctx, rest) {
   }
 
   if ((m = rest.match(/^object\/list\/([^/]+)$/)) && method === 'POST') {
-    requireUser(ctx);
     const bucket = m[1];
+    // buckets públicos (ex.: logo na tela de login) podem ser listados sem login
+    if (!PUBLIC_BUCKETS.has(bucket)) requireUser(ctx);
     const body = (await readJson(request)) || {};
     const prefix = (body.prefix || '').replace(/^\/+|\/+$/g, '');
     const limit = Number(body.limit || 100);

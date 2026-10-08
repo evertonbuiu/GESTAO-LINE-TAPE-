@@ -33,6 +33,14 @@ TODAY_SQL = "(date('now'))"
 TODAY_BR_SQL = "(date('now','-3 hours'))"
 
 
+EXTRA_RELATIONS = {
+    "recurring_expense_monthly_payments": [
+        {"name": "recurring_expense_monthly_payments_recurring_expense_id_fkey",
+         "cols": ["recurring_expense_id"], "ref": "recurring_expenses", "refCols": ["id"]},
+    ],
+}
+
+
 def kind_of(pgtype: str, enums) -> str:
     t = re.sub(r"\s+", " ", pgtype.strip().lower())
     if t.endswith("[]"):
@@ -289,6 +297,11 @@ def main():
         ddl.append(",\n".join(cols_sql))
         ddl.append(");")
         ddl.append("")
+        # Relações que as telas usam mas que o banco original não declarou:
+        # entram só no mapa de relações (sem restrição no banco).
+        for extra in EXTRA_RELATIONS.get(tname, []):
+            if not any(f["cols"] == extra["cols"] for f in fks):
+                fks.append(extra)
         meta[tname] = {"pk": t["pk"], "cols": cmeta, "fks": fks}
 
     # índices
