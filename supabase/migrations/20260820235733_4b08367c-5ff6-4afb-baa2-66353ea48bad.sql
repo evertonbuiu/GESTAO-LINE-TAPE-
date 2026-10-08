@@ -1,0 +1,1 @@
+UPDATE public.company_settings SET company_name = 'GESTAO LINE TAPE' WHERE company_name IS DISTINCT FROM 'GESTAO LINE TAPE';

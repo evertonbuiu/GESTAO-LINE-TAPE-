@@ -1,0 +1,28 @@
+project_id = "bvmadmmeheyclurvgrju"
+
+[functions.quote-approval]
+verify_jwt = false # Acesso público por token expirável validado dentro da função.
+
+[functions.whatsapp-webhook]
+verify_jwt = false
+
+[functions.emit-nfse]
+verify_jwt = false # Function validates the access token and role itself.
+
+[functions.nfse-nacional-homologacao]
+verify_jwt = false # A função valida o token e o papel internamente.
+
+[functions.fiscal-document]
+verify_jwt = false # A função valida o token e o papel internamente.
+
+[functions.c6-auth-test]
+verify_jwt = true
+
+[functions.c6-statement-test]
+verify_jwt = true
+
+[functions.c6-statement-sync]
+verify_jwt = false
+
+[functions.c6-receipt]
+verify_jwt = true

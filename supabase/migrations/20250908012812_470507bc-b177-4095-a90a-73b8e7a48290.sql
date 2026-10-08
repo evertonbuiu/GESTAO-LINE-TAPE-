@@ -1,0 +1,1 @@
+DELETE FROM recurring_expense_monthly_payments WHERE id = '0b1a62f9-fefd-4d7c-8242-c9c16a38e3dc';
