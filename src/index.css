@@ -266,3 +266,63 @@ All colors MUST be HSL.
     flex-shrink: 0;
   }
 }
+
+/* Tema escuro: fundos claros fixos (bg-*-50/100) e textos escuros (text-*-700/800/900)
+   de telas antigas viram tons translúcidos e textos claros. :where mantém a
+   especificidade baixa, então classes dark: explícitas continuam valendo. */
+.dark :where(.bg-blue-50:not(.bg-white *)) { background-color: hsl(217 91% 60% / 0.10); }
+.dark :where(.bg-blue-100:not(.bg-white *)) { background-color: hsl(217 91% 60% / 0.16); }
+.dark :where(.border-blue-100:not(.bg-white *), .border-blue-200:not(.bg-white *)) { border-color: hsl(217 91% 60% / 0.30); }
+.dark :where(.text-blue-700:not(.bg-white *), .text-blue-800:not(.bg-white *), .text-blue-900:not(.bg-white *)) { color: hsl(213 94% 78%); }
+.dark :where(.bg-green-50:not(.bg-white *)) { background-color: hsl(142 70% 45% / 0.10); }
+.dark :where(.bg-green-100:not(.bg-white *)) { background-color: hsl(142 70% 45% / 0.16); }
+.dark :where(.border-green-100:not(.bg-white *), .border-green-200:not(.bg-white *)) { border-color: hsl(142 70% 45% / 0.30); }
+.dark :where(.text-green-700:not(.bg-white *), .text-green-800:not(.bg-white *), .text-green-900:not(.bg-white *)) { color: hsl(142 69% 70%); }
+.dark :where(.bg-emerald-50:not(.bg-white *)) { background-color: hsl(152 69% 45% / 0.10); }
+.dark :where(.bg-emerald-100:not(.bg-white *)) { background-color: hsl(152 69% 45% / 0.16); }
+.dark :where(.border-emerald-100:not(.bg-white *), .border-emerald-200:not(.bg-white *)) { border-color: hsl(152 69% 45% / 0.30); }
+.dark :where(.text-emerald-700:not(.bg-white *), .text-emerald-800:not(.bg-white *), .text-emerald-900:not(.bg-white *)) { color: hsl(152 76% 70%); }
+.dark :where(.bg-orange-50:not(.bg-white *)) { background-color: hsl(25 95% 55% / 0.10); }
+.dark :where(.bg-orange-100:not(.bg-white *)) { background-color: hsl(25 95% 55% / 0.16); }
+.dark :where(.border-orange-100:not(.bg-white *), .border-orange-200:not(.bg-white *)) { border-color: hsl(25 95% 55% / 0.30); }
+.dark :where(.text-orange-700:not(.bg-white *), .text-orange-800:not(.bg-white *), .text-orange-900:not(.bg-white *)) { color: hsl(31 97% 72%); }
+.dark :where(.bg-yellow-50:not(.bg-white *)) { background-color: hsl(45 93% 50% / 0.10); }
+.dark :where(.bg-yellow-100:not(.bg-white *)) { background-color: hsl(45 93% 50% / 0.16); }
+.dark :where(.border-yellow-100:not(.bg-white *), .border-yellow-200:not(.bg-white *)) { border-color: hsl(45 93% 50% / 0.30); }
+.dark :where(.text-yellow-700:not(.bg-white *), .text-yellow-800:not(.bg-white *), .text-yellow-900:not(.bg-white *)) { color: hsl(48 96% 70%); }
+.dark :where(.bg-amber-50:not(.bg-white *)) { background-color: hsl(38 92% 50% / 0.10); }
+.dark :where(.bg-amber-100:not(.bg-white *)) { background-color: hsl(38 92% 50% / 0.16); }
+.dark :where(.border-amber-100:not(.bg-white *), .border-amber-200:not(.bg-white *)) { border-color: hsl(38 92% 50% / 0.30); }
+.dark :where(.text-amber-700:not(.bg-white *), .text-amber-800:not(.bg-white *), .text-amber-900:not(.bg-white *)) { color: hsl(43 96% 65%); }
+.dark :where(.bg-red-50:not(.bg-white *)) { background-color: hsl(0 84% 60% / 0.10); }
+.dark :where(.bg-red-100:not(.bg-white *)) { background-color: hsl(0 84% 60% / 0.16); }
+.dark :where(.border-red-100:not(.bg-white *), .border-red-200:not(.bg-white *)) { border-color: hsl(0 84% 60% / 0.30); }
+.dark :where(.text-red-700:not(.bg-white *), .text-red-800:not(.bg-white *), .text-red-900:not(.bg-white *)) { color: hsl(0 94% 78%); }
+.dark :where(.bg-purple-50:not(.bg-white *)) { background-color: hsl(270 70% 65% / 0.10); }
+.dark :where(.bg-purple-100:not(.bg-white *)) { background-color: hsl(270 70% 65% / 0.16); }
+.dark :where(.border-purple-100:not(.bg-white *), .border-purple-200:not(.bg-white *)) { border-color: hsl(270 70% 65% / 0.30); }
+.dark :where(.text-purple-700:not(.bg-white *), .text-purple-800:not(.bg-white *), .text-purple-900:not(.bg-white *)) { color: hsl(269 97% 82%); }
+.dark :where(.bg-gray-50:not(.bg-white *)) { background-color: hsl(215 16% 47% / 0.10); }
+.dark :where(.bg-gray-100:not(.bg-white *)) { background-color: hsl(215 16% 47% / 0.16); }
+.dark :where(.border-gray-100:not(.bg-white *), .border-gray-200:not(.bg-white *)) { border-color: hsl(215 16% 47% / 0.30); }
+.dark :where(.text-gray-700:not(.bg-white *), .text-gray-800:not(.bg-white *), .text-gray-900:not(.bg-white *)) { color: hsl(214 20% 78%); }
+.dark :where(.bg-slate-50:not(.bg-white *)) { background-color: hsl(215 16% 47% / 0.10); }
+.dark :where(.bg-slate-100:not(.bg-white *)) { background-color: hsl(215 16% 47% / 0.16); }
+.dark :where(.border-slate-100:not(.bg-white *), .border-slate-200:not(.bg-white *)) { border-color: hsl(215 16% 47% / 0.30); }
+.dark :where(.text-slate-700:not(.bg-white *), .text-slate-800:not(.bg-white *), .text-slate-900:not(.bg-white *)) { color: hsl(214 20% 78%); }
+.dark :where(.bg-sky-50:not(.bg-white *)) { background-color: hsl(199 89% 55% / 0.10); }
+.dark :where(.bg-sky-100:not(.bg-white *)) { background-color: hsl(199 89% 55% / 0.16); }
+.dark :where(.border-sky-100:not(.bg-white *), .border-sky-200:not(.bg-white *)) { border-color: hsl(199 89% 55% / 0.30); }
+.dark :where(.text-sky-700:not(.bg-white *), .text-sky-800:not(.bg-white *), .text-sky-900:not(.bg-white *)) { color: hsl(199 95% 74%); }
+.dark :where(.bg-indigo-50:not(.bg-white *)) { background-color: hsl(239 84% 67% / 0.10); }
+.dark :where(.bg-indigo-100:not(.bg-white *)) { background-color: hsl(239 84% 67% / 0.16); }
+.dark :where(.border-indigo-100:not(.bg-white *), .border-indigo-200:not(.bg-white *)) { border-color: hsl(239 84% 67% / 0.30); }
+.dark :where(.text-indigo-700:not(.bg-white *), .text-indigo-800:not(.bg-white *), .text-indigo-900:not(.bg-white *)) { color: hsl(230 94% 82%); }
+.dark :where(.bg-pink-50:not(.bg-white *)) { background-color: hsl(330 81% 60% / 0.10); }
+.dark :where(.bg-pink-100:not(.bg-white *)) { background-color: hsl(330 81% 60% / 0.16); }
+.dark :where(.border-pink-100:not(.bg-white *), .border-pink-200:not(.bg-white *)) { border-color: hsl(330 81% 60% / 0.30); }
+.dark :where(.text-pink-700:not(.bg-white *), .text-pink-800:not(.bg-white *), .text-pink-900:not(.bg-white *)) { color: hsl(327 87% 80%); }
+.dark :where(.bg-teal-50:not(.bg-white *)) { background-color: hsl(173 80% 40% / 0.10); }
+.dark :where(.bg-teal-100:not(.bg-white *)) { background-color: hsl(173 80% 40% / 0.16); }
+.dark :where(.border-teal-100:not(.bg-white *), .border-teal-200:not(.bg-white *)) { border-color: hsl(173 80% 40% / 0.30); }
+.dark :where(.text-teal-700:not(.bg-white *), .text-teal-800:not(.bg-white *), .text-teal-900:not(.bg-white *)) { color: hsl(171 77% 64%); }
