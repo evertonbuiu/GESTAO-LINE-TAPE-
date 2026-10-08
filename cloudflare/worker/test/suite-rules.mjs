@@ -21,7 +21,13 @@ export default async function ({ setup, client, ok }) {
     name: 'Show Rock', client_name: 'Prefeitura', event_date: '2026-11-01', total_budget: 10000,
     is_paid: true, payment_amount: 6000, payment_date: '2026-10-15',
   })).data[0];
+  // No sistema original, marcar como pago não lança na hora: o lançamento
+  // aparece quando a sincronização (sync_bank_transactions) roda.
+  const sync = () => c.call('POST', '/rest/v1/rpc/sync_bank_transactions', { body: {} });
   let txs = await get(`bank_transactions?select=*&reference_id=eq.${ev.id}`);
+  ok(txs.length === 0, 'sem lançamento antes da sincronização (igual ao original)', txs);
+  await sync();
+  txs = await get(`bank_transactions?select=*&reference_id=eq.${ev.id}`);
   ok(txs.length === 1 && txs[0].amount === 6000 && txs[0].transaction_type === 'income' && txs[0].bank_account_id === acct.id,
     'evento pago gera receita na conta padrão', txs);
   ok(txs[0] && txs[0].description === 'Receita - Show Rock (Prefeitura)', 'descrição igual ao original', txs[0]);
@@ -29,6 +35,7 @@ export default async function ({ setup, client, ok }) {
   ok(a[0].balance === 6000 && a[0].current_balance === 6000, 'saldo atualizado', a);
 
   const exp = (await ins('event_expenses', { event_id: ev.id, description: 'Gerador', total_price: 1500, expense_bank_account: 'Conta Corrente Principal' })).data[0];
+  await sync();
   txs = await get(`bank_transactions?select=*&reference_id=eq.${exp.id}`);
   ok(txs.length === 1 && txs[0].transaction_type === 'expense' && txs[0].description === 'Gerador - Show Rock', 'despesa com conta gera saída', txs);
   a = await get(`bank_accounts?select=balance&id=eq.${acct.id}`);
@@ -37,6 +44,7 @@ export default async function ({ setup, client, ok }) {
   ok(e[0].total_expenses === 1500 && e[0].profit_margin === 8500, 'totais do evento', e);
 
   await c.call('DELETE', `/rest/v1/event_expenses?id=eq.${exp.id}`);
+  await sync();
   e = await get(`events?select=total_expenses&id=eq.${ev.id}`);
   a = await get(`bank_accounts?select=balance&id=eq.${acct.id}`);
   ok(e[0].total_expenses === 0 && a[0].balance === 6000, 'apagar despesa recalcula tudo', [e, a]);
@@ -64,6 +72,24 @@ export default async function ({ setup, client, ok }) {
     ok(txs.length === 1 && txs[0].description === 'Despesa Fixa - Aluguel Galpão' && txs[0].category === 'Aluguel', 'pagamento de despesa fixa gera saída', txs);
   }
 
+  // ---------------- vale de colaborador ----------------
+  const adv = await ins('worker_advances', { worker_name: 'Carlos', amount: 100, advance_date: '2026-10-08', bank_account_id: acct.id, created_by: admin.id });
+  ok(adv.status === 201, 'vale de colaborador é cadastrado (antes falhava)', adv.data);
+  if (adv.status === 201) {
+    const vt = await get(`bank_transactions?select=*&reference_id=eq.${adv.data[0].id}`);
+    ok(vt.length === 1 && vt[0].transaction_type === 'expense' && vt[0].amount === 100, 'vale gera uma única saída', vt);
+    await c.call('DELETE', `/rest/v1/worker_advances?id=eq.${adv.data[0].id}`);
+    const vt2 = await get(`bank_transactions?select=id&reference_id=eq.${adv.data[0].id}`);
+    ok(vt2.length === 0, 'apagar vale remove a saída', vt2);
+  }
+
+  const nota = await ins('worker_expense_advances', { worker_name: 'Carlos', amount: 40, advance_date: '2026-10-08', bank_account_id: acct.id, created_by: admin.id });
+  ok(nota.status === 201, 'notinha de diarista é cadastrada', nota.data);
+  if (nota.status === 201) {
+    const nt = await get(`bank_transactions?select=*&reference_id=eq.${nota.data[0].id}`);
+    ok(nt.length === 1 && nt[0].description === 'Adiantamento - Carlos', 'notinha gera saída', nt);
+  }
+
   // ---------------- estoque ----------------
   const eq = (await ins('equipment', { name: 'Moving Head 230', category: 'Iluminação', total_stock: 10, available: 10, rented: 0 })).data[0];
   await ins('event_equipment', { event_id: ev.id, equipment_name: 'Moving Head 230', quantity: 4, status: 'confirmed', assigned_by: admin.id });
@@ -71,11 +97,11 @@ export default async function ({ setup, client, ok }) {
   ok(q[0].rented === 4 && q[0].available === 6 && q[0].status === 'available', 'alocar baixa estoque', q);
   await ins('maintenance_records', { equipment_name: 'Moving Head 230', maintenance_type: 'corretiva', status: 'agendada', scheduled_date: '2026-10-10', description: 'Lâmpada', quantity: 5 });
   q = await get(`equipment?select=available,status&id=eq.${eq.id}`);
-  ok(q[0].available === 1 && q[0].status === 'low_stock', 'manutenção reduz disponível', q);
+  ok(q[0].available === 6, 'manutenção não mexe no estoque (regra removida no banco real)', q);
   await c.call('PATCH', `/rest/v1/events?id=eq.${ev.id}`, { body: { status: 'completed' } });
   const ee = await get(`event_equipment?select=status&event_id=eq.${ev.id}`);
   q = await get(`equipment?select=rented,available&id=eq.${eq.id}`);
-  ok(ee[0].status === 'returned' && q[0].rented === 0 && q[0].available === 5, 'concluir evento devolve equipamento', [ee, q]);
+  ok(ee[0].status === 'returned' && q[0].rented === 0 && q[0].available === 5, 'concluir evento devolve equipamento (desconta os 5 em manutenção)', [ee, q]);
 
   // ---------------- diárias ----------------
   const ev2 = (await ins('events', { name: 'Formatura', event_date: '2026-12-10' })).data[0];
@@ -84,13 +110,13 @@ export default async function ({ setup, client, ok }) {
   const ex = await get(`event_expenses?select=*&reference_id=eq.${dr.id}`);
   ok(ex.length === 1 && ex[0].description === 'Diária - Carlos' && ex[0].total_price === 250, 'diária gera despesa no evento', ex);
   const col = await get(`event_collaborators?select=*&event_id=eq.${ev2.id}`);
-  ok(col.length >= 1 && col.some((x) => x.worker_id === worker.id && x.collaborator_email === 'carlos@x.com'), 'diária inclui pessoa na equipe', col);
+  ok(col.length === 1 && col[0].collaborator_name === 'Carlos' && col[0].role === 'diarista' && col[0].reference_type === 'daily_rate', 'diária inclui pessoa na equipe', col);
   r = await c.call('POST', '/rest/v1/daily_rates', { body: { worker_name: 'Carlos', date: '2026-12-11', amount: 10, attendance_status: 'xyz', created_by: admin.id } });
   ok(r.status === 400 && /Presença inválida/.test(r.data.message), 'validação de presença', r.data);
   await c.call('PATCH', `/rest/v1/daily_rates?id=eq.${dr.id}`, { body: { amount: 300 } });
   const ex2 = await get(`event_expenses?select=total_price&reference_id=eq.${dr.id}`);
   const ev2t = await get(`events?select=total_expenses&id=eq.${ev2.id}`);
-  ok(ex2[0].total_price === 300 && ev2t[0].total_expenses === 300, 'alterar diária atualiza despesa e total', [ex2, ev2t]);
+  ok(ex2[0].total_price === 250 && ev2t[0].total_expenses === 250, 'alterar diária não mexe na despesa (sem regra de atualização no banco real)', [ex2, ev2t]);
   await c.call('DELETE', `/rest/v1/daily_rates?id=eq.${dr.id}`);
   const ex3 = await get(`event_expenses?select=id&reference_id=eq.${dr.id}`);
   ok(ex3.length === 0, 'apagar diária apaga despesa', ex3);

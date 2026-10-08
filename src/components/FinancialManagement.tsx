@@ -36,6 +36,9 @@ import { BulkActionsBar } from "@/components/ui/BulkActionsBar";
 import { EventTaxReportModal } from "@/components/EventTaxReportModal";
 
 import { PageActions } from "@/components/layout/PageHeader";
+
+// Evita criar as contas padrão duas vezes quando a tela carrega em paralelo.
+let defaultAccountsCreation: Promise<{ error: unknown }> | null = null;
 interface CashFlowEntry {
   id: string;
   date: string;
@@ -1724,10 +1727,18 @@ export const FinancialManagement = () => {
           }
         ];
 
-        // Inserir contas padrão no banco
-        const { error: insertError } = await supabase
-          .from('bank_accounts')
-          .insert(defaultAccounts);
+        // Inserir contas padrão no banco. A tela carrega mais de uma vez ao
+        // abrir; a criação acontece uma única vez e confere de novo antes.
+        if (!defaultAccountsCreation) {
+          defaultAccountsCreation = (async () => {
+            const { count } = await supabase
+              .from('bank_accounts')
+              .select('id', { count: 'exact', head: true });
+            if ((count ?? 0) > 0) return { error: null };
+            return supabase.from('bank_accounts').insert(defaultAccounts);
+          })();
+        }
+        const { error: insertError } = await defaultAccountsCreation;
 
         if (!insertError) {
           // Garantir que a UI use o cálculo unificado de saldos

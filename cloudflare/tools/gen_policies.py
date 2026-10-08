@@ -127,7 +127,7 @@ def compile_expr(e, table):
     )
     if m:
         return {"anyRole": roles_list(m.group(1))}
-    m = re.fullmatch(r"EXISTS \( SELECT 1 FROM public\.(\w+) (\w+) WHERE (.*) \)", e, re.I)
+    m = re.fullmatch(r"EXISTS \(\s*SELECT 1 FROM (?:public\.)?(\w+) (\w+) WHERE (.*?)\s*\)", e, re.I)
     if m:
         sub_t, alias, cond = m.group(1), m.group(2), m.group(3)
         cond = re.sub(rf"\b{table}\.", "$T.", cond)
@@ -173,15 +173,36 @@ def parse_policy(table, stmt):
     return {"cmd": cmd, "roles": roles, "using": using, "check": check, "restrictive": restrictive}
 
 
+REAL = os.path.join(ROOT, "cloudflare", "rules", "real_policies.json")
+
+
 def main():
     out = {}
     errors = []
+    real = json.load(open(REAL, encoding="utf-8")) if os.path.exists(REAL) else None
+    real_tables = {r["t"] for r in real} if real else set()
+    if real:
+        # Políticas lidas do banco real (pg_policies): são a referência.
+        for r in real:
+            if r["t"] not in MODEL["tables"] or f'{r["t"]}.{r["n"]}' in INSECURE:
+                continue
+            try:
+                out.setdefault(r["t"], []).append({
+                    "cmd": r["c"].upper(),
+                    "roles": [x.lower() for x in r["r"]],
+                    "using": compile_expr(r["q"], r["t"]) if r["q"] else None,
+                    "check": compile_expr(r["w"], r["t"]) if r["w"] else None,
+                    "restrictive": r["p"].upper() == "RESTRICTIVE",
+                    "name": r["n"],
+                })
+            except Exception as e:  # noqa: BLE001
+                errors.append(str(e))
     for key, stmt in MODEL["policies"].items():
         parts = key.split(".")
         if len(parts) != 2:
             continue
         table, name = parts
-        if table not in MODEL["tables"] or key in INSECURE:
+        if table not in MODEL["tables"] or key in INSECURE or table in real_tables:
             continue
         try:
             p = parse_policy(table, stmt)

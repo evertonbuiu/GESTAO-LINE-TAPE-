@@ -12,29 +12,13 @@ BEGIN
   SELECT RAISE(ABORT, 'P0001:Status inválido. Use ativo, inativo, ferias, afastado ou bloqueado.') WHERE NEW.status IS NOT NULL AND NEW.status NOT IN ('ativo','inativo','ferias','afastado','bloqueado');
   SELECT RAISE(ABORT, 'P0001:Tipo de vínculo inválido. Use fixo, diarista ou freelancer.') WHERE NEW.employment_type IS NOT NULL AND NEW.employment_type NOT IN ('fixo','diarista','freelancer');
 END;
-CREATE TRIGGER IF NOT EXISTS "update_transaction_for_worker_expense_advance__update" AFTER UPDATE ON "worker_expense_advances" FOR EACH ROW
-BEGIN
-  UPDATE bank_transactions SET bank_account_id = NEW.bank_account_id, description = 'Adiantamento de Despesa - ' || NEW.worker_name, amount = NEW.amount, transaction_date = NEW.advance_date, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE reference_type = 'worker_expense_advance' AND reference_id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS "delete_worker_expense_advance_transaction__delete" AFTER DELETE ON "worker_expense_advances" FOR EACH ROW
-BEGIN
-  DELETE FROM bank_transactions WHERE reference_type = 'worker_expense_advance' AND reference_id = OLD.id;
-END;
-CREATE TRIGGER IF NOT EXISTS "delete_worker_advance_transaction__delete" AFTER DELETE ON "worker_expense_advances" FOR EACH ROW
+CREATE TRIGGER IF NOT EXISTS "worker_expense_advances__delete_worker_advance_transaction__delete" AFTER DELETE ON "worker_expense_advances" FOR EACH ROW
 BEGIN
   DELETE FROM bank_transactions WHERE reference_type = 'worker_advance' AND reference_id = OLD.id;
 END;
-CREATE TRIGGER IF NOT EXISTS "delete_transaction_for_worker_expense_advance__delete" BEFORE DELETE ON "worker_expense_advances" FOR EACH ROW
-BEGIN
-  DELETE FROM bank_transactions WHERE reference_type = 'worker_expense_advance' AND reference_id = OLD.id;
-END;
-CREATE TRIGGER IF NOT EXISTS "create_worker_advance_transaction__insert" AFTER INSERT ON "worker_expense_advances" FOR EACH ROW
+CREATE TRIGGER IF NOT EXISTS "worker_expense_advances__create_worker_advance_transaction__insert" AFTER INSERT ON "worker_expense_advances" FOR EACH ROW
 BEGIN
   INSERT INTO bank_transactions (bank_account_id, description, amount, transaction_type, category, reference_type, reference_id, transaction_date) SELECT NEW.bank_account_id, 'Adiantamento - ' || NEW.worker_name, NEW.amount, 'expense', 'Adiantamentos de Diaristas', 'worker_advance', NEW.id, NEW.advance_date;
-END;
-CREATE TRIGGER IF NOT EXISTS "create_transaction_for_worker_expense_advance__insert" AFTER INSERT ON "worker_expense_advances" FOR EACH ROW
-BEGIN
-  INSERT INTO bank_transactions (bank_account_id, description, amount, transaction_type, category, reference_type, reference_id, transaction_date) SELECT NEW.bank_account_id, 'Adiantamento de Despesa - ' || NEW.worker_name, NEW.amount, 'expense', 'Adiantamentos de Despesas de Diaristas', 'worker_expense_advance', NEW.id, NEW.advance_date;
 END;
 CREATE TRIGGER IF NOT EXISTS "validate_worker_availability_trg__insert" BEFORE INSERT ON "worker_availability" FOR EACH ROW
 BEGIN
@@ -46,42 +30,18 @@ BEGIN
   SELECT RAISE(ABORT, 'P0001:Período inválido. Use integral, manha, tarde ou noite.') WHERE NEW.period IS NOT NULL AND NEW.period NOT IN ('integral','manha','tarde','noite');
   SELECT RAISE(ABORT, 'P0001:Disponibilidade inválida. Use disponivel, indisponivel ou parcial.') WHERE NEW.availability IS NOT NULL AND NEW.availability NOT IN ('disponivel','indisponivel','parcial');
 END;
-CREATE TRIGGER IF NOT EXISTS "update_worker_vale_transaction__update" AFTER UPDATE ON "worker_advances" FOR EACH ROW
-BEGIN
-  UPDATE bank_transactions SET bank_account_id = NEW.bank_account_id, description = 'Vale - ' || NEW.worker_name, amount = NEW.amount, transaction_date = NEW.advance_date, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE reference_type = 'worker_vale' AND reference_id = NEW.id;
-END;
 CREATE TRIGGER IF NOT EXISTS "update_worker_advance_transaction__update" AFTER UPDATE ON "worker_advances" FOR EACH ROW
 BEGIN
   DELETE FROM bank_transactions WHERE reference_type = 'worker_advance' AND reference_id = OLD.id AND (OLD.bank_account_id IS NOT NULL);
   INSERT INTO bank_transactions (bank_account_id, description, amount, transaction_type, category, reference_type, reference_id, transaction_date) SELECT NEW.bank_account_id, 'Vale Diarista: ' || NEW.worker_name, NEW.amount, 'expense', 'Vale Diarista', 'worker_advance', NEW.id, NEW.advance_date WHERE NEW.bank_account_id IS NOT NULL;
 END;
-CREATE TRIGGER IF NOT EXISTS "update_transaction_for_advance__update" AFTER UPDATE ON "worker_advances" FOR EACH ROW
-BEGIN
-  UPDATE bank_transactions SET bank_account_id = NEW.bank_account_id, description = 'Adiantamento - ' || NEW.worker_name, amount = NEW.amount, transaction_date = NEW.advance_date, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE reference_type = 'worker_advance' AND reference_id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS "delete_worker_vale_transaction__delete" AFTER DELETE ON "worker_advances" FOR EACH ROW
-BEGIN
-  DELETE FROM bank_transactions WHERE reference_type = 'worker_vale' AND reference_id = OLD.id;
-END;
-CREATE TRIGGER IF NOT EXISTS "delete_worker_advance_transaction__delete" AFTER DELETE ON "worker_advances" FOR EACH ROW
+CREATE TRIGGER IF NOT EXISTS "worker_advances__delete_worker_advance_transaction__delete" AFTER DELETE ON "worker_advances" FOR EACH ROW
 BEGIN
   DELETE FROM bank_transactions WHERE reference_type = 'worker_advance' AND reference_id = OLD.id;
 END;
-CREATE TRIGGER IF NOT EXISTS "delete_transaction_for_advance__delete" BEFORE DELETE ON "worker_advances" FOR EACH ROW
-BEGIN
-  DELETE FROM bank_transactions WHERE reference_type = 'worker_advance' AND reference_id = OLD.id;
-END;
-CREATE TRIGGER IF NOT EXISTS "create_worker_vale_transaction__insert" AFTER INSERT ON "worker_advances" FOR EACH ROW
-BEGIN
-  INSERT INTO bank_transactions (bank_account_id, description, amount, transaction_type, category, reference_type, reference_id, transaction_date) SELECT NEW.bank_account_id, 'Vale - ' || NEW.worker_name, NEW.amount, 'expense', 'Vales de Diaristas', 'worker_vale', NEW.id, NEW.advance_date;
-END;
-CREATE TRIGGER IF NOT EXISTS "create_worker_advance_transaction__insert" AFTER INSERT ON "worker_advances" FOR EACH ROW
+CREATE TRIGGER IF NOT EXISTS "worker_advances__create_worker_advance_transaction__insert" AFTER INSERT ON "worker_advances" FOR EACH ROW
 BEGIN
   INSERT INTO bank_transactions (bank_account_id, description, amount, transaction_type, category, reference_type, reference_id, transaction_date) SELECT NEW.bank_account_id, 'Vale Diarista: ' || NEW.worker_name, NEW.amount, 'expense', 'Vale Diarista', 'worker_advance', NEW.id, NEW.advance_date WHERE NEW.bank_account_id IS NOT NULL;
-END;
-CREATE TRIGGER IF NOT EXISTS "create_transaction_for_advance__insert" AFTER INSERT ON "worker_advances" FOR EACH ROW
-BEGIN
-  INSERT INTO bank_transactions (bank_account_id, description, amount, transaction_type, category, reference_type, reference_id, transaction_date) SELECT NEW.bank_account_id, 'Adiantamento - ' || NEW.worker_name, NEW.amount, 'expense', 'Adiantamentos de Diaristas', 'worker_advance', NEW.id, NEW.advance_date;
 END;
 CREATE TRIGGER IF NOT EXISTS "trg_audit_user_roles__insert" AFTER INSERT ON "user_roles" FOR EACH ROW
 BEGIN
@@ -193,30 +153,6 @@ END;
 CREATE TRIGGER IF NOT EXISTS "trg_audit_nfse_invoices__delete" AFTER DELETE ON "nfse_invoices" FOR EACH ROW
 BEGIN
   INSERT INTO audit_logs (actor_id, actor_name, action, entity_type, entity_id, old_data, new_data) VALUES ((SELECT v FROM _ctx WHERE k = 'uid'), (SELECT name FROM user_credentials WHERE id = (SELECT v FROM _ctx WHERE k = 'uid')), 'DELETE', 'nfse_invoices', OLD.id, json_insert(json_insert(json_insert(json_insert(json_object('id', OLD."id", 'invoice_number', OLD."invoice_number", 'rps_number', OLD."rps_number", 'rps_series', OLD."rps_series", 'rps_type', OLD."rps_type", 'status', OLD."status", 'issue_date', OLD."issue_date", 'competence_date', OLD."competence_date", 'transmitted_at', OLD."transmitted_at", 'authorized_at', OLD."authorized_at", 'cancelled_at', OLD."cancelled_at", 'provider_cnpj', OLD."provider_cnpj", 'provider_im', OLD."provider_im", 'provider_name', OLD."provider_name", 'provider_address', OLD."provider_address"), '$.provider_city_code', OLD."provider_city_code", '$.provider_state', OLD."provider_state", '$.taker_type', OLD."taker_type", '$.taker_document', OLD."taker_document", '$.taker_name', OLD."taker_name", '$.taker_email', OLD."taker_email", '$.taker_phone', OLD."taker_phone", '$.taker_address', OLD."taker_address", '$.taker_city_code', OLD."taker_city_code", '$.taker_state', OLD."taker_state", '$.taker_cep', OLD."taker_cep", '$.service_code', OLD."service_code", '$.cnae_code', OLD."cnae_code", '$.service_description', OLD."service_description", '$.service_value', OLD."service_value"), '$.deduction_value', OLD."deduction_value", '$.base_calculation', OLD."base_calculation", '$.iss_rate', OLD."iss_rate", '$.iss_value', OLD."iss_value", '$.pis_value', OLD."pis_value", '$.cofins_value', OLD."cofins_value", '$.inss_value', OLD."inss_value", '$.ir_value', OLD."ir_value", '$.csll_value', OLD."csll_value", '$.other_retentions', OLD."other_retentions", '$.discount_unconditioned', OLD."discount_unconditioned", '$.discount_conditioned', OLD."discount_conditioned", '$.net_value', OLD."net_value", '$.iss_retention', CASE WHEN OLD."iss_retention" IS NULL THEN NULL WHEN OLD."iss_retention" THEN json('true') ELSE json('false') END, '$.iss_retention_responsible', OLD."iss_retention_responsible"), '$.nature_operation', OLD."nature_operation", '$.special_regime', OLD."special_regime", '$.simple_national', CASE WHEN OLD."simple_national" IS NULL THEN NULL WHEN OLD."simple_national" THEN json('true') ELSE json('false') END, '$.cultural_incentive', CASE WHEN OLD."cultural_incentive" IS NULL THEN NULL WHEN OLD."cultural_incentive" THEN json('true') ELSE json('false') END, '$.xml_rps', OLD."xml_rps", '$.xml_nfse', OLD."xml_nfse", '$.protocol_number', OLD."protocol_number", '$.verification_code', OLD."verification_code", '$.nfse_link', OLD."nfse_link", '$.error_code', OLD."error_code", '$.error_message', OLD."error_message", '$.event_id', OLD."event_id", '$.quote_id', OLD."quote_id", '$.contract_id', OLD."contract_id", '$.created_by', OLD."created_by"), '$.created_at', OLD."created_at", '$.updated_at', OLD."updated_at"), NULL);
-END;
-CREATE TRIGGER IF NOT EXISTS "trigger_update_equipment_on_maintenance_change__insert" AFTER INSERT ON "maintenance_records" FOR EACH ROW
-BEGIN
-  UPDATE equipment SET available = (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))), status = CASE WHEN (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))) <= 0 THEN 'out_of_stock' WHEN (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))) <= total_stock * 0.2 THEN 'low_stock' ELSE 'available' END, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE id = (SELECT id FROM equipment WHERE name = NEW.equipment_name LIMIT 1);
-END;
-CREATE TRIGGER IF NOT EXISTS "trigger_update_equipment_on_maintenance_change__update" AFTER UPDATE ON "maintenance_records" FOR EACH ROW
-BEGIN
-  UPDATE equipment SET available = (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))), status = CASE WHEN (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))) <= 0 THEN 'out_of_stock' WHEN (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))) <= total_stock * 0.2 THEN 'low_stock' ELSE 'available' END, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE id = (SELECT id FROM equipment WHERE name = NEW.equipment_name LIMIT 1);
-END;
-CREATE TRIGGER IF NOT EXISTS "trigger_update_equipment_on_maintenance_change__delete" AFTER DELETE ON "maintenance_records" FOR EACH ROW
-BEGIN
-  UPDATE equipment SET available = (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = OLD.equipment_name AND status IN ('agendada', 'em_andamento'))), status = CASE WHEN (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = OLD.equipment_name AND status IN ('agendada', 'em_andamento'))) <= 0 THEN 'out_of_stock' WHEN (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = OLD.equipment_name AND status IN ('agendada', 'em_andamento'))) <= total_stock * 0.2 THEN 'low_stock' ELSE 'available' END, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE id = (SELECT id FROM equipment WHERE name = OLD.equipment_name LIMIT 1);
-END;
-CREATE TRIGGER IF NOT EXISTS "trigger_update_equipment_maintenance__insert" AFTER INSERT ON "maintenance_records" FOR EACH ROW
-BEGIN
-  UPDATE equipment SET available = (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))), status = CASE WHEN (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))) <= 0 THEN 'out_of_stock' WHEN (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))) <= total_stock * 0.2 THEN 'low_stock' ELSE 'available' END, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE id = (SELECT id FROM equipment WHERE name = NEW.equipment_name LIMIT 1);
-END;
-CREATE TRIGGER IF NOT EXISTS "trigger_update_equipment_maintenance__update" AFTER UPDATE ON "maintenance_records" FOR EACH ROW
-BEGIN
-  UPDATE equipment SET available = (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))), status = CASE WHEN (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))) <= 0 THEN 'out_of_stock' WHEN (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))) <= total_stock * 0.2 THEN 'low_stock' ELSE 'available' END, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE id = (SELECT id FROM equipment WHERE name = NEW.equipment_name LIMIT 1);
-END;
-CREATE TRIGGER IF NOT EXISTS "trigger_update_equipment_maintenance__delete" AFTER DELETE ON "maintenance_records" FOR EACH ROW
-BEGIN
-  UPDATE equipment SET available = (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = OLD.equipment_name AND status IN ('agendada', 'em_andamento'))), status = CASE WHEN (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = OLD.equipment_name AND status IN ('agendada', 'em_andamento'))) <= 0 THEN 'out_of_stock' WHEN (total_stock - rented - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = OLD.equipment_name AND status IN ('agendada', 'em_andamento'))) <= total_stock * 0.2 THEN 'low_stock' ELSE 'available' END, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE id = (SELECT id FROM equipment WHERE name = OLD.equipment_name LIMIT 1);
 END;
 CREATE TRIGGER IF NOT EXISTS "trg_validate_interstate_transport__insert" BEFORE INSERT ON "interstate_transports" FOR EACH ROW
 BEGIN
@@ -380,18 +316,6 @@ CREATE TRIGGER IF NOT EXISTS "update_equipment_stock_trigger__delete" AFTER DELE
 BEGIN
   UPDATE equipment SET rented = max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status = 'returned')), available = (total_stock - max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status = 'returned')) - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = OLD.equipment_name AND status IN ('agendada', 'em_andamento'))), status = CASE WHEN (total_stock - max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status = 'returned')) - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = OLD.equipment_name AND status IN ('agendada', 'em_andamento'))) <= 0 THEN 'out_of_stock' WHEN (total_stock - max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status = 'returned')) - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = OLD.equipment_name AND status IN ('agendada', 'em_andamento'))) <= total_stock * 0.2 THEN 'low_stock' ELSE 'available' END, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE id = (SELECT id FROM equipment WHERE name = OLD.equipment_name LIMIT 1);
 END;
-CREATE TRIGGER IF NOT EXISTS "trigger_update_equipment_stock__insert" AFTER INSERT ON "event_equipment" FOR EACH ROW
-BEGIN
-  UPDATE equipment SET rented = max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status = 'returned')), available = (total_stock - max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status = 'returned')) - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))), status = CASE WHEN (total_stock - max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status = 'returned')) - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))) <= 0 THEN 'out_of_stock' WHEN (total_stock - max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status = 'returned')) - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))) <= total_stock * 0.2 THEN 'low_stock' ELSE 'available' END, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE id = (SELECT id FROM equipment WHERE name = NEW.equipment_name LIMIT 1);
-END;
-CREATE TRIGGER IF NOT EXISTS "trigger_update_equipment_stock__update" AFTER UPDATE ON "event_equipment" FOR EACH ROW
-BEGIN
-  UPDATE equipment SET rented = max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status = 'returned')), available = (total_stock - max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status = 'returned')) - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))), status = CASE WHEN (total_stock - max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status = 'returned')) - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))) <= 0 THEN 'out_of_stock' WHEN (total_stock - max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = NEW.equipment_name AND status = 'returned')) - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = NEW.equipment_name AND status IN ('agendada', 'em_andamento'))) <= total_stock * 0.2 THEN 'low_stock' ELSE 'available' END, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE id = (SELECT id FROM equipment WHERE name = NEW.equipment_name LIMIT 1);
-END;
-CREATE TRIGGER IF NOT EXISTS "trigger_update_equipment_stock__delete" AFTER DELETE ON "event_equipment" FOR EACH ROW
-BEGIN
-  UPDATE equipment SET rented = max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status = 'returned')), available = (total_stock - max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status = 'returned')) - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = OLD.equipment_name AND status IN ('agendada', 'em_andamento'))), status = CASE WHEN (total_stock - max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status = 'returned')) - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = OLD.equipment_name AND status IN ('agendada', 'em_andamento'))) <= 0 THEN 'out_of_stock' WHEN (total_stock - max(0, (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status IN ('confirmed', 'active', 'pending', 'allocated')) - (SELECT COALESCE(SUM(quantity), 0) FROM event_equipment WHERE equipment_name = OLD.equipment_name AND status = 'returned')) - (SELECT COALESCE(SUM(quantity), 0) FROM maintenance_records WHERE equipment_name = OLD.equipment_name AND status IN ('agendada', 'em_andamento'))) <= total_stock * 0.2 THEN 'low_stock' ELSE 'available' END, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE id = (SELECT id FROM equipment WHERE name = OLD.equipment_name LIMIT 1);
-END;
 CREATE TRIGGER IF NOT EXISTS "validate_event_collaborators_person_type__insert" BEFORE INSERT ON "event_collaborators" FOR EACH ROW
 BEGIN
   SELECT RAISE(ABORT, 'P0001:person_type inválido. Use collaborator ou worker.') WHERE NEW.person_type IS NOT NULL AND NEW.person_type NOT IN ('collaborator','worker');
@@ -430,51 +354,6 @@ BEGIN
   SELECT RAISE(ABORT, 'P0001:Transporte não pode ser negativo.') WHERE COALESCE(NEW.transport_amount, 0) < 0;
   SELECT RAISE(ABORT, 'P0001:Hospedagem não pode ser negativa.') WHERE COALESCE(NEW.lodging_amount, 0) < 0;
 END;
-CREATE TRIGGER IF NOT EXISTS "trigger_update_expense_from_daily_rate__update" AFTER UPDATE ON "daily_rates" FOR EACH ROW
-BEGIN
-  UPDATE event_expenses SET event_id = NEW.event_id, description = 'Diária - ' || NEW.worker_name, unit_price = NEW.amount, total_price = NEW.amount, expense_date = NEW.date, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE reference_type = 'daily_rate' AND reference_id = NEW.id;
-  INSERT INTO event_expenses (event_id, category, description, quantity, unit_price, total_price, expense_date, reference_type, reference_id, created_by) SELECT NEW.event_id, 'Diárias', 'Diária - ' || NEW.worker_name, 1, NEW.amount, NEW.amount, NEW.date, 'daily_rate', NEW.id, NEW.created_by WHERE NEW.event_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM event_expenses WHERE reference_type = 'daily_rate' AND reference_id = NEW.id);
-  DELETE FROM event_expenses WHERE OLD.event_id IS NOT NULL AND NEW.event_id IS NULL AND reference_type = 'daily_rate' AND reference_id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS "trigger_update_collaborator_from_daily_rate__update" AFTER UPDATE ON "daily_rates" FOR EACH ROW
-BEGIN
-  UPDATE event_collaborators SET event_id = NEW.event_id, collaborator_name = NEW.worker_name, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE reference_type = 'daily_rate' AND reference_id = NEW.id;
-  INSERT INTO event_collaborators (event_id, collaborator_name, collaborator_email, role, reference_type, reference_id, assigned_by) SELECT NEW.event_id, NEW.worker_name, '', 'diarista', 'daily_rate', NEW.id, NEW.created_by WHERE NEW.event_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM event_collaborators WHERE reference_type = 'daily_rate' AND reference_id = NEW.id);
-  DELETE FROM event_collaborators WHERE OLD.event_id IS NOT NULL AND NEW.event_id IS NULL AND reference_type = 'daily_rate' AND reference_id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS "trigger_delete_expense_from_daily_rate__delete" BEFORE DELETE ON "daily_rates" FOR EACH ROW
-BEGIN
-  DELETE FROM event_expenses WHERE reference_type = 'daily_rate' AND reference_id = OLD.id;
-END;
-CREATE TRIGGER IF NOT EXISTS "trigger_delete_collaborator_from_daily_rate__delete" BEFORE DELETE ON "daily_rates" FOR EACH ROW
-BEGIN
-  DELETE FROM event_collaborators WHERE reference_type = 'daily_rate' AND reference_id = OLD.id;
-END;
-CREATE TRIGGER IF NOT EXISTS "trigger_create_expense_from_daily_rate__insert" AFTER INSERT ON "daily_rates" FOR EACH ROW
-BEGIN
-  INSERT INTO event_expenses (event_id, category, description, quantity, unit_price, total_price, expense_date, reference_type, reference_id, created_by) SELECT NEW.event_id, 'Diárias', 'Diária - ' || NEW.worker_name, 1, NEW.amount, NEW.amount, NEW.date, 'daily_rate', NEW.id, NEW.created_by WHERE NEW.event_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM event_expenses WHERE reference_type = 'daily_rate' AND reference_id = NEW.id);
-END;
-CREATE TRIGGER IF NOT EXISTS "trigger_create_collaborator_from_daily_rate__insert" AFTER INSERT ON "daily_rates" FOR EACH ROW
-BEGIN
-  INSERT INTO event_collaborators (event_id, collaborator_name, collaborator_email, role, reference_type, reference_id, assigned_by) SELECT NEW.event_id, NEW.worker_name, '', 'diarista', 'daily_rate', NEW.id, NEW.created_by WHERE NEW.event_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM event_collaborators WHERE reference_type = 'daily_rate' AND reference_id = NEW.id);
-END;
-CREATE TRIGGER IF NOT EXISTS "sync_event_team_from_daily_rate_trigger__insert" AFTER INSERT ON "daily_rates" FOR EACH ROW
-BEGIN
-  DELETE FROM event_collaborators WHERE NEW.event_id IS NOT NULL AND NULLIF(trim(NEW.worker_name), '') IS NOT NULL AND event_id = NEW.event_id AND reference_type = 'daily_rate' AND ((NEW.worker_id IS NOT NULL AND worker_id = NEW.worker_id) OR lower(trim(collaborator_name)) = lower(trim(NEW.worker_name)));
-  INSERT INTO event_collaborators (event_id, collaborator_name, collaborator_email, role, reference_type, reference_id, assigned_by, worker_id, collaborator_id, person_type) SELECT NEW.event_id, r.worker_name, COALESCE((SELECT COALESCE(w.email, '') FROM workers w WHERE w.id = COALESCE(r.worker_id, NEW.worker_id) LIMIT 1), ''), COALESCE(NULLIF(trim(r.event_role), ''), 'diarista'), 'daily_rate', r.id, r.created_by, COALESCE(r.worker_id, NEW.worker_id), NULL, 'worker' FROM (SELECT * FROM daily_rates dr WHERE dr.event_id = NEW.event_id AND ((NEW.worker_id IS NOT NULL AND dr.worker_id = NEW.worker_id) OR lower(trim(dr.worker_name)) = lower(trim(NEW.worker_name))) ORDER BY dr.date, dr.created_at, dr.id LIMIT 1) r WHERE NEW.event_id IS NOT NULL AND NULLIF(trim(NEW.worker_name), '') IS NOT NULL AND NOT EXISTS (SELECT 1 FROM event_collaborators ec WHERE ec.event_id = NEW.event_id AND ec.reference_type IS NOT 'daily_rate' AND ((COALESCE(r.worker_id, NEW.worker_id) IS NOT NULL AND ec.worker_id = COALESCE(r.worker_id, NEW.worker_id)) OR lower(trim(ec.collaborator_name)) = lower(trim(r.worker_name))));
-END;
-CREATE TRIGGER IF NOT EXISTS "sync_event_team_from_daily_rate_trigger__update" AFTER UPDATE ON "daily_rates" FOR EACH ROW
-BEGIN
-  DELETE FROM event_collaborators WHERE OLD.event_id IS NOT NULL AND NULLIF(trim(OLD.worker_name), '') IS NOT NULL AND event_id = OLD.event_id AND reference_type = 'daily_rate' AND ((OLD.worker_id IS NOT NULL AND worker_id = OLD.worker_id) OR lower(trim(collaborator_name)) = lower(trim(OLD.worker_name)));
-  INSERT INTO event_collaborators (event_id, collaborator_name, collaborator_email, role, reference_type, reference_id, assigned_by, worker_id, collaborator_id, person_type) SELECT OLD.event_id, r.worker_name, COALESCE((SELECT COALESCE(w.email, '') FROM workers w WHERE w.id = COALESCE(r.worker_id, OLD.worker_id) LIMIT 1), ''), COALESCE(NULLIF(trim(r.event_role), ''), 'diarista'), 'daily_rate', r.id, r.created_by, COALESCE(r.worker_id, OLD.worker_id), NULL, 'worker' FROM (SELECT * FROM daily_rates dr WHERE dr.event_id = OLD.event_id AND ((OLD.worker_id IS NOT NULL AND dr.worker_id = OLD.worker_id) OR lower(trim(dr.worker_name)) = lower(trim(OLD.worker_name))) ORDER BY dr.date, dr.created_at, dr.id LIMIT 1) r WHERE OLD.event_id IS NOT NULL AND NULLIF(trim(OLD.worker_name), '') IS NOT NULL AND NOT EXISTS (SELECT 1 FROM event_collaborators ec WHERE ec.event_id = OLD.event_id AND ec.reference_type IS NOT 'daily_rate' AND ((COALESCE(r.worker_id, OLD.worker_id) IS NOT NULL AND ec.worker_id = COALESCE(r.worker_id, OLD.worker_id)) OR lower(trim(ec.collaborator_name)) = lower(trim(r.worker_name))));
-  DELETE FROM event_collaborators WHERE NEW.event_id IS NOT NULL AND NULLIF(trim(NEW.worker_name), '') IS NOT NULL AND event_id = NEW.event_id AND reference_type = 'daily_rate' AND ((NEW.worker_id IS NOT NULL AND worker_id = NEW.worker_id) OR lower(trim(collaborator_name)) = lower(trim(NEW.worker_name)));
-  INSERT INTO event_collaborators (event_id, collaborator_name, collaborator_email, role, reference_type, reference_id, assigned_by, worker_id, collaborator_id, person_type) SELECT NEW.event_id, r.worker_name, COALESCE((SELECT COALESCE(w.email, '') FROM workers w WHERE w.id = COALESCE(r.worker_id, NEW.worker_id) LIMIT 1), ''), COALESCE(NULLIF(trim(r.event_role), ''), 'diarista'), 'daily_rate', r.id, r.created_by, COALESCE(r.worker_id, NEW.worker_id), NULL, 'worker' FROM (SELECT * FROM daily_rates dr WHERE dr.event_id = NEW.event_id AND ((NEW.worker_id IS NOT NULL AND dr.worker_id = NEW.worker_id) OR lower(trim(dr.worker_name)) = lower(trim(NEW.worker_name))) ORDER BY dr.date, dr.created_at, dr.id LIMIT 1) r WHERE NEW.event_id IS NOT NULL AND NULLIF(trim(NEW.worker_name), '') IS NOT NULL AND NOT EXISTS (SELECT 1 FROM event_collaborators ec WHERE ec.event_id = NEW.event_id AND ec.reference_type IS NOT 'daily_rate' AND ((COALESCE(r.worker_id, NEW.worker_id) IS NOT NULL AND ec.worker_id = COALESCE(r.worker_id, NEW.worker_id)) OR lower(trim(ec.collaborator_name)) = lower(trim(r.worker_name))));
-END;
-CREATE TRIGGER IF NOT EXISTS "sync_event_team_from_daily_rate_trigger__delete" AFTER DELETE ON "daily_rates" FOR EACH ROW
-BEGIN
-  DELETE FROM event_collaborators WHERE OLD.event_id IS NOT NULL AND NULLIF(trim(OLD.worker_name), '') IS NOT NULL AND event_id = OLD.event_id AND reference_type = 'daily_rate' AND ((OLD.worker_id IS NOT NULL AND worker_id = OLD.worker_id) OR lower(trim(collaborator_name)) = lower(trim(OLD.worker_name)));
-  INSERT INTO event_collaborators (event_id, collaborator_name, collaborator_email, role, reference_type, reference_id, assigned_by, worker_id, collaborator_id, person_type) SELECT OLD.event_id, r.worker_name, COALESCE((SELECT COALESCE(w.email, '') FROM workers w WHERE w.id = COALESCE(r.worker_id, OLD.worker_id) LIMIT 1), ''), COALESCE(NULLIF(trim(r.event_role), ''), 'diarista'), 'daily_rate', r.id, r.created_by, COALESCE(r.worker_id, OLD.worker_id), NULL, 'worker' FROM (SELECT * FROM daily_rates dr WHERE dr.event_id = OLD.event_id AND ((OLD.worker_id IS NOT NULL AND dr.worker_id = OLD.worker_id) OR lower(trim(dr.worker_name)) = lower(trim(OLD.worker_name))) ORDER BY dr.date, dr.created_at, dr.id LIMIT 1) r WHERE OLD.event_id IS NOT NULL AND NULLIF(trim(OLD.worker_name), '') IS NOT NULL AND NOT EXISTS (SELECT 1 FROM event_collaborators ec WHERE ec.event_id = OLD.event_id AND ec.reference_type IS NOT 'daily_rate' AND ((COALESCE(r.worker_id, OLD.worker_id) IS NOT NULL AND ec.worker_id = COALESCE(r.worker_id, OLD.worker_id)) OR lower(trim(ec.collaborator_name)) = lower(trim(r.worker_name))));
-END;
 CREATE TRIGGER IF NOT EXISTS "delete_event_expense_from_daily_rate_trigger__delete" AFTER DELETE ON "daily_rates" FOR EACH ROW
 BEGIN
   DELETE FROM event_expenses WHERE reference_type = 'daily_rate' AND reference_id = OLD.id;
@@ -505,14 +384,6 @@ CREATE TRIGGER IF NOT EXISTS "validate_collaborator_fields__update" BEFORE UPDAT
 BEGIN
   SELECT RAISE(ABORT, 'P0001:Status inválido. Use ativo, inativo, ferias, afastado ou bloqueado.') WHERE NEW.status IS NOT NULL AND NEW.status NOT IN ('ativo','inativo','ferias','afastado','bloqueado');
   SELECT RAISE(ABORT, 'P0001:Tipo de vínculo inválido. Use fixo, diarista ou freelancer.') WHERE NEW.employment_type IS NOT NULL AND NEW.employment_type NOT IN ('fixo','diarista','freelancer');
-END;
-CREATE TRIGGER IF NOT EXISTS "delete_collaborator_expense_advance_transaction__delete" AFTER DELETE ON "collaborator_expense_advances" FOR EACH ROW
-BEGIN
-  DELETE FROM bank_transactions WHERE reference_type = 'collaborator_advance' AND reference_id = OLD.id;
-END;
-CREATE TRIGGER IF NOT EXISTS "update_collaborator_vale_transaction__update" AFTER UPDATE ON "collaborator_advances" FOR EACH ROW
-BEGIN
-  UPDATE bank_transactions SET bank_account_id = NEW.bank_account_id, description = 'Vale - ' || COALESCE((SELECT name FROM collaborators WHERE id = NEW.collaborator_id), 'Colaborador'), amount = NEW.amount, transaction_date = NEW.advance_date, updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE reference_type = 'collaborator_vale' AND reference_id = NEW.id;
 END;
 CREATE TRIGGER IF NOT EXISTS "delete_collaborator_vale_transaction__delete" AFTER DELETE ON "collaborator_advances" FOR EACH ROW
 BEGIN
@@ -566,18 +437,6 @@ END;
 CREATE TRIGGER IF NOT EXISTS "trg_audit_bank_transactions__delete" AFTER DELETE ON "bank_transactions" FOR EACH ROW
 BEGIN
   INSERT INTO audit_logs (actor_id, actor_name, action, entity_type, entity_id, old_data, new_data) VALUES ((SELECT v FROM _ctx WHERE k = 'uid'), (SELECT name FROM user_credentials WHERE id = (SELECT v FROM _ctx WHERE k = 'uid')), 'DELETE', 'bank_transactions', OLD.id, json_insert(json_object('id', OLD."id", 'bank_account_id', OLD."bank_account_id", 'transaction_date', OLD."transaction_date", 'description', OLD."description", 'category', OLD."category", 'transaction_type', OLD."transaction_type", 'amount', OLD."amount", 'balance_after', OLD."balance_after", 'notes', OLD."notes", 'created_at', OLD."created_at", 'updated_at', OLD."updated_at", 'reference_type', OLD."reference_type", 'reference_id', OLD."reference_id", 'receipt_url', OLD."receipt_url", 'pluggy_transaction_id', OLD."pluggy_transaction_id"), '$.import_fingerprint', OLD."import_fingerprint", '$.transaction_time', OLD."transaction_time"), NULL);
-END;
-CREATE TRIGGER IF NOT EXISTS "bank_transactions_balance_update__insert" AFTER INSERT ON "bank_transactions" FOR EACH ROW
-BEGIN
-  UPDATE bank_accounts SET balance = round((SELECT COALESCE(SUM(CASE WHEN transaction_type = 'income' THEN amount ELSE 0 END), 0) - COALESCE(SUM(CASE WHEN transaction_type = 'expense' THEN amount ELSE 0 END), 0) FROM bank_transactions WHERE bank_account_id = NEW.bank_account_id), 2), updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE id = NEW.bank_account_id;
-END;
-CREATE TRIGGER IF NOT EXISTS "bank_transactions_balance_update__update" AFTER UPDATE ON "bank_transactions" FOR EACH ROW
-BEGIN
-  UPDATE bank_accounts SET balance = round((SELECT COALESCE(SUM(CASE WHEN transaction_type = 'income' THEN amount ELSE 0 END), 0) - COALESCE(SUM(CASE WHEN transaction_type = 'expense' THEN amount ELSE 0 END), 0) FROM bank_transactions WHERE bank_account_id = COALESCE(NEW.bank_account_id, OLD.bank_account_id)), 2), updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE id = COALESCE(NEW.bank_account_id, OLD.bank_account_id);
-END;
-CREATE TRIGGER IF NOT EXISTS "bank_transactions_balance_update__delete" AFTER DELETE ON "bank_transactions" FOR EACH ROW
-BEGIN
-  UPDATE bank_accounts SET balance = round((SELECT COALESCE(SUM(CASE WHEN transaction_type = 'income' THEN amount ELSE 0 END), 0) - COALESCE(SUM(CASE WHEN transaction_type = 'expense' THEN amount ELSE 0 END), 0) FROM bank_transactions WHERE bank_account_id = OLD.bank_account_id), 2), updated_at = strftime('%Y-%m-%dT%H:%M:%f+00:00','now') WHERE id = OLD.bank_account_id;
 END;
 CREATE TRIGGER IF NOT EXISTS "auto_update_balance_on_transaction__insert" AFTER INSERT ON "bank_transactions" FOR EACH ROW
 BEGIN

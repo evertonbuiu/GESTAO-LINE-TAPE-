@@ -17,21 +17,41 @@ const BALANCE = `(SELECT COALESCE(SUM(CASE WHEN bt.transaction_type = 'income' T
 
 export function syncBankTransactionsSql() {
   return [
-    // Limpar transações automáticas existentes
+    // 1) Limpeza segura (apenas lançamentos sincronizados do sistema)
+    { sql: `DELETE FROM bank_transactions WHERE reference_type = 'event'` },
+    { sql: `DELETE FROM bank_transactions WHERE reference_type = 'event_remaining'` },
+    // receitas event_income que correspondem exatamente ao pagamento principal
     {
       sql: `DELETE FROM bank_transactions
-             WHERE reference_type IN ('event', 'expense', 'event_remaining', 'recurring_expense')`,
+             WHERE reference_type = 'event_income'
+               AND EXISTS (SELECT 1 FROM events e
+                            WHERE e.id = bank_transactions.reference_id AND e.is_paid = 1
+                              AND COALESCE(e.payment_amount, 0) > 0
+                              AND bank_transactions.amount = e.payment_amount
+                              AND bank_transactions.transaction_date = COALESCE(date(e.payment_date), e.event_date))`,
     },
+    // ... e ao pagamento restante
+    {
+      sql: `DELETE FROM bank_transactions
+             WHERE reference_type = 'event_income'
+               AND EXISTS (SELECT 1 FROM events e
+                            WHERE e.id = bank_transactions.reference_id AND e.is_remaining_paid = 1
+                              AND COALESCE(e.remaining_payment_amount, 0) > 0
+                              AND bank_transactions.amount = e.remaining_payment_amount
+                              AND bank_transactions.transaction_date = COALESCE(date(e.remaining_payment_date), e.event_date))`,
+    },
+    { sql: `DELETE FROM bank_transactions WHERE reference_type IN ('expense', 'event_expense') AND reference_id IS NOT NULL` },
+    { sql: `DELETE FROM bank_transactions WHERE reference_type = 'recurring_expense' AND reference_id IS NOT NULL` },
     // Eventos pagos -> receitas (pagamento principal)
     {
       sql: `INSERT INTO bank_transactions (bank_account_id, description, amount, transaction_type, category,
                                            reference_type, reference_id, transaction_date)
             SELECT ${ACCOUNT_BY_NAME("COALESCE(e.payment_bank_account, 'Conta Corrente Principal')")},
                    'Receita - ' || e.name || ' (' || COALESCE(e.client_name, 'Cliente') || ')',
-                   e.payment_amount, 'income', 'Receita de Eventos', 'event', e.id,
-                   COALESCE(e.payment_date, e.event_date)
+                   e.payment_amount, 'income', 'Receita de Eventos', 'event_income', e.id,
+                   COALESCE(date(e.payment_date), e.event_date)
               FROM events e
-             WHERE e.is_paid = 1 AND e.payment_amount > 0
+             WHERE e.is_paid = 1 AND COALESCE(e.payment_amount, 0) > 0
                AND ${ACCOUNT_BY_NAME("COALESCE(e.payment_bank_account, 'Conta Corrente Principal')")} IS NOT NULL`,
     },
     // Pagamentos restantes de eventos
@@ -41,9 +61,9 @@ export function syncBankTransactionsSql() {
             SELECT ${ACCOUNT_BY_NAME("COALESCE(e.remaining_payment_bank_account, 'Conta Corrente Principal')")},
                    'Restante - ' || e.name || ' (' || COALESCE(e.client_name, 'Cliente') || ')',
                    e.remaining_payment_amount, 'income', 'Receita de Eventos', 'event_remaining', e.id,
-                   COALESCE(e.remaining_payment_date, e.event_date)
+                   COALESCE(date(e.remaining_payment_date), e.event_date)
               FROM events e
-             WHERE e.is_remaining_paid = 1 AND e.remaining_payment_amount > 0
+             WHERE e.is_remaining_paid = 1 AND COALESCE(e.remaining_payment_amount, 0) > 0
                AND ${ACCOUNT_BY_NAME("COALESCE(e.remaining_payment_bank_account, 'Conta Corrente Principal')")} IS NOT NULL`,
     },
     // Despesas de eventos com conta bancária vinculada
@@ -53,7 +73,7 @@ export function syncBankTransactionsSql() {
             SELECT ${ACCOUNT_BY_NAME('ee.expense_bank_account')},
                    COALESCE(ee.description, 'Despesa') || COALESCE(' - ' || e.name, ''),
                    ee.total_price, 'expense', COALESCE(ee.category, 'Despesas Evento'), 'expense', ee.id,
-                   COALESCE(ee.expense_date, date(ee.created_at))
+                   COALESCE(date(ee.expense_date), date(ee.created_at))
               FROM event_expenses ee
               LEFT JOIN events e ON ee.event_id = e.id
              WHERE ee.expense_bank_account IS NOT NULL AND ee.expense_bank_account != ''

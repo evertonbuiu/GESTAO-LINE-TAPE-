@@ -3,12 +3,8 @@ export const HOOKS = {
  "approval_requests": {
   "updatedAt": true
  },
- "auth.users": {},
  "bank_account_closings": {
   "closingActor": true
- },
- "bank_accounts": {
-  "updatedAt": true
  },
  "bank_card_transactions": {
   "updatedAt": true
@@ -26,37 +22,14 @@ export const HOOKS = {
  "client_custom_items": {
   "updatedAt": true
  },
- "clients": {
-  "updatedAt": true
- },
  "collaborator_food_allowances": {
-  "updatedAt": true
- },
- "collaborators": {
-  "updatedAt": true
- },
- "company_expenses": {},
- "company_settings": {
-  "updatedAt": true
- },
- "contract_payments": {
   "updatedAt": true
  },
  "contract_templates": {
   "updatedAt": true
  },
  "contracts": {
-  "contractSign": true,
-  "updatedAt": true
- },
- "daily_rates": {
-  "updatedAt": true
- },
- "equipment": {
-  "updatedAt": true
- },
- "event_budgets": {
-  "updatedAt": true
+  "contractSign": true
  },
  "event_checklist_items": {
   "updatedAt": true
@@ -71,18 +44,6 @@ export const HOOKS = {
   "updatedAt": true
  },
  "event_equipment": {
-  "updatedAt": true
- },
- "event_expenses": {
-  "updatedAt": true
- },
- "event_transport_vehicles": {
-  "updatedAt": true
- },
- "events": {
-  "updatedAt": true
- },
- "external_quotes": {
   "updatedAt": true
  },
  "finance_installments": {
@@ -103,9 +64,6 @@ export const HOOKS = {
  "interstate_transports": {
   "updatedAt": true
  },
- "maintenance_records": {
-  "updatedAt": true
- },
  "message_templates": {
   "updatedAt": true
  },
@@ -116,9 +74,6 @@ export const HOOKS = {
   "updatedAt": true
  },
  "nfse_invoices": {
-  "updatedAt": true
- },
- "patrimony_inventory": {
   "updatedAt": true
  },
  "person_sensitive_data": {
@@ -157,25 +112,13 @@ export const HOOKS = {
  "recurring_expense_monthly_payments": {
   "updatedAt": true
  },
- "recurring_expense_payment_plans": {
-  "updatedAt": true
- },
  "recurring_expenses": {
-  "updatedAt": true
- },
- "role_permissions": {
   "updatedAt": true
  },
  "saved_bank_accounts": {
   "updatedAt": true
  },
- "user_credentials": {
-  "updatedAt": true
- },
  "user_theme_preferences": {
-  "updatedAt": true
- },
- "whatsapp_expenses": {
   "updatedAt": true
  },
  "whatsapp_messages": {
@@ -197,4 +140,4 @@ export const HOOKS = {
   "updatedAt": true
  }
 };
-export const POST_SYNC_TABLES = ["company_expenses", "event_expenses", "events", "recurring_expenses"];
+export const POST_SYNC_TABLES = [];

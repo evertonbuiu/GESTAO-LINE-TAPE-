@@ -10,6 +10,7 @@
 //   DELETE   /object/<bucket>  {prefixes}       apagar
 //   POST     /object/move | /object/copy
 import { signJwt, verifyJwt } from './crypto.js';
+import { storageAllowed } from './storagePolicies.js';
 import { ApiError, json, readJson } from './util.js';
 
 // Buckets públicos no sistema original (leitura sem login)
@@ -27,6 +28,19 @@ function key(bucket, path) {
   return `${bucket}/${path}`;
 }
 
+async function ownerOf(db, bucket, path) {
+  const r = await db.first('SELECT owner FROM storage_objects WHERE bucket_id = ? AND name = ?', [bucket, path]);
+  return r ? { exists: true, owner: r.owner ?? null } : { exists: false, owner: null };
+}
+
+function deny() {
+  throw new ApiError(403, 'Unauthorized', 'new row violates row-level security policy');
+}
+
+function notFound() {
+  throw new ApiError(400, 'not_found', 'Object not found');
+}
+
 function requireUser(ctx) {
   if (!ctx.uid && !ctx.service) throw new ApiError(403, 'Unauthorized', 'new row violates row-level security policy');
 }
@@ -34,6 +48,12 @@ function requireUser(ctx) {
 async function putObject(request, env, db, ctx, bucket, path, upsert) {
   requireUser(ctx);
   const k = key(bucket, path);
+  const cur = await ownerOf(db, bucket, path);
+  if (cur.exists && upsert) {
+    if (!storageAllowed(ctx, 'update', bucket, path, cur.owner)) deny();
+  } else if (!storageAllowed(ctx, 'insert', bucket, path, ctx.uid ?? null)) {
+    deny();
+  }
   if (!upsert) {
     const exists = await env.FILES.head(k);
     if (exists) return json({ statusCode: '409', error: 'Duplicate', message: 'The resource already exists' }, 400);
@@ -92,6 +112,8 @@ export async function handleStorage(request, env, db, ctx, rest) {
     }
     if (method === 'POST') {
       requireUser(ctx);
+      const cur = await ownerOf(db, bucket, path);
+      if (!cur.exists || !storageAllowed(ctx, 'select', bucket, path, cur.owner)) notFound();
       const body = (await readJson(request)) || {};
       const expiresIn = Number(body.expiresIn || 3600);
       const token = await signJwt({ url: key(bucket, path), exp: Math.floor(Date.now() / 1000) + expiresIn }, env.JWT_SECRET);
@@ -107,6 +129,11 @@ export async function handleStorage(request, env, db, ctx, rest) {
     const expiresIn = Number(body.expiresIn || 3600);
     const out = [];
     for (const p of body.paths || []) {
+      const cur = await ownerOf(db, bucket, p);
+      if (!cur.exists || !storageAllowed(ctx, 'select', bucket, p, cur.owner)) {
+        out.push({ path: p, signedURL: null, error: 'Either the object does not exist or you do not have access to it' });
+        continue;
+      }
       const token = await signJwt({ url: key(bucket, p), exp: Math.floor(Date.now() / 1000) + expiresIn }, env.JWT_SECRET);
       out.push({ path: p, signedURL: `/object/sign/${bucket}/${encodeURI(p)}?token=${token}`, error: null });
     }
@@ -123,7 +150,7 @@ export async function handleStorage(request, env, db, ctx, rest) {
     const offset = Number(body.offset || 0);
     const like = prefix ? prefix + '/%' : '%';
     const rows = await db.all(
-      `SELECT name, content_type, size, created_at, updated_at FROM storage_objects
+      `SELECT name, owner, content_type, size, created_at, updated_at FROM storage_objects
         WHERE bucket_id = ? AND name LIKE ? ORDER BY name LIMIT ? OFFSET ?`,
       [bucket, like, limit + 1000, offset],
     );
@@ -131,6 +158,7 @@ export async function handleStorage(request, env, db, ctx, rest) {
     const out = [];
     const search = (body.search || '').toLowerCase();
     for (const r of rows) {
+      if (!storageAllowed(ctx, 'select', bucket, r.name, r.owner ?? null)) continue;
       const rel = prefix ? r.name.slice(prefix.length + 1) : r.name;
       const slash = rel.indexOf('/');
       if (slash >= 0) {
@@ -160,6 +188,11 @@ export async function handleStorage(request, env, db, ctx, rest) {
     const src = key(body.bucketId, safePath(body.sourceKey));
     const dstBucket = body.destinationBucket || body.bucketId;
     const dst = key(dstBucket, safePath(body.destinationKey));
+    const srcCur = await ownerOf(db, body.bucketId, body.sourceKey);
+    if (!srcCur.exists || !storageAllowed(ctx, 'select', body.bucketId, body.sourceKey, srcCur.owner)) notFound();
+    const dstCur = await ownerOf(db, dstBucket, body.destinationKey);
+    if (!storageAllowed(ctx, dstCur.exists ? 'update' : 'insert', dstBucket, body.destinationKey, dstCur.exists ? dstCur.owner : ctx.uid ?? null)) deny();
+    if (rest === 'object/move' && !storageAllowed(ctx, 'delete', body.bucketId, body.sourceKey, srcCur.owner)) deny();
     const obj = await env.FILES.get(src);
     if (!obj) throw new ApiError(404, 'not_found', 'Object not found');
     await env.FILES.put(dst, obj.body, { httpMetadata: obj.httpMetadata });
@@ -183,6 +216,8 @@ export async function handleStorage(request, env, db, ctx, rest) {
     const out = [];
     for (const p of body.prefixes || []) {
       const path = safePath(p);
+      const cur = await ownerOf(db, bucket, path);
+      if (!cur.exists || !storageAllowed(ctx, 'delete', bucket, path, cur.owner)) continue;
       await env.FILES.delete(key(bucket, path));
       await db.d1.prepare('DELETE FROM storage_objects WHERE bucket_id = ? AND name = ?').bind(bucket, path).run();
       out.push({ name: path, bucket_id: bucket });
@@ -194,7 +229,11 @@ export async function handleStorage(request, env, db, ctx, rest) {
     const [, bucket, p] = m;
     const path = safePath(p);
     if (method === 'GET' || method === 'HEAD') {
-      if (!PUBLIC_BUCKETS.has(bucket)) requireUser(ctx);
+      if (!PUBLIC_BUCKETS.has(bucket)) {
+        requireUser(ctx);
+        const cur = await ownerOf(db, bucket, path);
+        if (!cur.exists || !storageAllowed(ctx, 'select', bucket, path, cur.owner)) notFound();
+      }
       return getObject(env, bucket, path);
     }
     if (method === 'POST' || method === 'PUT') {

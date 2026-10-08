@@ -1,0 +1,1652 @@
+[
+ {
+  "t": "app_error_logs",
+  "n": "Admins can read error logs",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "is_current_user_admin()",
+  "w": null
+ },
+ {
+  "t": "app_error_logs",
+  "n": "Users insert own error logs",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "(user_id = auth.uid())"
+ },
+ {
+  "t": "approval_requests",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "audit_log",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "audit_logs",
+  "n": "Admins can read audit logs",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "is_current_user_admin()",
+  "w": null
+ },
+ {
+  "t": "bank_account_closings",
+  "n": "bac_insert",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "bank_account_closings",
+  "n": "bac_select",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": null
+ },
+ {
+  "t": "bank_accounts",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "bank_card_transactions",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "bank_cards",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "bank_transaction_reconciliations",
+  "n": "btr_delete",
+  "c": "DELETE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": null
+ },
+ {
+  "t": "bank_transaction_reconciliations",
+  "n": "btr_insert",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "bank_transaction_reconciliations",
+  "n": "btr_select",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": null
+ },
+ {
+  "t": "bank_transaction_reconciliations",
+  "n": "btr_update",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "bank_transactions",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "client_advances",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "client_custom_items",
+  "n": "Comercial read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "client_custom_items",
+  "n": "Comercial write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "clients",
+  "n": "Comercial read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "clients",
+  "n": "Comercial write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "collaborator_advances",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "collaborator_expense_advances",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "collaborator_food_allowances",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "collaborator_monthly_salaries",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "collaborator_payments",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "collaborators",
+  "n": "People read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "collaborators",
+  "n": "People write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "company_expenses",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "company_fixed_expense_monthly_payments",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "company_fixed_expenses",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "company_settings",
+  "n": "Whats read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text])",
+  "w": null
+ },
+ {
+  "t": "company_settings",
+  "n": "Whats write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text])"
+ },
+ {
+  "t": "contract_attachments",
+  "n": "Comercial read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "contract_attachments",
+  "n": "Comercial write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "contract_history",
+  "n": "Comercial insert",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "contract_history",
+  "n": "Comercial read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "contract_payments",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "contract_templates",
+  "n": "Comercial read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "contract_templates",
+  "n": "Comercial write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "contracts",
+  "n": "Comercial read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "contracts",
+  "n": "Comercial write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "daily_rates",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "equipment",
+  "n": "Equip read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "equipment",
+  "n": "Equip write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text])"
+ },
+ {
+  "t": "event_budgets",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "event_budgets",
+  "n": "Funcionario read event_budgets",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "event_checklist_items",
+  "n": "checklist_items_delete_operacional",
+  "c": "DELETE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "event_checklist_items",
+  "n": "checklist_items_select_authenticated",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "true",
+  "w": null
+ },
+ {
+  "t": "event_checklist_items",
+  "n": "checklist_items_update_operacional",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "event_checklist_items",
+  "n": "checklist_items_write_operacional",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "event_checklists",
+  "n": "checklists_delete_admin",
+  "c": "DELETE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "is_current_user_admin()",
+  "w": null
+ },
+ {
+  "t": "event_checklists",
+  "n": "checklists_select_authenticated",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "true",
+  "w": null
+ },
+ {
+  "t": "event_checklists",
+  "n": "checklists_update_operacional",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "event_checklists",
+  "n": "checklists_write_operacional",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "event_collaborators",
+  "n": "Comercial read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "event_collaborators",
+  "n": "Comercial write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "event_contracts",
+  "n": "Comercial read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "event_contracts",
+  "n": "Comercial write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "event_equipment",
+  "n": "Equip read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "event_equipment",
+  "n": "Equip write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text])"
+ },
+ {
+  "t": "event_expenses",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "events",
+  "n": "Comercial read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "events",
+  "n": "Comercial write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "external_quotes",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "external_quotes",
+  "n": "Funcionario read external_quotes",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "finance_installments",
+  "n": "finance_installments_insert_finance",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "finance_installments",
+  "n": "finance_installments_read_finance",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": null
+ },
+ {
+  "t": "finance_installments",
+  "n": "finance_installments_update_finance",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "finance_payments",
+  "n": "finance_payments_insert_finance",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "finance_payments",
+  "n": "finance_payments_read_finance",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": null
+ },
+ {
+  "t": "finance_titles",
+  "n": "finance_titles_insert_finance",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "finance_titles",
+  "n": "finance_titles_read_finance",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": null
+ },
+ {
+  "t": "finance_titles",
+  "n": "finance_titles_update_finance",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "fiscal_document_events",
+  "n": "fiscal_document_events_read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text]) OR (EXISTS ( SELECT 1\n   FROM fiscal_documents d\n  WHERE ((d.id = fiscal_document_events.document_id) AND (d.created_by = auth.uid())))))",
+  "w": null
+ },
+ {
+  "t": "fiscal_document_items",
+  "n": "fiscal_document_items_manage",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "fiscal_document_items",
+  "n": "fiscal_document_items_read_own",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(EXISTS ( SELECT 1\n   FROM fiscal_documents d\n  WHERE ((d.id = fiscal_document_items.document_id) AND (d.created_by = auth.uid()))))",
+  "w": null
+ },
+ {
+  "t": "fiscal_documents",
+  "n": "fiscal_documents_manage",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "fiscal_documents",
+  "n": "fiscal_documents_read_own",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(created_by = auth.uid())",
+  "w": null
+ },
+ {
+  "t": "fiscal_profiles",
+  "n": "fiscal_profiles_manage",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "fiscal_profiles",
+  "n": "fiscal_profiles_read_basic",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'deposito'::text, 'funcionario'::text])",
+  "w": null
+ },
+ {
+  "t": "interstate_transports",
+  "n": "Equip read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "interstate_transports",
+  "n": "Equip write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text])"
+ },
+ {
+  "t": "maintenance_records",
+  "n": "Equip read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "maintenance_records",
+  "n": "Equip write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text])"
+ },
+ {
+  "t": "message_templates",
+  "n": "message_templates_delete_admin",
+  "c": "DELETE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "is_current_user_admin()",
+  "w": null
+ },
+ {
+  "t": "message_templates",
+  "n": "message_templates_select_authenticated",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "true",
+  "w": null
+ },
+ {
+  "t": "message_templates",
+  "n": "message_templates_update_comercial",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "message_templates",
+  "n": "message_templates_write_comercial",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "nfse_certificates",
+  "n": "nfse_cert_admin_only",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "is_current_user_admin()",
+  "w": "is_current_user_admin()"
+ },
+ {
+  "t": "nfse_config",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "nfse_invoices",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "patrimony_inventory",
+  "n": "Equip read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "patrimony_inventory",
+  "n": "Equip write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'funcionario'::text, 'deposito'::text])"
+ },
+ {
+  "t": "permissions",
+  "n": "perm_admin_write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "is_current_user_admin()",
+  "w": "is_current_user_admin()"
+ },
+ {
+  "t": "permissions",
+  "n": "perm_read_authenticated",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "true",
+  "w": null
+ },
+ {
+  "t": "person_sensitive_data",
+  "n": "Somente admin e financeiro acessam dados sensiveis",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "person_status_history",
+  "n": "Admin e financeiro registram historico de status",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "person_status_history",
+  "n": "Autenticados leem historico de status",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "personal_accounts",
+  "n": "personal_accounts_insert_own",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "(owner_id = auth.uid())"
+ },
+ {
+  "t": "personal_accounts",
+  "n": "personal_accounts_select_own",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(owner_id = auth.uid())",
+  "w": null
+ },
+ {
+  "t": "personal_accounts",
+  "n": "personal_accounts_update_own",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(owner_id = auth.uid())",
+  "w": "(owner_id = auth.uid())"
+ },
+ {
+  "t": "personal_budgets",
+  "n": "personal_budgets_insert_own",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "(owner_id = auth.uid())"
+ },
+ {
+  "t": "personal_budgets",
+  "n": "personal_budgets_select_own",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(owner_id = auth.uid())",
+  "w": null
+ },
+ {
+  "t": "personal_budgets",
+  "n": "personal_budgets_update_own",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(owner_id = auth.uid())",
+  "w": "(owner_id = auth.uid())"
+ },
+ {
+  "t": "personal_categories",
+  "n": "personal_categories_insert_own",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "(owner_id = auth.uid())"
+ },
+ {
+  "t": "personal_categories",
+  "n": "personal_categories_select_own",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(owner_id = auth.uid())",
+  "w": null
+ },
+ {
+  "t": "personal_categories",
+  "n": "personal_categories_update_own",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(owner_id = auth.uid())",
+  "w": "(owner_id = auth.uid())"
+ },
+ {
+  "t": "personal_expense_attachments",
+  "n": "personal_expense_attachments_delete_own",
+  "c": "DELETE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(owner_id = auth.uid())",
+  "w": null
+ },
+ {
+  "t": "personal_expense_attachments",
+  "n": "personal_expense_attachments_insert_own",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "(owner_id = auth.uid())"
+ },
+ {
+  "t": "personal_expense_attachments",
+  "n": "personal_expense_attachments_select_own",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(owner_id = auth.uid())",
+  "w": null
+ },
+ {
+  "t": "personal_expense_attachments",
+  "n": "personal_expense_attachments_update_own",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(owner_id = auth.uid())",
+  "w": "(owner_id = auth.uid())"
+ },
+ {
+  "t": "personal_expenses",
+  "n": "personal_expenses_insert_own",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "(owner_id = auth.uid())"
+ },
+ {
+  "t": "personal_expenses",
+  "n": "personal_expenses_select_own",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(owner_id = auth.uid())",
+  "w": null
+ },
+ {
+  "t": "personal_expenses",
+  "n": "personal_expenses_update_own",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(owner_id = auth.uid())",
+  "w": "(owner_id = auth.uid())"
+ },
+ {
+  "t": "personal_recurrences",
+  "n": "personal_recurrences_insert_own",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "(owner_id = auth.uid())"
+ },
+ {
+  "t": "personal_recurrences",
+  "n": "personal_recurrences_select_own",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(owner_id = auth.uid())",
+  "w": null
+ },
+ {
+  "t": "personal_recurrences",
+  "n": "personal_recurrences_update_own",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(owner_id = auth.uid())",
+  "w": "(owner_id = auth.uid())"
+ },
+ {
+  "t": "profiles",
+  "n": "profiles_admin_manage",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "is_current_user_admin()",
+  "w": "is_current_user_admin()"
+ },
+ {
+  "t": "profiles",
+  "n": "profiles_select_self_or_admin",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "((auth.uid() = user_id) OR is_current_user_admin())",
+  "w": null
+ },
+ {
+  "t": "profiles",
+  "n": "profiles_update_own_or_admin",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "((auth.uid() = user_id) OR is_current_user_admin())",
+  "w": "((auth.uid() = user_id) OR is_current_user_admin())"
+ },
+ {
+  "t": "quote_approvals",
+  "n": "quote_approvals_insert_comercial",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "quote_approvals",
+  "n": "quote_approvals_select_comercial",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": null
+ },
+ {
+  "t": "quote_approvals",
+  "n": "quote_approvals_update_comercial",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "recurring_expense_monthly_payments",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "recurring_expense_payment_plans",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "recurring_expenses",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "role_permissions",
+  "n": "rp_admin_write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "is_current_user_admin()",
+  "w": "is_current_user_admin()"
+ },
+ {
+  "t": "role_permissions",
+  "n": "rp_read_authenticated",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "true",
+  "w": null
+ },
+ {
+  "t": "saved_bank_accounts",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "saved_signatures",
+  "n": "Signatures access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "user_credentials",
+  "n": "uc_admin_delete",
+  "c": "DELETE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "is_current_user_admin()",
+  "w": null
+ },
+ {
+  "t": "user_credentials",
+  "n": "uc_admin_insert",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "is_current_user_admin()"
+ },
+ {
+  "t": "user_credentials",
+  "n": "uc_admin_update",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "is_current_user_admin()",
+  "w": "is_current_user_admin()"
+ },
+ {
+  "t": "user_credentials",
+  "n": "uc_select_self_or_admin",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "((auth.uid() = id) OR is_current_user_admin())",
+  "w": null
+ },
+ {
+  "t": "user_permissions",
+  "n": "up_admin_manage",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "is_current_user_admin()",
+  "w": "is_current_user_admin()"
+ },
+ {
+  "t": "user_permissions",
+  "n": "up_select_self_or_admin",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "((auth.uid() = user_id) OR is_current_user_admin())",
+  "w": null
+ },
+ {
+  "t": "user_roles",
+  "n": "ur_admin_manage",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "is_current_user_admin()",
+  "w": "is_current_user_admin()"
+ },
+ {
+  "t": "user_roles",
+  "n": "ur_select_self_or_admin",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "((auth.uid() = user_id) OR is_current_user_admin())",
+  "w": null
+ },
+ {
+  "t": "user_theme_preferences",
+  "n": "Own preferences",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "(user_id = auth.uid())",
+  "w": "(user_id = auth.uid())"
+ },
+ {
+  "t": "whatsapp_messages",
+  "n": "Whats read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text])",
+  "w": null
+ },
+ {
+  "t": "whatsapp_messages",
+  "n": "Whats write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text])"
+ },
+ {
+  "t": "worker_advances",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "worker_availability",
+  "n": "Escala atualiza disponibilidade",
+  "c": "UPDATE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text])"
+ },
+ {
+  "t": "worker_availability",
+  "n": "Escala cria disponibilidade",
+  "c": "INSERT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": null,
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text])"
+ },
+ {
+  "t": "worker_availability",
+  "n": "Escala remove disponibilidade",
+  "c": "DELETE",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text])",
+  "w": null
+ },
+ {
+  "t": "worker_availability",
+  "n": "Perfis internos leem disponibilidade",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "worker_expense_advances",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "worker_food_allowances",
+  "n": "Financeiro full access",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ },
+ {
+  "t": "workers",
+  "n": "People read",
+  "c": "SELECT",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text, 'funcionario'::text, 'deposito'::text])",
+  "w": null
+ },
+ {
+  "t": "workers",
+  "n": "People write",
+  "c": "ALL",
+  "p": "PERMISSIVE",
+  "r": [
+   "authenticated"
+  ],
+  "q": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])",
+  "w": "current_user_has_any_role(ARRAY['admin'::text, 'financeiro'::text])"
+ }
+]

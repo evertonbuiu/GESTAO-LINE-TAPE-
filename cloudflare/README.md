@@ -83,6 +83,12 @@ Informe o `SETUP_TOKEN`, seu nome, um usuário e uma senha. Isso só funciona en
   - O original não recalculava o saldo da conta antiga quando um lançamento mudava de conta. A cópia recalcula as duas.
   - O mesmo vale para o total do evento antigo quando uma despesa muda de evento.
   - Duas permissões antigas deixavam qualquer pessoa, **mesmo sem login**, ler e alterar usuários e perfis (`user_credentials` e `user_roles`). Elas não foram copiadas.
+- **Regras e permissões conferidas com o banco real** (Supabase "sistema line tape 2026", lido em 08/10/2026):
+  - As regras automáticas são as 104 que existem lá (`rules/active_triggers.json`), não as 152 do histórico de migrações. Saíram, por exemplo, a baixa de estoque duplicada e as três regras repetidas do vale de colaborador, que faziam o cadastro de vale falhar.
+  - As permissões das tabelas vêm de `rules/real_policies.json` (lidas de `pg_policies`).
+  - As permissões dos arquivos seguem as do banco real (`worker/src/storagePolicies.js`): certificado digital só para administrador, comprovantes só para financeiro/administrador ou para quem enviou, e assim por diante.
+  - Como no original, marcar um evento como pago não lança no financeiro na hora: o lançamento aparece quando a sincronização roda (ícone de sincronizar no saldo da Gestão financeira).
+  - Melhoria: no original ninguém conseguia enviar arquivos para `company_files` (anexos da planilha de gastos) e `worker-photos` (foto do diarista), porque faltava a permissão. Na cópia, administrador e financeiro podem.
 - **Regra herdada do original:** o banco exige que cada origem (`reference_id`) tenha um único lançamento bancário. Um evento com pagamento principal **e** restante gera dois lançamentos com a mesma origem, e a sincronização automática falha em silêncio. Isso acontece igual no sistema atual. Dá para corrigir depois, se você quiser.
 
 ## Para quem for mexer no código
@@ -94,4 +100,4 @@ Informe o `SETUP_TOKEN`, seu nome, um usuário e uma senha. Isso só funciona en
 - `tools/port_functions.py`: copia as funções de `supabase/functions` para `worker/src/edge`.
 - Testes: `cd cloudflare/worker && npm test` (precisa do Node 22.6 ou mais novo).
 
-Se o banco atual tiver regras diferentes das migrações, salve a lista real em `rules/active_triggers.json` e rode `python3 cloudflare/tools/gen_rules.py`. Só as regras dessa lista serão criadas.
+As listas reais ficam em `rules/active_triggers.json` (regras automáticas) e `rules/real_policies.json` (permissões). Depois de mudar uma delas, rode `python3 cloudflare/tools/gen_rules.py` e `python3 cloudflare/tools/gen_policies.py`. Para um banco D1 que já está no ar, as diferenças de regras entram por uma migração nova (ver `worker/migrations/0004_real_triggers.sql`).

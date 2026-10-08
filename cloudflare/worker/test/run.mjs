@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 // Testes locais do Worker: banco D1 simulado com o SQLite do Node.
 // Rodar com:  node --no-warnings cloudflare/worker/test/run.mjs
 import { D1Shim } from './d1shim.mjs';
@@ -40,9 +41,9 @@ class R2Mock {
 
 export async function setup() {
   const d1 = new D1Shim();
-  d1.applyFile(path.join(migrations, '0001_schema.sql'));
-  d1.applyFile(path.join(migrations, '0002_rules.sql'));
-  d1.applyFile(path.join(migrations, '0003_settings.sql'));
+  for (const f of fs.readdirSync(migrations).filter((n) => /^\d{4}_.*\.sql$/.test(n)).sort()) {
+    d1.applyFile(path.join(migrations, f));
+  }
   const env = { DB: d1, JWT_SECRET: 'segredo-de-teste-com-mais-de-32-caracteres', FILES: new R2Mock(), ALLOWED_ORIGINS: '*' };
   const db = new Db(d1);
   async function mkUser(username, role, password = 'senha123') {

@@ -175,6 +175,13 @@ def main():
     # o SQLite dispara primeiro o criado por último. Por isso criamos em ordem
     # alfabética inversa.
     trigs.sort(key=lambda t: (t["table"], t["name"]), reverse=True)
+    # No PostgreSQL o nome do gatilho vale por tabela; no SQLite, para o banco
+    # todo. Nomes repetidos em tabelas diferentes ganham o nome da tabela.
+    seen = {}
+    for t in trigs:
+        seen.setdefault(t["name"], set()).add(t["table"])
+    for t in trigs:
+        t["sqlname"] = f'{t["table"]}__{t["name"]}' if len(seen[t["name"]]) > 1 else t["name"]
     missing = set()
     for t in trigs:
         if not t["per_row"]:
@@ -219,7 +226,7 @@ def main():
             when_sql = f" WHEN {expand(when, t['table'])}" if when else ""
             stmts = ";\n  ".join(expand(s, t["table"]) for s in body)
             ddl.append(
-                f'CREATE TRIGGER IF NOT EXISTS "{t["name"]}__{op.lower()}" {t["timing"]} {op}{of} ON "{t["table"]}" '
+                f'CREATE TRIGGER IF NOT EXISTS "{t["sqlname"]}__{op.lower()}" {t["timing"]} {op}{of} ON "{t["table"]}" '
                 f"FOR EACH ROW{when_sql}\nBEGIN\n  {stmts};\nEND;"
             )
     if missing:

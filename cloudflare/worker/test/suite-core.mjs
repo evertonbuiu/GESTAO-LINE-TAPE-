@@ -2,6 +2,7 @@
 export default async function ({ setup, client, ok }) {
   const { env, mkUser } = await setup();
   await mkUser('admin', 'admin');
+  const func = await mkUser('func', 'funcionario');
   const c = client(env);
 
   // --- login ---
@@ -106,7 +107,31 @@ export default async function ({ setup, client, ok }) {
   r = await c.call('POST', '/storage/v1/object/list/logos', { body: { prefix: '' } });
   ok(Array.isArray(r.data) && r.data[0].name === 'teste.png', 'listar arquivos', r.data);
   r = await c.call('POST', '/storage/v1/object/sign/receipts/a/b.pdf', { body: { expiresIn: 60 } });
+  ok(r.status === 400, 'link para arquivo inexistente é recusado (igual ao original)', r.data);
+  res = await c.call('POST', '/storage/v1/object/receipts/a/b.pdf', { raw: true, body: 'pdf' });
+  ok(res.status === 200, 'financeiro/admin envia comprovante');
+  r = await c.call('POST', '/storage/v1/object/sign/receipts/a/b.pdf', { body: { expiresIn: 60 } });
   ok(r.data.signedURL && r.data.signedURL.includes('token='), 'link assinado', r.data);
+  res = await c.call('POST', '/storage/v1/object/nfse-certificates/cert.pfx', { raw: true, body: 'x' });
+  ok(res.status === 200, 'admin envia certificado');
+
+  // --- arquivos: regras por perfil (funcionário) ---
+  c.logout();
+  await c.login('func');
+  res = await c.call('GET', '/storage/v1/object/nfse-certificates/cert.pfx', { raw: true });
+  ok(res.status === 400, 'funcionário não lê o certificado digital');
+  r = await c.call('POST', '/storage/v1/object/sign/receipts/a/b.pdf', { body: { expiresIn: 60 } });
+  ok(r.status === 400, 'funcionário não abre comprovante de outra pessoa', r.data);
+  res = await c.call('POST', `/storage/v1/object/worker-receipts/receipts/${func.id}-1.pdf`, { raw: true, body: 'x' });
+  ok(res.status === 200, 'funcionário envia o próprio comprovante');
+  res = await c.call('POST', '/storage/v1/object/worker-receipts/receipts/outro-1.pdf', { raw: true, body: 'x' });
+  ok(res.status === 403, 'funcionário não envia em nome de outro');
+  res = await c.call('POST', '/storage/v1/object/logos/x.png', { raw: true, body: 'x' });
+  ok(res.status === 403, 'funcionário não troca a logo');
+  r = await c.call('DELETE', '/storage/v1/object/receipts', { body: { prefixes: ['a/b.pdf'] } });
+  ok(Array.isArray(r.data) && r.data.length === 0, 'funcionário não apaga comprovante', r.data);
+  c.logout();
+  await c.login('admin');
 
   // --- atualização automática das telas ---
   r = await c.call('GET', '/realtime/v1/changes?since=0');

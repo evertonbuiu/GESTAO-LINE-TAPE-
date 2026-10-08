@@ -1,0 +1,418 @@
+[
+ {
+  "tabela": "approval_requests",
+  "nome": "update_approval_requests_updated_at"
+ },
+ {
+  "tabela": "bank_account_closings",
+  "nome": "trg_audit_bac"
+ },
+ {
+  "tabela": "bank_account_closings",
+  "nome": "trg_closing_immutable"
+ },
+ {
+  "tabela": "bank_account_closings",
+  "nome": "trg_force_closing_actor"
+ },
+ {
+  "tabela": "bank_accounts",
+  "nome": "trg_audit_bank_accounts"
+ },
+ {
+  "tabela": "bank_card_transactions",
+  "nome": "update_bank_card_transactions_updated_at"
+ },
+ {
+  "tabela": "bank_cards",
+  "nome": "update_bank_cards_updated_at"
+ },
+ {
+  "tabela": "bank_transaction_reconciliations",
+  "nome": "trg_audit_btr"
+ },
+ {
+  "tabela": "bank_transaction_reconciliations",
+  "nome": "trg_force_reconciliation_actor"
+ },
+ {
+  "tabela": "bank_transactions",
+  "nome": "auto_update_balance_on_transaction"
+ },
+ {
+  "tabela": "bank_transactions",
+  "nome": "trg_audit_bank_transactions"
+ },
+ {
+  "tabela": "bank_transactions",
+  "nome": "trg_enforce_bank_period_closing"
+ },
+ {
+  "tabela": "bank_transactions",
+  "nome": "trg_prevent_duplicate_bank_transaction_reference"
+ },
+ {
+  "tabela": "client_advances",
+  "nome": "update_client_advances_updated_at"
+ },
+ {
+  "tabela": "client_custom_items",
+  "nome": "update_client_custom_items_updated_at"
+ },
+ {
+  "tabela": "clients",
+  "nome": "trg_audit_clients"
+ },
+ {
+  "tabela": "collaborator_advances",
+  "nome": "create_collaborator_vale_transaction"
+ },
+ {
+  "tabela": "collaborator_advances",
+  "nome": "delete_collaborator_vale_transaction"
+ },
+ {
+  "tabela": "collaborator_food_allowances",
+  "nome": "update_collaborator_food_allowances_updated_at"
+ },
+ {
+  "tabela": "collaborators",
+  "nome": "validate_collaborator_fields"
+ },
+ {
+  "tabela": "contract_templates",
+  "nome": "update_contract_templates_updated_at"
+ },
+ {
+  "tabela": "contracts",
+  "nome": "enforce_signed_contract_immutability"
+ },
+ {
+  "tabela": "contracts",
+  "nome": "record_contract_history"
+ },
+ {
+  "tabela": "daily_rates",
+  "nome": "create_event_collaborator_from_daily_rate_trigger"
+ },
+ {
+  "tabela": "daily_rates",
+  "nome": "create_event_expense_from_daily_rate_trigger"
+ },
+ {
+  "tabela": "daily_rates",
+  "nome": "delete_event_collaborator_from_daily_rate_trigger"
+ },
+ {
+  "tabela": "daily_rates",
+  "nome": "delete_event_expense_from_daily_rate_trigger"
+ },
+ {
+  "tabela": "daily_rates",
+  "nome": "validate_daily_rate_fields_trg"
+ },
+ {
+  "tabela": "equipment",
+  "nome": "trg_audit_equipment"
+ },
+ {
+  "tabela": "event_checklist_items",
+  "nome": "update_event_checklist_items_updated_at"
+ },
+ {
+  "tabela": "event_checklists",
+  "nome": "update_event_checklists_updated_at"
+ },
+ {
+  "tabela": "event_collaborators",
+  "nome": "update_event_collaborators_updated_at"
+ },
+ {
+  "tabela": "event_collaborators",
+  "nome": "validate_event_collaborators_person_type"
+ },
+ {
+  "tabela": "event_contracts",
+  "nome": "update_event_contracts_updated_at"
+ },
+ {
+  "tabela": "event_equipment",
+  "nome": "update_equipment_stock_trigger"
+ },
+ {
+  "tabela": "event_equipment",
+  "nome": "update_event_equipment_updated_at"
+ },
+ {
+  "tabela": "event_expenses",
+  "nome": "trg_update_event_totals"
+ },
+ {
+  "tabela": "event_expenses",
+  "nome": "update_event_totals_trigger"
+ },
+ {
+  "tabela": "events",
+  "nome": "return_equipment_on_completion"
+ },
+ {
+  "tabela": "events",
+  "nome": "trg_audit_events"
+ },
+ {
+  "tabela": "finance_installments",
+  "nome": "trg_audit_finance_installments"
+ },
+ {
+  "tabela": "finance_installments",
+  "nome": "trg_finance_installment_guard"
+ },
+ {
+  "tabela": "finance_installments",
+  "nome": "trg_forbid_delete_finance_installments"
+ },
+ {
+  "tabela": "finance_payments",
+  "nome": "trg_audit_finance_payments"
+ },
+ {
+  "tabela": "finance_payments",
+  "nome": "trg_finance_payment_guard"
+ },
+ {
+  "tabela": "finance_payments",
+  "nome": "trg_forbid_delete_finance_payments"
+ },
+ {
+  "tabela": "finance_payments",
+  "nome": "trg_forbid_update_finance_payments"
+ },
+ {
+  "tabela": "finance_titles",
+  "nome": "trg_audit_finance_titles"
+ },
+ {
+  "tabela": "finance_titles",
+  "nome": "trg_finance_title_guard"
+ },
+ {
+  "tabela": "finance_titles",
+  "nome": "trg_forbid_delete_finance_titles"
+ },
+ {
+  "tabela": "fiscal_document_items",
+  "nome": "trg_fiscal_document_items_updated"
+ },
+ {
+  "tabela": "fiscal_documents",
+  "nome": "trg_fiscal_document_events"
+ },
+ {
+  "tabela": "fiscal_documents",
+  "nome": "trg_fiscal_document_guard"
+ },
+ {
+  "tabela": "fiscal_profiles",
+  "nome": "trg_fiscal_profiles_updated"
+ },
+ {
+  "tabela": "interstate_transports",
+  "nome": "trg_validate_interstate_transport"
+ },
+ {
+  "tabela": "interstate_transports",
+  "nome": "update_interstate_transports_updated_at"
+ },
+ {
+  "tabela": "message_templates",
+  "nome": "update_message_templates_updated_at"
+ },
+ {
+  "tabela": "nfse_certificates",
+  "nome": "update_nfse_certificates_updated_at"
+ },
+ {
+  "tabela": "nfse_config",
+  "nome": "update_nfse_config_updated_at"
+ },
+ {
+  "tabela": "nfse_invoices",
+  "nome": "trg_audit_nfse_invoices"
+ },
+ {
+  "tabela": "nfse_invoices",
+  "nome": "update_nfse_invoices_updated_at"
+ },
+ {
+  "tabela": "person_sensitive_data",
+  "nome": "trg_audit_person_sensitive_data_redacted"
+ },
+ {
+  "tabela": "person_sensitive_data",
+  "nome": "update_person_sensitive_data_updated_at"
+ },
+ {
+  "tabela": "person_sensitive_data",
+  "nome": "validate_person_sensitive_type"
+ },
+ {
+  "tabela": "person_status_history",
+  "nome": "validate_person_status_history_type"
+ },
+ {
+  "tabela": "personal_accounts",
+  "nome": "trg_personal_accounts_owner"
+ },
+ {
+  "tabela": "personal_accounts",
+  "nome": "trg_personal_accounts_touch"
+ },
+ {
+  "tabela": "personal_budgets",
+  "nome": "trg_personal_budgets_owner"
+ },
+ {
+  "tabela": "personal_budgets",
+  "nome": "trg_personal_budgets_touch"
+ },
+ {
+  "tabela": "personal_categories",
+  "nome": "trg_personal_categories_owner"
+ },
+ {
+  "tabela": "personal_categories",
+  "nome": "trg_personal_categories_touch"
+ },
+ {
+  "tabela": "personal_expense_attachments",
+  "nome": "trg_personal_expense_attachments_owner"
+ },
+ {
+  "tabela": "personal_expense_attachments",
+  "nome": "trg_personal_expense_attachments_touch"
+ },
+ {
+  "tabela": "personal_expenses",
+  "nome": "trg_personal_expenses_owner"
+ },
+ {
+  "tabela": "personal_expenses",
+  "nome": "trg_personal_expenses_reversal_validate"
+ },
+ {
+  "tabela": "personal_expenses",
+  "nome": "trg_personal_expenses_reversed_guard"
+ },
+ {
+  "tabela": "personal_expenses",
+  "nome": "trg_personal_expenses_touch"
+ },
+ {
+  "tabela": "personal_recurrences",
+  "nome": "trg_personal_recurrences_owner"
+ },
+ {
+  "tabela": "personal_recurrences",
+  "nome": "trg_personal_recurrences_touch"
+ },
+ {
+  "tabela": "profiles",
+  "nome": "update_profiles_updated_at"
+ },
+ {
+  "tabela": "quote_approvals",
+  "nome": "update_quote_approvals_updated_at"
+ },
+ {
+  "tabela": "recurring_expense_monthly_payments",
+  "nome": "create_bank_transaction_for_recurring_expense_payment"
+ },
+ {
+  "tabela": "recurring_expense_monthly_payments",
+  "nome": "delete_bank_transaction_for_recurring_expense_payment"
+ },
+ {
+  "tabela": "recurring_expense_monthly_payments",
+  "nome": "trg_audit_recurring_expense_monthly_payments"
+ },
+ {
+  "tabela": "recurring_expense_monthly_payments",
+  "nome": "update_bank_transaction_for_recurring_expense_payment"
+ },
+ {
+  "tabela": "recurring_expense_monthly_payments",
+  "nome": "update_recurring_expense_monthly_payments_updated_at"
+ },
+ {
+  "tabela": "recurring_expenses",
+  "nome": "trg_audit_recurring_expenses"
+ },
+ {
+  "tabela": "recurring_expenses",
+  "nome": "update_recurring_expenses_updated_at"
+ },
+ {
+  "tabela": "saved_bank_accounts",
+  "nome": "update_saved_bank_accounts_updated_at"
+ },
+ {
+  "tabela": "user_roles",
+  "nome": "trg_audit_user_roles"
+ },
+ {
+  "tabela": "user_theme_preferences",
+  "nome": "trg_utp_updated_at"
+ },
+ {
+  "tabela": "whatsapp_messages",
+  "nome": "update_whatsapp_messages_updated_at"
+ },
+ {
+  "tabela": "worker_advances",
+  "nome": "create_worker_advance_transaction"
+ },
+ {
+  "tabela": "worker_advances",
+  "nome": "delete_worker_advance_transaction"
+ },
+ {
+  "tabela": "worker_advances",
+  "nome": "update_worker_advance_transaction"
+ },
+ {
+  "tabela": "worker_advances",
+  "nome": "update_worker_advances_updated_at"
+ },
+ {
+  "tabela": "worker_availability",
+  "nome": "update_worker_availability_updated_at"
+ },
+ {
+  "tabela": "worker_availability",
+  "nome": "validate_worker_availability_trg"
+ },
+ {
+  "tabela": "worker_expense_advances",
+  "nome": "create_worker_advance_transaction"
+ },
+ {
+  "tabela": "worker_expense_advances",
+  "nome": "delete_worker_advance_transaction"
+ },
+ {
+  "tabela": "worker_expense_advances",
+  "nome": "update_worker_expense_advances_updated_at"
+ },
+ {
+  "tabela": "worker_food_allowances",
+  "nome": "update_worker_food_allowances_updated_at"
+ },
+ {
+  "tabela": "workers",
+  "nome": "update_workers_updated_at"
+ },
+ {
+  "tabela": "workers",
+  "nome": "validate_worker_fields"
+ }
+]
