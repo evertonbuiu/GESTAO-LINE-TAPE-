@@ -702,7 +702,7 @@ export const Equipment = () => {
 
       {/* Tabs para Categorias */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <div className="flex items-center justify-between mb-6">
+        <div className="mb-6 flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
           <TabsList className="grid w-auto grid-cols-6 gap-1">
             <TabsTrigger value="all">
               Todos ({equipment.length})
