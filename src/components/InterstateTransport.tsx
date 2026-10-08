@@ -2160,8 +2160,7 @@ export const InterstateTransport = () => {
                               variant="outline"
                               size="sm"
                               onClick={() => removeMaterial(material.id)}
-                              className="text-destructive hover:bg-destructive/10"
-                            >
+                              className="text-destructive hover:bg-destructive/10" title="Remover" aria-label="Remover">
                               <X className="w-4 h-4" />
                             </Button>
                           </div>

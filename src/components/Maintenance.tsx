@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Calendar, Clock, AlertTriangle, CheckCircle, XCircle, Plus, Edit, Trash2, Wrench, Search, Filter, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { getStatusVariant } from '@/lib/utils';
+import { formatCurrency, getStatusVariant } from '@/lib/utils';
 import { format, parseISO, addDays, isBefore, isAfter } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -843,23 +843,21 @@ export const Maintenance = () => {
                           {record.technician_name || '-'}
                         </TableCell>
                         <TableCell>
-                          R$ {record.cost.toFixed(2)}
+                          {formatCurrency(record.cost)}
                         </TableCell>
                         <TableCell>
                           <div className="flex gap-2">
                             <Button 
                               variant="outline" 
                               size="sm" 
-                              onClick={() => openEditDialog(record)}
-                            >
+                              onClick={() => openEditDialog(record)} title="Editar" aria-label="Editar">
                               <Edit className="w-4 h-4" />
                             </Button>
                             <Button 
                               variant="outline" 
                               size="sm" 
                               className="text-red-600 hover:text-red-700"
-                              onClick={() => deleteMaintenance(record.id)}
-                            >
+                              onClick={() => deleteMaintenance(record.id)} title="Excluir" aria-label="Excluir">
                               <Trash2 className="w-4 h-4" />
                             </Button>
                           </div>

@@ -535,7 +535,7 @@ export const WhatsAppMessages = () => {
             <code className="flex-1 p-3 bg-muted rounded-md text-sm break-all">
               {webhookUrl}
             </code>
-            <Button onClick={copyWebhookUrl} size="icon" variant="outline">
+            <Button onClick={copyWebhookUrl} size="icon" variant="outline" title="Copiar" aria-label="Copiar">
               <Copy className="w-4 h-4" />
             </Button>
           </div>
@@ -690,8 +690,7 @@ export const WhatsAppMessages = () => {
                                     size="sm"
                                     variant="ghost"
                                     onClick={() => handleIgnoreMessage(message.id)}
-                                    className="h-8"
-                                  >
+                                    className="h-8" title="Remover" aria-label="Remover">
                                     <X className="w-3 h-3" />
                                   </Button>
                                 </>
@@ -700,8 +699,7 @@ export const WhatsAppMessages = () => {
                                 size="sm"
                                 variant="ghost"
                                 onClick={() => handleDeleteMessage(message.id)}
-                                className="h-8 text-destructive hover:text-destructive"
-                              >
+                                className="h-8 text-destructive hover:text-destructive" title="Excluir" aria-label="Excluir">
                                 <Trash2 className="w-3 h-3" />
                               </Button>
                             </div>

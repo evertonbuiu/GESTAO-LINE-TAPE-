@@ -976,8 +976,7 @@ export const FiscalDocumentsPanel = ({ transports }: Props) => {
                           type="button"
                           size="icon"
                           variant="ghost"
-                          onClick={() => setForm((prev) => ({ ...prev, items: prev.items.filter((_, i) => i !== index) }))}
-                        >
+                          onClick={() => setForm((prev) => ({ ...prev, items: prev.items.filter((_, i) => i !== index) }))} title="Remover" aria-label="Remover">
                           <X className="h-4 w-4" />
                         </Button>
                       </div>

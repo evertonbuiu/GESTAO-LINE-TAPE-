@@ -1274,15 +1274,13 @@ Série: ${invoice.rps_series || 'RPS'}
                               onClick={() => {
                                 setSelectedInvoice(invoice);
                                 setIsViewDialogOpen(true);
-                              }}
-                            >
+                              }} title="Ver detalhes" aria-label="Ver detalhes">
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => generateRPSPdf(invoice)}
-                            >
+                              onClick={() => generateRPSPdf(invoice)} title="Imprimir" aria-label="Imprimir">
                               <Printer className="h-4 w-4" />
                             </Button>
                             {invoice.nfse_link && (

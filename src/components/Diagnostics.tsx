@@ -92,7 +92,7 @@ export const Diagnostics = () => {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Supabase</CardDescription>
+            <CardDescription>Servidor</CardDescription>
           </CardHeader>
           <CardContent>
             <Badge variant={dbStatus === "ok" ? "default" : dbStatus === "error" ? "destructive" : "outline"}>

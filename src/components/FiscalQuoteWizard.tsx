@@ -744,8 +744,7 @@ export const FiscalQuoteWizard = () => {
                                     type="button"
                                     variant="ghost"
                                     size="icon"
-                                    onClick={() => removeQuoteItem(index)}
-                                  >
+                                    onClick={() => removeQuoteItem(index)} title="Excluir" aria-label="Excluir">
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
                                 )}
@@ -1026,8 +1025,7 @@ export const FiscalQuoteWizard = () => {
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => {/* Implementar edição */}}
-                          >
+                            onClick={() => {/* Implementar edição */}} title="Editar" aria-label="Editar">
                             <Edit className="h-4 w-4" />
                           </Button>
                         )}

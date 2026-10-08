@@ -509,7 +509,7 @@ export const Contracts = () => {
                             {isContentLocked(contract) ? 'Abrir' : 'Editar'}
                           </Button>
                         )}
-                        <Button size="sm" variant="ghost" onClick={() => handleDownload(contract)}>
+                        <Button size="sm" variant="ghost" onClick={() => handleDownload(contract)} title="Baixar" aria-label="Baixar">
                           <Download className="h-4 w-4" />
                         </Button>
                       </div>

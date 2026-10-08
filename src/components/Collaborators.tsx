@@ -1962,8 +1962,7 @@ export const Collaborators = () => {
                   <Button 
                     variant="destructive" 
                     size="sm"
-                    onClick={() => handleDeleteCollaborator(collaborator)}
-                  >
+                    onClick={() => handleDeleteCollaborator(collaborator)} title="Excluir" aria-label="Excluir">
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 )}
@@ -2115,8 +2114,7 @@ export const Collaborators = () => {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleDeleteAdvance(advance.id)}
-                            >
+                              onClick={() => handleDeleteAdvance(advance.id)} title="Excluir" aria-label="Excluir">
                               <Trash2 className="w-4 h-4" />
                             </Button>
                           </TableCell>
@@ -2519,8 +2517,7 @@ export const Collaborators = () => {
                           type="button"
                           variant="ghost"
                           size="icon"
-                          onClick={() => setNotinhaFormData({ ...notinhaFormData, receipt_file: null })}
-                        >
+                          onClick={() => setNotinhaFormData({ ...notinhaFormData, receipt_file: null })} title="Excluir" aria-label="Excluir">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -2824,8 +2821,7 @@ export const Collaborators = () => {
                                   <Button
                                     variant="ghost"
                                     size="icon"
-                                    onClick={() => void openReceipt(expense.receipt_url)}
-                                  >
+                                    onClick={() => void openReceipt(expense.receipt_url)} title="Ver comprovante" aria-label="Ver comprovante">
                                     <ImageIcon className="h-4 w-4" />
                                   </Button>
                                 ) : (
@@ -2837,8 +2833,7 @@ export const Collaborators = () => {
                                   <Button
                                     variant="ghost"
                                     size="icon"
-                                    onClick={() => handleDeleteNotinha(expense.id)}
-                                  >
+                                    onClick={() => handleDeleteNotinha(expense.id)} title="Excluir" aria-label="Excluir">
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
                                 </TableCell>
@@ -2985,8 +2980,7 @@ export const Collaborators = () => {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => handleDeleteExpenseAdvance(advance.id)}
-                            >
+                              onClick={() => handleDeleteExpenseAdvance(advance.id)} title="Excluir" aria-label="Excluir">
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </TableCell>
@@ -3103,8 +3097,7 @@ export const Collaborators = () => {
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => handleDeletePayment(payment.id)}
-                                  >
+                                    onClick={() => handleDeletePayment(payment.id)} title="Excluir" aria-label="Excluir">
                                     <Trash2 className="w-4 h-4" />
                                   </Button>
                                 </TableCell>
@@ -3170,8 +3163,7 @@ export const Collaborators = () => {
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => handleDeleteAdvance(advance.id)}
-                                  >
+                                    onClick={() => handleDeleteAdvance(advance.id)} title="Excluir" aria-label="Excluir">
                                     <Trash2 className="w-4 h-4" />
                                   </Button>
                                 </TableCell>
@@ -3245,8 +3237,7 @@ export const Collaborators = () => {
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => void openReceipt(expense.receipt_url)}
-                                  >
+                                    onClick={() => void openReceipt(expense.receipt_url)} title="Comprovante" aria-label="Comprovante">
                                     <Receipt className="w-4 h-4" />
                                   </Button>
 
@@ -3401,8 +3392,7 @@ export const Collaborators = () => {
                              console.error('Error deleting salary:', error);
                              toast({ title: "Erro", description: "Erro ao remover salário", variant: "destructive" });
                            }
-                         }}
-                       >
+                         }} title="Excluir" aria-label="Excluir">
                          <Trash2 className="w-4 h-4" />
                        </Button>
                      )}

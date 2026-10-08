@@ -991,8 +991,7 @@ export const WorkerFoodAllowanceCalendar = ({
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => handleDeleteAllowance(allowance.id, allowance.allowance_type)}
-                          >
+                            onClick={() => handleDeleteAllowance(allowance.id, allowance.allowance_type)} title="Excluir" aria-label="Excluir">
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
                         )}

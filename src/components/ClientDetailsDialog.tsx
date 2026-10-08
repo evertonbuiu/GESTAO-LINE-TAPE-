@@ -1026,8 +1026,7 @@ export const ClientDetailsDialog = ({ clientId, clientName, open, onOpenChange }
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => deleteAdvance(advance.id)}
-                          >
+                            onClick={() => deleteAdvance(advance.id)} title="Excluir" aria-label="Excluir">
                             <Trash2 className="w-4 h-4 text-destructive" />
                           </Button>
                         </TableCell>
@@ -1143,8 +1142,7 @@ export const ClientDetailsDialog = ({ clientId, clientName, open, onOpenChange }
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => deleteCustomItem(item.id)}
-                          >
+                            onClick={() => deleteCustomItem(item.id)} title="Excluir" aria-label="Excluir">
                             <Trash2 className="w-4 h-4 text-destructive" />
                           </Button>
                         </TableCell>

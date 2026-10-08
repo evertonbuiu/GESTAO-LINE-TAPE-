@@ -1138,15 +1138,13 @@ export const ExpenseSpreadsheet = () => {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => setEditingExpense(expense)}
-                              >
+                                onClick={() => setEditingExpense(expense)} title="Editar" aria-label="Editar">
                                 <Edit className="h-4 w-4" />
                               </Button>
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handleDeleteExpense(expense.id)}
-                              >
+                                onClick={() => handleDeleteExpense(expense.id)} title="Excluir" aria-label="Excluir">
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </div>
@@ -1351,8 +1349,7 @@ export const ExpenseSpreadsheet = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleEditCategoryBudget(category)}
-                        >
+                          onClick={() => handleEditCategoryBudget(category)} title="Editar" aria-label="Editar">
                           <Edit className="h-4 w-4" />
                         </Button>
                       </TableCell>

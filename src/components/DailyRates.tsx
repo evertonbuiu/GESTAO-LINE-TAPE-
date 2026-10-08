@@ -2411,8 +2411,7 @@ export const DailyRates = () => {
                               onClick={() => {
                                 setWorkerPhoto(null);
                                 setWorkerPhotoPreview(null);
-                              }}
-                            >
+                              }} title="Excluir" aria-label="Excluir">
                               <Trash2 className="h-3 w-3" />
                             </Button>
                           </div>
@@ -2486,8 +2485,7 @@ export const DailyRates = () => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => handleDeleteWorker(worker.name)}
-                        >
+                          onClick={() => handleDeleteWorker(worker.name)} title="Excluir" aria-label="Excluir">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       )}
@@ -2947,8 +2945,7 @@ export const DailyRates = () => {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => handleDeleteAdvance(advance.id)}
-                              >
+                                onClick={() => handleDeleteAdvance(advance.id)} title="Excluir" aria-label="Excluir">
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </TableCell>
@@ -3151,8 +3148,7 @@ export const DailyRates = () => {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => void openReceipt(advance.receipt_url)}
-                              >
+                                onClick={() => void openReceipt(advance.receipt_url)} title="Comprovante" aria-label="Comprovante">
                                 <Receipt className="h-4 w-4" />
                               </Button>
                             ) : (
@@ -3164,8 +3160,7 @@ export const DailyRates = () => {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => handleDeleteExpenseAdvance(advance.id)}
-                              >
+                                onClick={() => handleDeleteExpenseAdvance(advance.id)} title="Excluir" aria-label="Excluir">
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </TableCell>
@@ -3556,8 +3551,7 @@ export const DailyRates = () => {
                                           <Button
                                             variant="ghost"
                                             size="icon"
-                                            onClick={() => void openReceipt(expense.receipt_url)}
-                                          >
+                                            onClick={() => void openReceipt(expense.receipt_url)} title="Ver comprovante" aria-label="Ver comprovante">
                                             <ImageIcon className="h-4 w-4" />
                                           </Button>
                                         ) : (
@@ -3581,8 +3575,7 @@ export const DailyRates = () => {
                                           <Button
                                             variant="ghost"
                                             size="icon"
-                                            onClick={() => handleDeleteNotinha(expense.id)}
-                                          >
+                                            onClick={() => handleDeleteNotinha(expense.id)} title="Excluir" aria-label="Excluir">
                                             <Trash2 className="h-4 w-4" />
                                           </Button>
                                         </TableCell>
@@ -3898,8 +3891,7 @@ export const DailyRates = () => {
                       type="button"
                       variant="ghost"
                       size="icon"
-                      onClick={() => setNotinhaFormData({ ...notinhaFormData, receipt_file: null })}
-                    >
+                      onClick={() => setNotinhaFormData({ ...notinhaFormData, receipt_file: null })} title="Excluir" aria-label="Excluir">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -4229,8 +4221,7 @@ export const DailyRates = () => {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => handleDeleteAdvance(advance.id)}
-                              >
+                                onClick={() => handleDeleteAdvance(advance.id)} title="Excluir" aria-label="Excluir">
                                 <Trash2 className="h-4 w-4 text-destructive" />
                               </Button>
                             </TableCell>

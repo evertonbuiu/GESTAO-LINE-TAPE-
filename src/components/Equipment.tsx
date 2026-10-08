@@ -736,6 +736,17 @@ export const Equipment = () => {
         </div>
 
         <TabsContent value={activeTab} className="space-y-4">
+          {filteredEquipment.length === 0 && (
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-14 text-center">
+              <Package className="mb-3 h-10 w-10 text-muted-foreground/60" />
+              <p className="font-medium">
+                {searchTerm ? "Nenhum equipamento encontrado" : "Nenhum equipamento nesta categoria"}
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {searchTerm ? "Tente outro termo de busca." : "Use \"Novo Equipamento\" para cadastrar."}
+              </p>
+            </div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredEquipment.map((item) => {
               const inMaintenance = isInMaintenance(item.name);
@@ -768,7 +779,7 @@ export const Equipment = () => {
                       </div>
                     </div>
                     <CardTitle className="text-lg">{item.name}</CardTitle>
-                    <CardDescription>{item.category}</CardDescription>
+                    <CardDescription>{categories.find((c) => c.value === item.category)?.label ?? item.category}</CardDescription>
                     {inMaintenance && maintenanceInfo && (
                       <div className="text-sm text-orange-600 bg-orange-100 p-2 rounded">
                         <div className="font-medium">Em manutenção:</div>
@@ -794,7 +805,7 @@ export const Equipment = () => {
                       {canViewPrices && (
                         <div>
                           <p className="text-muted-foreground">Valor do Material</p>
-                          <p className="font-medium">R$ {item.price_per_day.toFixed(2)}</p>
+                          <p className="font-medium">{formatCurrency(item.price_per_day)}</p>
                         </div>
                       )}
                     </div>
@@ -809,8 +820,7 @@ export const Equipment = () => {
                           variant="outline" 
                           size="sm" 
                           className="text-red-600 hover:text-red-700"
-                          onClick={() => deleteEquipment(item.id)}
-                        >
+                          onClick={() => deleteEquipment(item.id)} title="Excluir" aria-label="Excluir">
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>

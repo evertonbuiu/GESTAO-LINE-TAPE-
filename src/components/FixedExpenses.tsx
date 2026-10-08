@@ -1023,8 +1023,7 @@ export const FixedExpenses = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => handleViewDetails(expense)}
-                          >
+                            onClick={() => handleViewDetails(expense)} title="Ver detalhes" aria-label="Ver detalhes">
                             <Eye className="w-4 h-4" />
                           </Button>
                           <Button
@@ -1038,8 +1037,7 @@ export const FixedExpenses = () => {
                               });
                               setIsPayingExpense(true);
                             }}
-                            disabled={isExpensePaid(expense.id)}
-                          >
+                            disabled={isExpensePaid(expense.id)} title="Comprovante" aria-label="Comprovante">
                             <Receipt className="w-4 h-4" />
                           </Button>
                            <Button
@@ -1061,15 +1059,13 @@ export const FixedExpenses = () => {
                                 due_day: expense.due_day || 1
                               });
                               setIsEditingExpense(true);
-                            }}
-                          >
+                            }} title="Editar" aria-label="Editar">
                             <Edit className="w-4 h-4" />
                           </Button>
                           <Button
                             size="sm"
                             variant="destructive"
-                            onClick={() => handleDeleteExpense(expense.id)}
-                          >
+                            onClick={() => handleDeleteExpense(expense.id)} title="Excluir" aria-label="Excluir">
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
@@ -1137,15 +1133,13 @@ export const FixedExpenses = () => {
                                 bank_account_id: payment.bank_account_id
                               });
                               setIsEditingPayment(true);
-                            }}
-                          >
+                            }} title="Editar" aria-label="Editar">
                             <Edit className="w-4 h-4" />
                           </Button>
                           <Button
                             size="sm"
                             variant="destructive"
-                            onClick={() => handleDeletePayment(payment.id)}
-                          >
+                            onClick={() => handleDeletePayment(payment.id)} title="Excluir" aria-label="Excluir">
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>

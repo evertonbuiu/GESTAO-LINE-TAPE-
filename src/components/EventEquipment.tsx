@@ -2031,16 +2031,14 @@ export const EventEquipment = () => {
                                          });
                                          setEditEquipmentDialog(true);
                                        }}
-                                       className="text-blue-600 hover:text-blue-800"
-                                     >
+                                       className="text-blue-600 hover:text-blue-800" title="Editar" aria-label="Editar">
                                        <Edit className="h-4 w-4" />
                                      </Button>
                                      <Button
                                        variant="ghost"
                                        size="sm"
                                        onClick={() => deleteEquipment(item.id)}
-                                       className="text-red-600 hover:text-red-800"
-                                     >
+                                       className="text-red-600 hover:text-red-800" title="Excluir" aria-label="Excluir">
                                        <Trash2 className="h-4 w-4" />
                                      </Button>
                                    </div>
@@ -2198,16 +2196,14 @@ export const EventEquipment = () => {
                                       });
                                       setEditEquipmentDialog(true);
                                     }}
-                                    className="text-blue-600 hover:text-blue-800"
-                                  >
+                                    className="text-blue-600 hover:text-blue-800" title="Editar" aria-label="Editar">
                                     <Edit className="h-4 w-4" />
                                   </Button>
                                   <Button
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => deleteEquipment(item.id)}
-                                    className="text-red-600 hover:text-red-800"
-                                  >
+                                    className="text-red-600 hover:text-red-800" title="Excluir" aria-label="Excluir">
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
                                 </div>
@@ -2430,8 +2426,7 @@ export const EventEquipment = () => {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => removeCollaborator(collaborator.id)}
-                                className="text-red-600 hover:text-red-800"
-                              >
+                                className="text-red-600 hover:text-red-800" title="Excluir" aria-label="Excluir">
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </TableCell>

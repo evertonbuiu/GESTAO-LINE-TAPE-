@@ -322,16 +322,14 @@ export const Clients = () => {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => openEditDialog(client)}
-                        >
+                          onClick={() => openEditDialog(client)} title="Editar" aria-label="Editar">
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => deleteClient(client.id)}
-                          className="text-red-600 hover:text-red-700"
-                        >
+                          className="text-red-600 hover:text-red-700" title="Excluir" aria-label="Excluir">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>

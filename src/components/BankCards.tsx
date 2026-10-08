@@ -968,7 +968,7 @@ export const BankCards = () => {
                       <Button size="sm" variant="outline" onClick={() => {
                         setSelectedCard(card);
                         setIsViewingCard(true);
-                      }}>
+                      }} title="Ver detalhes" aria-label="Ver detalhes">
                         <Eye className="h-3 w-3" />
                       </Button>
                       <Button size="sm" variant="outline" onClick={() => {
@@ -976,13 +976,13 @@ export const BankCards = () => {
                         setSelectedMonth(new Date().getMonth() + 1);
                         setSelectedYear(new Date().getFullYear());
                         setIsViewingStatement(true);
-                      }}>
+                      }} title="Ver documento" aria-label="Ver documento">
                         <FileText className="h-3 w-3" />
                       </Button>
                       <Button size="sm" variant="outline" onClick={() => {
                         setSelectedCard(card);
                         setIsEditingCard(true);
-                      }}>
+                      }} title="Editar" aria-label="Editar">
                         <Edit className="h-3 w-3" />
                       </Button>
                       <Button size="sm" variant="outline" onClick={() => {
@@ -991,10 +991,10 @@ export const BankCards = () => {
                       }} title="Pagar Cartão">
                         <DollarSign className="h-3 w-3" />
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => syncCardTransactions(card.id)}>
+                      <Button size="sm" variant="outline" onClick={() => syncCardTransactions(card.id)} title="Atualizar" aria-label="Atualizar">
                         <RefreshCw className="h-3 w-3" />
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleDeleteCard(card.id)}>
+                      <Button size="sm" variant="outline" onClick={() => handleDeleteCard(card.id)} title="Excluir" aria-label="Excluir">
                         <Trash2 className="h-3 w-3" />
                       </Button>
                     </div>
@@ -1481,8 +1481,7 @@ export const BankCards = () => {
                                       transaction_date: transaction.date
                                     });
                                     setIsEditingTransaction(true);
-                                  }}
-                                >
+                                  }} title="Editar" aria-label="Editar">
                                   <Edit className="h-4 w-4" />
                                 </Button>
                                 <Button
@@ -1492,8 +1491,7 @@ export const BankCards = () => {
                                     if (confirm('Tem certeza que deseja remover esta transação?')) {
                                       handleDeleteTransaction(transaction.id);
                                     }
-                                  }}
-                                >
+                                  }} title="Excluir" aria-label="Excluir">
                                   <Trash2 className="h-4 w-4" />
                                 </Button>
                               </div>

@@ -5957,10 +5957,10 @@ export const FinancialManagement = () => {
                       </TableCell>
                       <TableCell>
                         <div className="flex gap-2">
-                          <Button variant="ghost" size="sm" onClick={() => openEditEntry(entry)}>
+                          <Button variant="ghost" size="sm" onClick={() => openEditEntry(entry)} title="Editar" aria-label="Editar">
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm" onClick={() => handleDeleteEntry(entry.id)}>
+                          <Button variant="ghost" size="sm" onClick={() => handleDeleteEntry(entry.id)} title="Excluir" aria-label="Excluir">
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
@@ -6550,22 +6550,19 @@ export const FinancialManagement = () => {
                             <Button 
                               variant="ghost" 
                               size="sm"
-                              onClick={() => handleViewInventoryItem(item)}
-                            >
+                              onClick={() => handleViewInventoryItem(item)} title="Ver detalhes" aria-label="Ver detalhes">
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button 
                               variant="ghost" 
                               size="sm"
-                              onClick={() => handleEditInventoryItem(item)}
-                            >
+                              onClick={() => handleEditInventoryItem(item)} title="Editar" aria-label="Editar">
                               <Edit className="h-4 w-4" />
                             </Button>
                             <Button 
                               variant="ghost" 
                               size="sm"
-                              onClick={() => handleDeleteInventoryItem(item.id)}
-                            >
+                              onClick={() => handleDeleteInventoryItem(item.id)} title="Excluir" aria-label="Excluir">
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>

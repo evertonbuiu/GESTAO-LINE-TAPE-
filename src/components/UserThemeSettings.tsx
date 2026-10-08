@@ -73,8 +73,7 @@ const ColorInput = ({ label, value, onChange, description }: ColorInputProps) =>
             size="sm"
             onClick={() => setShowPicker(!showPicker)}
             className="w-12 h-8 p-0"
-            style={{ backgroundColor: `hsl(${hslValue})` }}
-          >
+            style={{ backgroundColor: `hsl(${hslValue})` }} title="Escolher cor" aria-label="Escolher cor">
             <Palette className="h-4 w-4" />
           </Button>
         </div>

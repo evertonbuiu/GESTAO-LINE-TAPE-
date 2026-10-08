@@ -2682,8 +2682,7 @@ export const Rentals = () => {
                                        size="sm"
                                        onClick={() => {
                                          setSelectedEventForView(event);
-                                       }}
-                                     >
+                                       }} title="Ver detalhes" aria-label="Ver detalhes">
                                        <Eye className="h-4 w-4" />
                                      </Button>
                                      <Button
@@ -2692,16 +2691,14 @@ export const Rentals = () => {
                                        onClick={() => {
                                          setSelectedEventForEdit(event);
                                          setEditEventDialog(true);
-                                       }}
-                                     >
+                                       }} title="Editar" aria-label="Editar">
                                        <Edit className="h-4 w-4" />
                                      </Button>
                                      <Button
                                        variant="outline"
                                        size="sm"
                                        onClick={() => deleteEvent(event.id)}
-                                       className="text-red-600 hover:text-red-800"
-                                     >
+                                       className="text-red-600 hover:text-red-800" title="Excluir" aria-label="Excluir">
                                        <Trash2 className="h-4 w-4" />
                                      </Button>
                                      <Button
@@ -3760,16 +3757,14 @@ export const Rentals = () => {
                                 onClick={() => {
                                   setSelectedExpenseForEdit(expense);
                                   setEditExpenseDialog(true);
-                                }}
-                              >
+                                }} title="Editar" aria-label="Editar">
                                 <Edit className="h-4 w-4" />
                               </Button>
                               <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={() => deleteExpense(expense.id)}
-                                className="text-red-600 hover:text-red-800"
-                              >
+                                className="text-red-600 hover:text-red-800" title="Excluir" aria-label="Excluir">
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </div>
