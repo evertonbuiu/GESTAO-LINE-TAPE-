@@ -25,3 +25,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Cloudflare: arquivos intermediários gerados pelos scripts
+cloudflare/build/
+cloudflare/worker/.wrangler/
+cloudflare/worker/.dev.vars
