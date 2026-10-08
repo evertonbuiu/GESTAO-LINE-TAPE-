@@ -5697,7 +5697,7 @@ export const FinancialManagement = () => {
                             placeholder="Digite a descrição..."
                           />
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
                             <Label htmlFor="type">Tipo</Label>
                             <Select value={newEntry.type} onValueChange={(value: 'income' | 'expense') => setNewEntry({...newEntry, type: value})}>
@@ -5729,7 +5729,7 @@ export const FinancialManagement = () => {
                             </Select>
                           </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
                             <Label htmlFor="amount">Valor</Label>
                             <CurrencyInput
@@ -5793,7 +5793,7 @@ export const FinancialManagement = () => {
                               placeholder="Digite a descrição..."
                             />
                           </div>
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label htmlFor="edit-type">Tipo</Label>
                               <Select value={selectedEntry.type} onValueChange={(value: 'income' | 'expense') => setSelectedEntry({...selectedEntry, type: value})}>
@@ -5825,7 +5825,7 @@ export const FinancialManagement = () => {
                               </Select>
                             </div>
                           </div>
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label htmlFor="edit-amount">Valor</Label>
                               <CurrencyInput
@@ -6265,7 +6265,7 @@ export const FinancialManagement = () => {
                       <DialogTitle>Adicionar Item ao Patrimônio</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <Label htmlFor="itemName">Nome do Item</Label>
                           <Input
@@ -6303,7 +6303,7 @@ export const FinancialManagement = () => {
                           </Select>
                         </div>
                       </div>
-                      <div className="grid grid-cols-4 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                         <div>
                           <Label htmlFor="acquisitionValue">Valor de Aquisição</Label>
                           <CurrencyInput
@@ -6353,7 +6353,7 @@ export const FinancialManagement = () => {
                           </Select>
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <Label htmlFor="serialNumber">Número de Série</Label>
                           <Input
@@ -6770,7 +6770,7 @@ export const FinancialManagement = () => {
             <DialogTitle>Editar Item do Inventário</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="editItemName">Nome do Item</Label>
                 <Input
@@ -6808,7 +6808,7 @@ export const FinancialManagement = () => {
                 </Select>
               </div>
             </div>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
               <div>
                 <Label htmlFor="editAcquisitionValue">Valor de Aquisição</Label>
                 <CurrencyInput
@@ -6858,7 +6858,7 @@ export const FinancialManagement = () => {
                 </Select>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="editSerialNumber">Número de Série</Label>
                 <Input
@@ -6924,7 +6924,7 @@ export const FinancialManagement = () => {
           </DialogHeader>
           {viewInventoryItem && (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label className="text-sm font-medium text-muted-foreground">Nome do Item</Label>
                   <div className="p-2 bg-muted rounded-md">{viewInventoryItem.name}</div>
@@ -6942,7 +6942,7 @@ export const FinancialManagement = () => {
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div>
                   <Label className="text-sm font-medium text-muted-foreground">Valor de Aquisição</Label>
                   <div className="p-2 bg-muted rounded-md">{formatCurrency(viewInventoryItem.acquisitionValue)}</div>
@@ -6964,7 +6964,7 @@ export const FinancialManagement = () => {
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label className="text-sm font-medium text-muted-foreground">Número de Série</Label>
                   <div className="p-2 bg-muted rounded-md">{viewInventoryItem.serialNumber || 'Não informado'}</div>

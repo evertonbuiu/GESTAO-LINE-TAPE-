@@ -1364,7 +1364,7 @@ Série: ${invoice.rps_series || 'RPS'}
                 </CardContent>
               </Card>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Tipo de Documento</Label>
                   <Select 
@@ -1404,7 +1404,7 @@ Série: ${invoice.rps_series || 'RPS'}
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>E-mail</Label>
                   <Input
@@ -1433,7 +1433,7 @@ Série: ${invoice.rps_series || 'RPS'}
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label>Cidade (Cód. IBGE)</Label>
                   <Input
@@ -1463,7 +1463,7 @@ Série: ${invoice.rps_series || 'RPS'}
             </TabsContent>
 
             <TabsContent value="servico" className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Código do Serviço *</Label>
                   <Select
@@ -1531,7 +1531,7 @@ Série: ${invoice.rps_series || 'RPS'}
                 </Popover>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Natureza da Operação</Label>
                   <Select 
@@ -1583,7 +1583,7 @@ Série: ${invoice.rps_series || 'RPS'}
             </TabsContent>
 
             <TabsContent value="valores" className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Valor dos Serviços *</Label>
                   <CurrencyInput
@@ -1600,7 +1600,7 @@ Série: ${invoice.rps_series || 'RPS'}
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Alíquota ISS (%)</Label>
                   <Input
@@ -1680,7 +1680,7 @@ Série: ${invoice.rps_series || 'RPS'}
               <p className="text-sm text-muted-foreground">Padrão ABRASF 2.04</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Inscrição Municipal do Prestador</Label>
                 <Input
@@ -1709,7 +1709,7 @@ Série: ${invoice.rps_series || 'RPS'}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>CNAE Padrão</Label>
                 <Input
@@ -1731,7 +1731,7 @@ Série: ${invoice.rps_series || 'RPS'}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Série RPS</Label>
                 <Input

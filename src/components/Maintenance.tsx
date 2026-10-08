@@ -450,7 +450,7 @@ export const Maintenance = () => {
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="equipment">Equipamento *</Label>
                     <Select 
@@ -494,7 +494,7 @@ export const Maintenance = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
                     <Label htmlFor="status">Status</Label>
                     <Select 
@@ -573,7 +573,7 @@ export const Maintenance = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                   <div>
                     <Label htmlFor="quantity">Quantidade *</Label>
                     <Input

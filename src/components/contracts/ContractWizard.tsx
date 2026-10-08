@@ -278,7 +278,7 @@ export function ContractWizard({
                     placeholder="000.000.000-00"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <Label htmlFor="client_phone">Telefone*</Label>
                     <Input
@@ -350,7 +350,7 @@ export function ContractWizard({
                     }
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <Label htmlFor="companyRepresentative">Responsável*</Label>
                     <Input
@@ -389,7 +389,7 @@ export function ContractWizard({
           {/* ------------------------- OBJETO ------------------------- */}
           {step === 'Objeto' && (
             <fieldset disabled={locked} className="space-y-3">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <Label htmlFor="contract_number">Número do contrato</Label>
                   <Input

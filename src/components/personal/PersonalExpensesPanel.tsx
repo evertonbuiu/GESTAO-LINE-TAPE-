@@ -650,7 +650,7 @@ export const PersonalExpensesPanel = () => {
                 onChange={(e) => setDraft({ ...draft, description: e.target.value })}
               />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="grid gap-1">
                 <Label>Valor</Label>
                 <CurrencyInput
@@ -667,7 +667,7 @@ export const PersonalExpensesPanel = () => {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="grid gap-1">
                 <Label>Tipo</Label>
                 <Select
@@ -692,7 +692,7 @@ export const PersonalExpensesPanel = () => {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="grid gap-1">
                 <Label>Categoria</Label>
                 <Select

@@ -1915,7 +1915,7 @@ export const EventEquipment = () => {
                             )}
                           </div>
                           
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label htmlFor="quantity">Quantidade</Label>
                               <Input
@@ -2539,7 +2539,7 @@ export const EventEquipment = () => {
               </Select>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="edit_quantity">Quantidade</Label>
                 <Input

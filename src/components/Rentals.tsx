@@ -2780,7 +2780,7 @@ export const Rentals = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Nome do Evento *</Label>
                 <Input
@@ -2827,7 +2827,7 @@ export const Rentals = () => {
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="client_email">Email do Cliente</Label>
                 <Input
@@ -2849,7 +2849,7 @@ export const Rentals = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="event_date">Data do Evento *</Label>
                 <Input
@@ -2932,7 +2932,7 @@ export const Rentals = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="edit_name">Nome do Evento *</Label>
                 <Input
@@ -2977,7 +2977,7 @@ export const Rentals = () => {
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="edit_client_email">Email do Cliente</Label>
                 <Input
@@ -2999,7 +2999,7 @@ export const Rentals = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="edit_event_date">Data do Evento *</Label>
                 <Input
@@ -3065,7 +3065,7 @@ export const Rentals = () => {
 
               {selectedEventForEdit?.is_paid && (
                 <div className="grid gap-4 pl-6 border-l-2 border-green-200">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="edit_payment_type">Tipo de Pagamento</Label>
                       <Select
@@ -3092,7 +3092,7 @@ export const Rentals = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="edit_payment_bank_account">Conta de Recebimento</Label>
                       <Select
@@ -3148,7 +3148,7 @@ export const Rentals = () => {
                             />
                           </div>
 
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                               <Label htmlFor="edit_remaining_payment_bank_account">Conta de Recebimento do Restante</Label>
                               <Select
@@ -3809,7 +3809,7 @@ export const Rentals = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="expense_description">Descrição *</Label>
                 <Input
@@ -3873,7 +3873,7 @@ export const Rentals = () => {
               </div>
             )}
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="expense_quantity">Quantidade</Label>
                 <Input
@@ -3920,7 +3920,7 @@ export const Rentals = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="expense_supplier">Fornecedor</Label>
                 <Input
@@ -4013,7 +4013,7 @@ export const Rentals = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="edit_expense_description">Descrição *</Label>
                 <Input
@@ -4077,7 +4077,7 @@ export const Rentals = () => {
               </div>
             )}
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="edit_expense_quantity">Quantidade</Label>
                 <Input
@@ -4124,7 +4124,7 @@ export const Rentals = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="edit_expense_supplier">Fornecedor</Label>
                 <Input
@@ -4238,7 +4238,7 @@ export const Rentals = () => {
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold">Lista de Itens</h3>
                 <div className="space-y-4 border p-4 rounded-lg bg-muted/50">
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div className="space-y-2">
                       <Label htmlFor="budget_item">Item</Label>
                       <Input
@@ -4258,7 +4258,7 @@ export const Rentals = () => {
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     <div className="space-y-2">
                       <Label htmlFor="budget_quantity">Quantidade</Label>
                       <Input
@@ -4507,7 +4507,7 @@ export const Rentals = () => {
             </DialogHeader>
             
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="edit_budget_item">Item</Label>
                   <Input
@@ -4534,7 +4534,7 @@ export const Rentals = () => {
                 </div>
               </div>
               
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="edit_budget_quantity">Quantidade</Label>
                   <Input

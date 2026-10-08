@@ -868,7 +868,7 @@ export const PersonalExpenseSpreadsheet = () => {
                 <DialogTitle>Adicionar Despesa Pessoal</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="date">Data</Label>
                     <Input
@@ -901,7 +901,7 @@ export const PersonalExpenseSpreadsheet = () => {
                     placeholder="Descrição da despesa"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="amount">Valor</Label>
                     <CurrencyInput
@@ -1243,7 +1243,7 @@ export const PersonalExpenseSpreadsheet = () => {
           </DialogHeader>
           {editingExpense && (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="edit-date">Data</Label>
                   <Input
@@ -1275,7 +1275,7 @@ export const PersonalExpenseSpreadsheet = () => {
                   onChange={(e) => setEditingExpense({ ...editingExpense, description: e.target.value })}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="edit-amount">Valor</Label>
                   <CurrencyInput

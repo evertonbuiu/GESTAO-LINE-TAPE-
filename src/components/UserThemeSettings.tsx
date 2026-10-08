@@ -279,7 +279,7 @@ export const UserThemeSettings = () => {
               <CardTitle>Informações do Tema Atual</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label className="text-sm font-medium">Tema</Label>
                   <p className="text-lg capitalize">{theme}</p>

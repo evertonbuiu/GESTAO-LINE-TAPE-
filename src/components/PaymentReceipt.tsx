@@ -375,7 +375,7 @@ export const PaymentReceipt = ({ quoteData, companyData }: PaymentReceiptProps) 
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="receiptNumber">Número do Recibo</Label>
           <Input

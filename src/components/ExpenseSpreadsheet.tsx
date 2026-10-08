@@ -915,7 +915,7 @@ export const ExpenseSpreadsheet = () => {
                         <DialogTitle>Adicionar Despesa</DialogTitle>
                       </DialogHeader>
                       <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
                             <Label htmlFor="date">Data</Label>
                             <Input
@@ -953,7 +953,7 @@ export const ExpenseSpreadsheet = () => {
                           />
                         </div>
                         
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
                             <Label htmlFor="amount">Valor</Label>
                             <CurrencyInput
@@ -1370,7 +1370,7 @@ export const ExpenseSpreadsheet = () => {
               <DialogTitle>Editar Despesa</DialogTitle>
             </DialogHeader>
             <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="edit-date">Data</Label>
                   <Input
@@ -1407,7 +1407,7 @@ export const ExpenseSpreadsheet = () => {
                 />
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="edit-amount">Valor</Label>
                   <CurrencyInput

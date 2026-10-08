@@ -966,7 +966,7 @@ export const ClientDetailsDialog = ({ clientId, clientName, open, onOpenChange }
             <CardContent className="space-y-4">
               {showAdvanceForm && (
                 <div className="border rounded-lg p-4 bg-muted/50 space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="advance_amount">Valor</Label>
                       <Input
@@ -1050,7 +1050,7 @@ export const ClientDetailsDialog = ({ clientId, clientName, open, onOpenChange }
             <CardContent className="space-y-4">
               {showCustomItemForm && (
                 <div className="border rounded-lg p-4 bg-muted/50 space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="col-span-2">
                       <Label htmlFor="item_description">Descrição da Peça *</Label>
                       <Input

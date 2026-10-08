@@ -78,7 +78,7 @@ export function QuotesToolbar({
         </Select>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         <div>
           <Label htmlFor="quotes-month">Mês</Label>
           <Select value={month} onValueChange={onMonthChange}>
