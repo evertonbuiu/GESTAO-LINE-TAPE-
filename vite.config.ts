@@ -179,6 +179,22 @@ export default defineConfig(({ mode }) => {
             options: {
               cacheName: 'assets-hash',
               expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              // Durante uma publicação o site pode responder com a página HTML
+              // no lugar de um script. Essa resposta nunca é guardada, e uma
+              // já guardada é descartada (senão a tela fica em branco).
+              plugins: [
+                {
+                  cacheWillUpdate: async ({ response }: { response: Response }) =>
+                    response && response.status === 200 &&
+                    /javascript|ecmascript/i.test(response.headers.get('content-type') || '')
+                      ? response
+                      : null,
+                  cachedResponseWillBeUsed: async ({ cachedResponse }: { cachedResponse?: Response }) =>
+                    cachedResponse && /javascript|ecmascript/i.test(cachedResponse.headers.get('content-type') || '')
+                      ? cachedResponse
+                      : null,
+                },
+              ],
             },
           },
         ],
