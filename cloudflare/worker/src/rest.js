@@ -542,6 +542,18 @@ function condSql(meta, alias, node, params) {
         s = '0';
         break;
       }
+      // O D1 aceita no máximo 100 parâmetros por consulta: listas grandes
+      // vão como valores literais (escapados).
+      if (list.length > 40) {
+        const lits = list.map((x) => {
+          const v = coerceFilterValue(c, x);
+          if (v === null || v === undefined) return 'NULL';
+          if (typeof v === 'number') return String(v);
+          return "'" + String(v).replace(/'/g, "''") + "'";
+        });
+        s = `${ref} IN (${lits.join(',')})`;
+        break;
+      }
       const ph = list.map((x) => {
         params.push(coerceFilterValue(c, x));
         return '?';
@@ -708,7 +720,7 @@ async function attachEmbeds(db, ctx, table, sel, filters, rawRows, outRows, pref
     let children = [];
     if (keys.size && !pol.deny) {
       const all = [...keys.keys()].map((k) => JSON.parse(k));
-      const CHUNK = 80;
+      const CHUNK = 40;
       for (let i = 0; i < all.length; i += CHUNK) {
         const chunk = all.slice(i, i + CHUNK);
         const params = [];
@@ -959,11 +971,15 @@ async function reselect(db, ctx, table, meta, rows, select) {
   const parsed = parseSelect(sel);
   const conv = rows.map((r) => rowFromDb(meta, r));
   if (!parsed.embeds.length) return conv.map((r) => project(meta, parsed, r));
-  const { rows: out } = await selectRows(db, { ...ctx, service: true }, table, {
-    select: sel,
-    filters: { root: [], embedded: {}, order: { root: null, embedded: {} }, limits: { embedded: {} } },
-    pkWhere: pkWhereFor(meta, conv),
-  });
+  const out = [];
+  for (let i = 0; i < conv.length; i += 40) {
+    const { rows } = await selectRows(db, { ...ctx, service: true }, table, {
+      select: sel,
+      filters: { root: [], embedded: {}, order: { root: null, embedded: {} }, limits: { embedded: {} } },
+      pkWhere: pkWhereFor(meta, conv.slice(i, i + 40)),
+    });
+    out.push(...rows);
+  }
   return out;
 }
 

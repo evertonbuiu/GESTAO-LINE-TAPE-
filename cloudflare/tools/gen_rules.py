@@ -45,8 +45,10 @@ def col_kind(pgtype):
 
 
 def json_of(table, ref):
+    # O D1 aceita no máximo 32 argumentos por função: o objeto é montado em
+    # partes (json_object com até 15 colunas + json_insert encadeados).
     cols = MODEL["tables"][table]["columns"]
-    parts = []
+    pairs = []
     for c, info in cols.items():
         k = col_kind(info["type"])
         v = f'{ref}."{c}"'
@@ -54,8 +56,13 @@ def json_of(table, ref):
             v = f"json({v})"
         elif k == "bool":
             v = f"CASE WHEN {v} IS NULL THEN NULL WHEN {v} THEN json('true') ELSE json('false') END"
-        parts.append(f"'{c}', {v}")
-    return "json_object(" + ", ".join(parts) + ")"
+        pairs.append((c, v))
+    head, rest = pairs[:15], pairs[15:]
+    expr = "json_object(" + ", ".join(f"'{c}', {v}" for c, v in head) + ")"
+    while rest:
+        chunk, rest = rest[:15], rest[15:]
+        expr = "json_insert(" + expr + ", " + ", ".join(f"'$.{c}', {v}" for c, v in chunk) + ")"
+    return expr
 
 
 def jsonb_key_order(cols):
@@ -64,9 +71,11 @@ def jsonb_key_order(cols):
 
 
 def changed_of(table):
+    # Lista JSON das colunas alteradas, montada por concatenação (sem UNION
+    # e sem funções com muitos argumentos, por causa dos limites do D1).
     cols = jsonb_key_order(MODEL["tables"][table]["columns"].keys())
-    union = " UNION ALL ".join(f"SELECT {i} AS o, '{c}' AS c WHERE NEW.\"{c}\" IS NOT OLD.\"{c}\"" for i, c in enumerate(cols))
-    return f"(SELECT json_group_array(c) FROM (SELECT c FROM ({union}) ORDER BY o))"
+    parts = " || ".join(f"CASE WHEN NEW.\"{c}\" IS NOT OLD.\"{c}\" THEN '\"{c}\",' ELSE '' END" for c in cols)
+    return f"('[' || rtrim({parts}, ',') || ']')"
 
 
 def any_changed(table):
@@ -128,6 +137,28 @@ def load_triggers():
             if (a["tabela"], a["nome"]) not in known and a["tabela"] in MODEL["tables"]:
                 report.append(f"ATENÇÃO: gatilho existe no banco real mas não nas migrações: {a['tabela']}.{a['nome']}")
     return trigs
+
+
+def check_d1_limits(sql):
+    """Limites do D1: até 32 argumentos por função e sem SELECT compostos longos."""
+    for m in re.finditer(r"\b(\w+)\(", sql):
+        i = m.end()
+        depth, n, j = 1, 1, i
+        if sql[i] == ")":
+            continue
+        while depth:
+            ch = sql[j]
+            if ch == "'":
+                j = sql.index("'", j + 1)
+            elif ch == "(":
+                depth += 1
+            elif ch == ")":
+                depth -= 1
+            elif ch == "," and depth == 1:
+                n += 1
+            j += 1
+        if n > 32 and m.group(1).lower() not in ("in", "values", "insert", "into"):
+            raise SystemExit(f"função {m.group(1)} com {n} argumentos (D1 aceita até 32)")
 
 
 def main():
@@ -195,6 +226,7 @@ def main():
         raise SystemExit("funções sem tradução: " + ", ".join(sorted(missing)))
 
     sql = "\n".join(ddl) + "\n"
+    check_d1_limits(sql)
     db = sqlite3.connect(":memory:")
     db.executescript(open(SCHEMA_SQL, encoding="utf-8").read())
     db.executescript(sql)

@@ -235,10 +235,10 @@ FUNCS = {
             "when": distinct_any(["cpf", "rg", "pix_key", "pix_key_type", "bank_name", "bank_agency", "bank_account", "bank_account_type", "account_holder_name"]),
             "do": [AUDIT_INSERT % ("UPDATE", "NEW.id", "NULL",
                    "json_object('person_type', NEW.person_type, 'person_id', NEW.person_id, 'changed_fields', "
-                   "(SELECT json_group_array(c) FROM (" + " UNION ALL ".join(
-                       f"SELECT '{c}' AS c WHERE NEW.{c} IS NOT OLD.{c}" for c in
+                   "(SELECT json_group_array(value) FROM json_each(json_array(" + ", ".join(
+                       f"CASE WHEN NEW.{c} IS NOT OLD.{c} THEN '{c}' END" for c in
                        ["cpf", "rg", "pix_key", "pix_key_type", "bank_name", "bank_agency", "bank_account", "bank_account_type", "account_holder_name"]
-                   ) + ")), 'redacted', json('true'))")],
+                   ) + ")) WHERE value IS NOT NULL), 'redacted', json('true'))")],
         },
         "DELETE": [AUDIT_INSERT % ("DELETE", "OLD.id", "NULL",
                    "json_object('person_type', OLD.person_type, 'person_id', OLD.person_id, 'changed_fields', json('[]'), 'redacted', json('true'))")],
