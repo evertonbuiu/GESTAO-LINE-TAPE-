@@ -1840,7 +1840,7 @@ export const Collaborators = () => {
         {collaborators.map((collaborator) => (
           <Card key={collaborator.id} className="hover:shadow-lg transition-shadow">
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                     <User className="w-6 h-6 text-primary" />
@@ -3052,7 +3052,7 @@ export const Collaborators = () => {
               ) : (
                 <Card>
                   <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <CardTitle className="text-base">
                         {getFilteredPayments().length} {getFilteredPayments().length === 1 ? 'dia' : 'dias'}
                       </CardTitle>
@@ -3131,7 +3131,7 @@ export const Collaborators = () => {
               ) : (
                 <Card>
                   <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <CardTitle className="text-base">
                         {getFilteredAdvances().length} {getFilteredAdvances().length === 1 ? 'vale' : 'vales'}
                       </CardTitle>
@@ -3194,7 +3194,7 @@ export const Collaborators = () => {
                 </h3>
                 <Card>
                   <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <CardTitle className="text-base">
                         {getFilteredExpenses().length} {getFilteredExpenses().length === 1 ? 'notinha' : 'notinhas'}
                       </CardTitle>
@@ -3270,7 +3270,7 @@ export const Collaborators = () => {
                 </h3>
                 <Card>
                   <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <CardTitle className="text-base">
                         {getFilteredExpenseAdvances().length} {getFilteredExpenseAdvances().length === 1 ? 'adiantamento' : 'adiantamentos'}
                       </CardTitle>

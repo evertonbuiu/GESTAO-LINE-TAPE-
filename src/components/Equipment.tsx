@@ -744,7 +744,7 @@ export const Equipment = () => {
               return (
                 <Card key={item.id} className={`hover:shadow-lg transition-shadow ${inMaintenance ? 'border-orange-200 bg-orange-50' : ''}`}>
                   <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
                         {item.image_url ? (
                           <img

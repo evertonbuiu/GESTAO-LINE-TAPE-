@@ -2357,7 +2357,7 @@ export const DailyRates = () => {
 
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <CardTitle>Diaristas</CardTitle>
               <CardDescription>Gerencie os diaristas e seus dias de trabalho</CardDescription>
@@ -3313,7 +3313,7 @@ export const DailyRates = () => {
                       return (
                         <Card key={monthYear}>
                           <CardHeader className="pb-3">
-                            <div className="flex items-center justify-between">
+                            <div className="flex flex-wrap items-center justify-between gap-3">
                               <CardTitle className="text-base">
                                 {format(monthDate, 'MMMM yyyy', { locale: ptBR })}
                               </CardTitle>
@@ -3394,7 +3394,7 @@ export const DailyRates = () => {
                       return (
                         <Card key={monthYear}>
                           <CardHeader className="pb-3">
-                            <div className="flex items-center justify-between">
+                            <div className="flex flex-wrap items-center justify-between gap-3">
                               <CardTitle className="text-base">
                                 {format(monthDate, 'MMMM yyyy', { locale: ptBR })}
                               </CardTitle>
@@ -3505,7 +3505,7 @@ export const DailyRates = () => {
                       return (
                         <Card key={monthYear}>
                           <CardHeader className="pb-3">
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-wrap items-center justify-between gap-3">
                               <CardTitle className="text-base capitalize">{monthName}</CardTitle>
                               {canViewValues && (
                                 <span className="text-sm font-semibold text-green-600 dark:text-green-400">
@@ -3617,7 +3617,7 @@ export const DailyRates = () => {
                       return (
                         <Card key={monthYear}>
                           <CardHeader className="pb-3">
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-wrap items-center justify-between gap-3">
                               <CardTitle className="text-base capitalize">{monthName}</CardTitle>
                               {canViewValues && (
                                 <span className="text-sm font-semibold text-orange-600 dark:text-orange-400">

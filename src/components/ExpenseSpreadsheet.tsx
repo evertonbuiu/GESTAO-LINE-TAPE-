@@ -885,7 +885,7 @@ export const ExpenseSpreadsheet = () => {
         <TabsContent value="monthly">
           <Card>
             <CardHeader>
-              <div className="flex justify-between items-center">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <CardTitle>Visão Mensal</CardTitle>
                   <CardDescription>
@@ -893,7 +893,7 @@ export const ExpenseSpreadsheet = () => {
                   </CardDescription>
                 </div>
                 
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <Button variant="outline" onClick={exportToExcel}>
                     <FileSpreadsheet className="h-4 w-4 mr-2" />
                     Exportar Excel
@@ -993,7 +993,7 @@ export const ExpenseSpreadsheet = () => {
 
                         <div>
                           <Label htmlFor="receipt">Comprovante</Label>
-                          <div className="flex gap-2">
+                          <div className="flex flex-wrap gap-2">
                             <Input
                               id="receipt"
                               type="file"
@@ -1171,7 +1171,7 @@ export const ExpenseSpreadsheet = () => {
         <TabsContent value="daily">
           <Card>
             <CardHeader>
-              <div className="flex justify-between items-center">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <CardTitle>Planilha Diária</CardTitle>
                   <CardDescription>
@@ -1179,7 +1179,7 @@ export const ExpenseSpreadsheet = () => {
                   </CardDescription>
                 </div>
                 
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <Button variant="outline" onClick={exportToExcel}>
                     <FileSpreadsheet className="h-4 w-4 mr-2" />
                     Exportar Excel
@@ -1263,7 +1263,7 @@ export const ExpenseSpreadsheet = () => {
         <TabsContent value="categorias">
           <Card>
             <CardHeader>
-              <div className="flex justify-between items-center">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <CardTitle>Resumo por Categoria</CardTitle>
                   <CardDescription>
@@ -1271,7 +1271,7 @@ export const ExpenseSpreadsheet = () => {
                   </CardDescription>
                 </div>
                 
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <Button variant="outline" onClick={() => generatePDF('category')}>
                     <FileText className="h-4 w-4 mr-2" />
                     Gerar PDF

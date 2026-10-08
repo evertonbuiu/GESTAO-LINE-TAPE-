@@ -2615,23 +2615,23 @@ export const EventEquipment = () => {
               missingEquipmentList.map((item, index) => (
                 <Card key={index} className="border-red-200">
                   <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <CardTitle className="text-lg">{item.event.name}</CardTitle>
                       <Badge variant="outline" className="bg-red-50 text-red-700">
                         {item.missingEquipment.length} item(s) faltando
                       </Badge>
                     </div>
                     <CardDescription className="space-y-1">
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <User className="h-4 w-4" />
                         <span>{item.event.client_name}</span>
                       </div>
-                       <div className="flex items-center gap-2">
+                       <div className="flex flex-wrap items-center gap-2">
                          <Calendar className="h-4 w-4" />
                          <span>{format(new Date(item.event.event_date + 'T12:00:00'), 'dd/MM/yyyy', { locale: ptBR })}</span>
                        </div>
                       {item.event.location && (
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           <MapPin className="h-4 w-4" />
                           <span>{item.event.location}</span>
                         </div>

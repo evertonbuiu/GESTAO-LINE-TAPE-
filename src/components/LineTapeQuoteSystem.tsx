@@ -3262,12 +3262,12 @@ Formas de pagamento aceitas: PIX, Transferência Bancária ou Dinheiro.`;
                         {/* Seção de Dados de Pagamento no Orçamento */}
                         <Card>
                           <CardHeader>
-                            <div className="flex items-center justify-between">
-                              <CardTitle className="flex items-center gap-2">
+                            <div className="flex flex-wrap items-center justify-between gap-3">
+                              <CardTitle className="flex flex-wrap items-center gap-2">
                                 <Building className="w-5 h-5" />
                                 Dados para Pagamento
                               </CardTitle>
-                              <div className="flex items-center gap-2">
+                              <div className="flex flex-wrap items-center gap-2">
                                 <Label htmlFor="include-payment-quote" className="text-sm text-muted-foreground">
                                   Incluir no PDF
                                 </Label>

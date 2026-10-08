@@ -1073,7 +1073,7 @@ export const PersonalExpenseSpreadsheet = () => {
         <TabsContent value="monthly">
           <Card>
             <CardHeader>
-              <div className="flex justify-between items-center">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <CardTitle>Despesas Pessoais do Mês</CardTitle>
                   <CardDescription>
@@ -1146,7 +1146,7 @@ export const PersonalExpenseSpreadsheet = () => {
         <TabsContent value="daily">
           <Card>
             <CardHeader>
-              <div className="flex justify-between items-center">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <CardTitle>Planilha Diária</CardTitle>
                   <CardDescription>Despesas pessoais organizadas por dia do mês</CardDescription>
@@ -1187,7 +1187,7 @@ export const PersonalExpenseSpreadsheet = () => {
         <TabsContent value="categories">
           <Card>
             <CardHeader>
-              <div className="flex justify-between items-center">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <CardTitle>Gastos por Categoria</CardTitle>
                   <CardDescription>Comparação entre orçado e gasto por categoria pessoal</CardDescription>

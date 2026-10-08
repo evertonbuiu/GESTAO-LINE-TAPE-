@@ -5585,12 +5585,12 @@ export const FinancialManagement = () => {
         <TabsContent value="cashflow" className="space-y-4">
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <CardTitle>Fluxo de Caixa</CardTitle>
                   <CardDescription>Controle detalhado de entradas e saídas</CardDescription>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <Button 
                     variant="outline" 
                     size="sm"
@@ -5983,7 +5983,7 @@ export const FinancialManagement = () => {
         <TabsContent value="budget" className="space-y-4">
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <CardTitle>Controle Orçamentário</CardTitle>
                   <CardDescription>Acompanhe o orçamento vs realizado por categoria</CardDescription>
@@ -6043,7 +6043,7 @@ export const FinancialManagement = () => {
         <TabsContent value="budget-company" className="space-y-4">
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <CardTitle>Controle Orçamentário da Empresa</CardTitle>
                   <CardDescription>Acompanhe o orçamento vs realizado por categoria empresarial</CardDescription>
@@ -6132,7 +6132,7 @@ export const FinancialManagement = () => {
         <TabsContent value="budget-personal" className="space-y-4">
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <CardTitle>Controle Orçamentário Pessoal</CardTitle>
                   <CardDescription>Acompanhe seu orçamento pessoal vs gastos realizados</CardDescription>
@@ -6221,12 +6221,12 @@ export const FinancialManagement = () => {
         <TabsContent value="inventory" className="space-y-4">
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <CardTitle>Inventário Patrimonial</CardTitle>
                   <CardDescription>Controle de bens e patrimônio da empresa</CardDescription>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <LogoUpload />
                   <Button 
                     variant="outline"
@@ -6585,13 +6585,13 @@ export const FinancialManagement = () => {
           <Card>
 
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <CardTitle>Relatórios Financeiros</CardTitle>
                   <CardDescription>Análises e relatórios detalhados</CardDescription>
                 </div>
                 {reportData && (
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <Button 
                       variant="outline" 
                       size="sm"
@@ -6712,7 +6712,7 @@ export const FinancialManagement = () => {
               {reportData && (
                 <Card className="mt-6">
                   <CardHeader>
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <CardTitle>{reportData.title}</CardTitle>
                         <CardDescription>Período: {reportData.period}</CardDescription>

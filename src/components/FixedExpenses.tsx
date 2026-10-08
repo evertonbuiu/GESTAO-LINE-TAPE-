@@ -972,7 +972,7 @@ export const FixedExpenses = () => {
         <TabsContent value="expenses">
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <CardTitle>Lista de Despesas Fixas</CardTitle>
                 <Input
                   placeholder="Buscar despesa..."

@@ -740,9 +740,9 @@ export const EventTaxDetailModal = ({
               <TabsContent value="expenses" className="mt-4">
                 <Card>
                   <CardHeader className="pb-2">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <CardTitle className="text-sm">Despesas do Evento</CardTitle>
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
                         <Badge variant="outline" className="bg-green-500/10 text-green-600">
                           Dedutível: {formatCurrency(deductibleExpenses)}
                         </Badge>
@@ -811,7 +811,7 @@ export const EventTaxDetailModal = ({
               <TabsContent value="personnel" className="mt-4">
                 <Card>
                   <CardHeader className="pb-2">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <CardTitle className="text-sm">Custos com Pessoal</CardTitle>
                       <Badge variant="outline" className="bg-green-500/10 text-green-600">
                         Total Dedutível: {formatCurrency(deductiblePersonnelCosts)}
