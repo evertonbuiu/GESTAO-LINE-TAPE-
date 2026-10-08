@@ -11,7 +11,7 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "gestao-line-tape"
-database_id = "COLE_AQUI_O_ID_DO_BANCO_D1"
+database_id = "986acf9e-d62e-4004-9d3a-1466a1afd519"
 migrations_dir = "migrations"
 
 # Arquivos: logos, fotos, comprovantes, PDFs (Cloudflare R2).
