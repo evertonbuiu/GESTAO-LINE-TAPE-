@@ -60,11 +60,13 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 
 // Dark theme color schemes
+// Obs.: no tema escuro a cor principal (botões, destaques) precisa contrastar com o
+// fundo; antes ela era igual ao fundo e botões/ícones ficavam quase invisíveis.
 const darkColorSchemes: ColorScheme[] = [
   {
     id: 'blue',
     name: 'Azul Padrão',
-    primary: '220 60% 6%',
+    primary: '220 60% 50%',
     secondary: '220 40% 15%',
     accent: '220 40% 15%',
     background: '220 60% 6%',
@@ -81,7 +83,7 @@ const darkColorSchemes: ColorScheme[] = [
   {
     id: 'green',
     name: 'Verde Escuro',
-    primary: '120 60% 6%',
+    primary: '142 60% 40%',
     secondary: '120 40% 15%',
     accent: '120 40% 15%',
     background: '120 60% 6%',
@@ -98,7 +100,7 @@ const darkColorSchemes: ColorScheme[] = [
   {
     id: 'purple',
     name: 'Roxo Escuro',
-    primary: '270 60% 6%',
+    primary: '270 60% 58%',
     secondary: '270 40% 15%',
     accent: '270 40% 15%',
     background: '270 60% 6%',
@@ -115,7 +117,7 @@ const darkColorSchemes: ColorScheme[] = [
   {
     id: 'red',
     name: 'Vermelho Escuro',
-    primary: '0 60% 6%',
+    primary: '0 68% 52%',
     secondary: '0 40% 15%',
     accent: '0 40% 15%',
     background: '0 60% 6%',
@@ -132,7 +134,7 @@ const darkColorSchemes: ColorScheme[] = [
   {
     id: 'orange',
     name: 'Laranja Escuro',
-    primary: '30 60% 6%',
+    primary: '30 90% 50%',
     secondary: '30 40% 15%',
     accent: '30 40% 15%',
     background: '30 60% 6%',
@@ -149,7 +151,7 @@ const darkColorSchemes: ColorScheme[] = [
   {
     id: 'slate',
     name: 'Cinza Escuro',
-    primary: '222.2 84% 4.9%',
+    primary: '217 91% 60%',
     secondary: '217.2 32.6% 17.5%',
     accent: '217.2 32.6% 17.5%',
     background: '222.2 84% 4.9%',

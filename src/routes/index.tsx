@@ -150,16 +150,16 @@ const UserMenu = ({ onNavigate }: { onNavigate: (t: string) => void }) => {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="flex items-center gap-2 rounded-full border border-border bg-background py-1 pl-1 pr-2 text-left outline-none transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring sm:pr-3"
+          className="flex items-center gap-2 rounded-full border border-border bg-background p-1 text-left outline-none transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring lg:pr-3"
         >
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground dark:bg-sidebar-primary dark:text-white">
             {initials(user?.name)}
           </span>
-          <span className="hidden min-w-0 leading-tight sm:block">
+          <span className="hidden min-w-0 leading-tight lg:block">
             <span className="block max-w-[140px] truncate text-sm font-medium">{user?.name || user?.username}</span>
             <span className="block text-[11px] text-muted-foreground">{ROLE_LABEL[userRole || ""] || "Usuário"}</span>
           </span>
-          <ChevronDown className="hidden h-4 w-4 text-muted-foreground sm:block" />
+          <ChevronDown className="hidden h-4 w-4 text-muted-foreground lg:block" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
@@ -222,8 +222,8 @@ const Index = () => {
         <div id="conteudo-principal" className="flex min-w-0 flex-1 flex-col">
           <header className="sticky top-0 z-30 flex h-16 items-center gap-2 border-b border-border bg-card/85 px-3 backdrop-blur supports-[backdrop-filter]:bg-card/70 sm:gap-3 sm:px-5">
             <SidebarTrigger className="shrink-0" />
-            <div className="hidden h-5 w-px bg-border sm:block" />
-            <nav aria-label="Você está em" className="hidden min-w-0 items-center gap-1.5 text-sm md:flex">
+            <div className="hidden h-5 w-px bg-border xl:block" />
+            <nav aria-label="Você está em" className="hidden min-w-0 items-center gap-1.5 text-sm xl:flex">
               {nav?.group && <span className="truncate text-muted-foreground">{nav.group}</span>}
               {nav?.group && <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />}
               <span className="truncate font-medium">{nav?.item.label ?? "Painel"}</span>
