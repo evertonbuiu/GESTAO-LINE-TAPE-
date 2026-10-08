@@ -25,7 +25,7 @@ bucket_name = "gestao-line-tape-arquivos"
 # Ex.: "https://gestao-line-tape-api.SUA-CONTA.workers.dev"
 PUBLIC_API_URL = "https://gestao-line-tape-api.evertonbuiu0.workers.dev"
 # Sites que podem usar a API (separados por vírgula). Ex.: "https://gestao-line-tape.pages.dev"
-ALLOWED_ORIGINS = "*"
+ALLOWED_ORIGINS = "https://gestao-line-tape.pages.dev,http://localhost:8080"
 # Ambiente do banco C6: "sandbox" ou "production"
 C6_API_ENV = "sandbox"
 # Funções que rodam sozinhas no horário de [triggers] (separadas por vírgula).
