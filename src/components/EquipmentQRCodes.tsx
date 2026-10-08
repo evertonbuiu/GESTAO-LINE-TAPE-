@@ -20,6 +20,7 @@ import {
 import { Camera, Printer, QrCode, Loader2, Search } from "lucide-react";
 import { useCustomAuth } from "@/hooks/useCustomAuth";
 
+import { PageActions } from "@/components/layout/PageHeader";
 interface EquipmentRow {
   id: string;
   name: string;
@@ -177,15 +178,7 @@ export const EquipmentQRCodes = ({ onNavigate }: { onNavigate?: (tab: string) =>
 
   return (
     <div className="space-y-6 p-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h1 className="flex items-center gap-2 text-2xl font-bold">
-            <QrCode className="h-6 w-6" /> QR Code de equipamentos
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Gere e imprima etiquetas ou leia o código para abrir o equipamento.
-          </p>
-        </div>
+      <PageActions>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => setScannerOpen(true)}>
             <Camera className="mr-2 h-4 w-4" /> Ler QR Code
@@ -194,7 +187,7 @@ export const EquipmentQRCodes = ({ onNavigate }: { onNavigate?: (tab: string) =>
             <Printer className="mr-2 h-4 w-4" /> Imprimir ({selected.size})
           </Button>
         </div>
-      </div>
+      </PageActions>
 
       {error && (
         <Alert variant="destructive">

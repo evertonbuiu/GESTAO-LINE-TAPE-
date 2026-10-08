@@ -63,6 +63,7 @@ import {
   Wallet,
 } from "lucide-react";
 
+import { PageActions } from "@/components/layout/PageHeader";
 const PAYMENT_METHODS = [
   "Dinheiro",
   "Cartão de Débito",
@@ -252,13 +253,7 @@ export const PersonalExpensesPanel = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
-        <div>
-          <h2 className="text-2xl font-semibold">Gastos Pessoais</h2>
-          <p className="text-sm text-muted-foreground flex items-center gap-1">
-            <Lock className="h-3 w-3" /> Privado: somente você tem acesso a estes dados.
-          </p>
-        </div>
+      <PageActions>
         <div className="flex flex-wrap gap-2">
           <Select value={String(month)} onValueChange={(v) => setMonth(Number(v))}>
             <SelectTrigger className="w-36"><SelectValue /></SelectTrigger>
@@ -283,7 +278,7 @@ export const PersonalExpensesPanel = () => {
           <Button variant="outline" onClick={handlePrint}><Printer className="h-4 w-4 mr-1" /> Imprimir</Button>
           <Button onClick={() => setOpenExpense(true)}><Plus className="h-4 w-4 mr-1" /> Novo lançamento</Button>
         </div>
-      </div>
+      </PageActions>
 
       {data.error && (
         <Card className="border-destructive print:hidden">

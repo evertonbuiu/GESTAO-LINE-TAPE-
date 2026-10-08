@@ -76,14 +76,6 @@ export const MessageTemplates = () => {
 
   return (
     <div className="space-y-6 p-6">
-      <div>
-        <h1 className="flex items-center gap-2 text-2xl font-bold">
-          <MessageSquare className="h-6 w-6" /> Mensagens e lembretes
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Templates de envio de orçamento, contrato e lembretes pelo WhatsApp.
-        </p>
-      </div>
 
       <Alert variant="destructive">
         <AlertTriangle className="h-4 w-4" />

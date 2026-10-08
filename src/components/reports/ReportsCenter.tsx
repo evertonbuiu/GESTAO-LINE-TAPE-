@@ -25,6 +25,7 @@ import {
   type DateRange,
   type PeriodPreset,
 } from "@/lib/reports";
+import { PageActions } from "@/components/layout/PageHeader";
 import { BreakdownList, KpiCard, ReportTable, SectionState, type ReportColumn } from "./ReportPrimitives";
 
 interface ReportsCenterProps {
@@ -247,17 +248,8 @@ export const ReportsCenter = ({ onNavigate }: ReportsCenterProps) => {
   const denyValues = !canViewValues;
 
   return (
-    <main className="space-y-6 p-4 md:p-6">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          <BarChart3 className="h-8 w-8 text-primary" aria-hidden="true" />
-          <div>
-            <h1 className="text-2xl font-bold md:text-3xl">Relatórios</h1>
-            <p className="text-sm text-muted-foreground">
-              {formatDateBR(range.start)} a {formatDateBR(range.end)} — fuso America/São_Paulo
-            </p>
-          </div>
-        </div>
+    <div className="space-y-6 p-4 md:p-6">
+      <PageActions>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" onClick={refetchAll} className="gap-2">
             <RefreshCw className="h-4 w-4" aria-hidden="true" />
@@ -268,7 +260,7 @@ export const ReportsCenter = ({ onNavigate }: ReportsCenterProps) => {
             Imprimir / PDF
           </Button>
         </div>
-      </header>
+      </PageActions>
 
       {denyValues && (
         <p className="rounded-md border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
@@ -1142,6 +1134,6 @@ export const ReportsCenter = ({ onNavigate }: ReportsCenterProps) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </main>
+    </div>
   );
 };

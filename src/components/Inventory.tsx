@@ -15,6 +15,7 @@ import { useCustomAuth } from "@/hooks/useCustomAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+import { PageActions } from "@/components/layout/PageHeader";
 export const Inventory = () => {
   const { equipment, loading, totals, fetchEquipment } = useEquipment();
   const { hasPermission } = usePermissions();
@@ -262,11 +263,7 @@ export const Inventory = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground">Controle de Estoque</h2>
-          <p className="text-muted-foreground">Monitore os níveis de estoque em tempo real</p>
-        </div>
+      <PageActions>
         <div className="flex items-center gap-4">
           <Button
             variant="outline"
@@ -391,7 +388,7 @@ export const Inventory = () => {
             </DialogContent>
           </Dialog>
         </div>
-      </div>
+      </PageActions>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>

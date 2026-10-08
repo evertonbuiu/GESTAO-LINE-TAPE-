@@ -89,6 +89,7 @@ import {
   AlertTriangle
 } from "lucide-react";
 
+import { PageActions } from "@/components/layout/PageHeader";
 interface NFSeInvoice {
   id: string;
   invoice_number: string | null;
@@ -982,13 +983,7 @@ Série: ${invoice.rps_series || 'RPS'}
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-bold text-foreground">NFS-e - Notas Fiscais de Serviço</h2>
-          <p className="text-muted-foreground">
-            Gerencie suas notas fiscais eletrônicas - Goiânia/GO (ABRASF 2.04)
-          </p>
-        </div>
+      <PageActions>
         <div className="flex flex-wrap gap-2">
           {canEmitDirect && (
             <Button variant="outline" onClick={handleValidateFiscalSetup} disabled={validating}>
@@ -1006,7 +1001,7 @@ Série: ${invoice.rps_series || 'RPS'}
             Novo RPS
           </Button>
         </div>
-      </div>
+      </PageActions>
 
       {/* Status Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

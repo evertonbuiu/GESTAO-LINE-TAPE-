@@ -21,6 +21,7 @@ import { Separator } from "@/components/ui/separator";
 import { validateReceiptUpload, SIGNED_URL_TTL_SECONDS, EXPENSE_RECEIPT_BUCKET } from "@/lib/storageUrls";
 import * as pdfjsLib from 'pdfjs-dist';
 
+import { PageActions } from "@/components/layout/PageHeader";
 interface FixedExpense {
   id: string;
   name: string;
@@ -865,16 +866,12 @@ export const FixedExpenses = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Despesas Fixas</h1>
-          <p className="text-muted-foreground">Gerencie despesas fixas mensais da empresa</p>
-        </div>
+      <PageActions>
         <Button onClick={() => setIsAddingExpense(true)}>
           <Plus className="w-4 h-4 mr-2" />
           Nova Despesa Fixa
         </Button>
-      </div>
+      </PageActions>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>

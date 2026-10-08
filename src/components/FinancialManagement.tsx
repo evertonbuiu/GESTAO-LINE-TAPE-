@@ -35,6 +35,7 @@ import { useBulkSelection } from "@/hooks/useBulkSelection";
 import { BulkActionsBar } from "@/components/ui/BulkActionsBar";
 import { EventTaxReportModal } from "@/components/EventTaxReportModal";
 
+import { PageActions } from "@/components/layout/PageHeader";
 interface CashFlowEntry {
   id: string;
   date: string;
@@ -2485,7 +2486,7 @@ export const FinancialManagement = () => {
       }
       
       // Cabeçalho da empresa usando dados dinâmicos das configurações
-      const companyName = settings?.company_name || 'LUZ LOCAÇÃO';
+      const companyName = settings?.company_name || 'LINE TAPE ILUMINAÇÃO E LOCAÇÃO';
       const tagline = settings?.tagline || 'Controle de Estoque e Patrimônio';
       
       doc.setFontSize(16);
@@ -5427,16 +5428,12 @@ export const FinancialManagement = () => {
   return (
     <>
       <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-3xl font-bold">Controle Financeiro</h2>
-          <p className="text-muted-foreground">Planilhas e controles financeiros completos</p>
-        </div>
+      <PageActions>
         <Button variant="outline" size="sm">
           <Download className="h-4 w-4 mr-2" />
           Exportar
         </Button>
-      </div>
+      </PageActions>
 
       {/* Filtro de Período */}
       <div className="space-y-3">
@@ -7031,7 +7028,7 @@ export const FinancialManagement = () => {
                     <img src={logoUrl} alt="Logo" className="w-20 h-20 object-contain" />
                   )}
                   <div className="text-right">
-                    <h1 className="text-2xl font-bold text-blue-600">{settings?.company_name || 'LUZ LOCAÇÃO'}</h1>
+                    <h1 className="text-2xl font-bold text-blue-600">{settings?.company_name || 'LINE TAPE ILUMINAÇÃO E LOCAÇÃO'}</h1>
                     <p className="text-sm text-gray-600">{settings?.tagline || 'Controle de Estoque e Patrimônio'}</p>
                     {settings?.cnpj && <p className="text-xs text-gray-500 mt-1">CNPJ: {settings.cnpj}</p>}
                     {settings?.phone && <p className="text-xs text-gray-500">Tel: {settings.phone}</p>}

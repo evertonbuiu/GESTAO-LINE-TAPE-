@@ -873,10 +873,6 @@ export const FinancialDashboard = () => {
   return (
     <div className="p-8 space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold">Dashboard Financeiro</h1>
-        <p className="text-muted-foreground">Visão geral da saúde financeira da empresa</p>
-      </div>
 
       {/* Métricas principais */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

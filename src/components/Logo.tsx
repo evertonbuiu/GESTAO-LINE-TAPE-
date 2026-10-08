@@ -1,43 +1,36 @@
-import logoImage from "@/assets/logo.png";
 import { useLogo } from "@/hooks/useLogo";
 import { useCompanySettings } from "@/hooks/useCompanySettings";
+import { LineTapeSymbol } from "@/components/layout/BrandMark";
 
 interface LogoProps {
   size?: "sm" | "md" | "lg";
   showText?: boolean;
 }
 
+// Logo da empresa: usa a imagem enviada em Configurações; sem ela, mostra a
+// marca da Line Tape desenhada em SVG.
 export const Logo = ({ size = "md", showText = true }: LogoProps) => {
-  const { logoUrl, isLoading } = useLogo();
+  const { logoUrl } = useLogo();
   const { settings } = useCompanySettings();
-  const sizeClasses = {
-    sm: "h-12", // era h-8 (32px) -> h-12 (48px) = +16px
-    md: "h-16", // era h-12 (48px) -> h-16 (64px) = +16px  
-    lg: "h-20"  // era h-16 (64px) -> h-20 (80px) = +16px
-  };
-
-  const textSizeClasses = {
-    sm: "text-lg",
-    md: "text-xl", 
-    lg: "text-2xl"
-  };
+  const box = { sm: "h-12 w-12", md: "h-16 w-16", lg: "h-20 w-20" }[size];
+  const text = { sm: "text-lg", md: "text-xl", lg: "text-2xl" }[size];
 
   return (
     <div className="flex items-center gap-3">
-      <img 
-        src={logoUrl || logoImage} 
-        alt="GESTAO LINE TAPE" 
-        className={`${sizeClasses[size]} w-auto object-contain`}
-      />
+      {logoUrl ? (
+        <img src={logoUrl} alt="GESTÃO LINE TAPE" className={`${box} rounded-xl bg-white object-contain p-1`} />
+      ) : (
+        <div className={`${box} flex items-center justify-center rounded-xl bg-white p-2 shadow-sm ring-1 ring-black/5`}>
+          <LineTapeSymbol className="h-full w-full" />
+        </div>
+      )}
       {showText && (
         <div>
-          <h1 className={`${textSizeClasses[size]} font-bold text-primary`}>
-            {settings?.company_name || 'GESTAO LINE TAPE'}
+          <h1 className={`${text} font-bold text-foreground`}>
+            {settings?.company_name || "GESTÃO LINE TAPE"}
           </h1>
           {size !== "sm" && (
-            <p className="text-sm text-muted-foreground">
-              {settings?.tagline || 'Controle de Estoque'}
-            </p>
+            <p className="text-sm text-muted-foreground">{settings?.tagline || "Iluminação e locação"}</p>
           )}
         </div>
       )}

@@ -70,12 +70,6 @@ export const Diagnostics = () => {
 
   return (
     <div className="space-y-6 p-6">
-      <div>
-        <h1 className="text-2xl font-bold">Diagnóstico do sistema</h1>
-        <p className="text-sm text-muted-foreground">
-          Saúde da aplicação, atualizações e erros recentes.
-        </p>
-      </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>

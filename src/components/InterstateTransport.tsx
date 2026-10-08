@@ -1092,15 +1092,9 @@ export const InterstateTransport = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5">
-      {/* Header */}
-      <div className="bg-primary text-primary-foreground p-6 mb-6">
-        <div className="container mx-auto">
-          <h1 className="text-3xl font-bold text-center">Transporte Interestadual de Mercadorias</h1>
-        </div>
-      </div>
+    <div>
 
-      <div className="container mx-auto p-4 sm:p-6">
+      <div className="p-4 sm:p-6">
         <Tabs defaultValue="viagens" className="space-y-6">
           <TabsList>
             <TabsTrigger value="viagens">Viagens</TabsTrigger>

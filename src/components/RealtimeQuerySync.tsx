@@ -34,8 +34,8 @@ const REALTIME_TABLES = [
 ] as const;
 
 /**
- * MantÃ©m consultas visÃ­veis sincronizadas sem recarregar a aplicaÃ§Ã£o inteira.
- * Um pequeno debounce agrupa importaÃ§Ãµes e alteraÃ§Ãµes em lote em um Ãºnico refetch.
+ * Mantém consultas visíveis sincronizadas sem recarregar a aplicação inteira.
+ * Um pequeno debounce agrupa importações e alterações em lote em um único refetch.
  */
 export function RealtimeQuerySync() {
   const queryClient = useQueryClient();

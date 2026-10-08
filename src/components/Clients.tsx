@@ -16,6 +16,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { formatPhone, handlePhoneInput } from '@/lib/utils';
 
+import { PageActions } from "@/components/layout/PageHeader";
 interface Client {
   id: string;
   name: string;
@@ -243,18 +244,14 @@ export const Clients = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground">Clientes</h2>
-          <p className="text-muted-foreground">Gerencie seus clientes</p>
-        </div>
+      <PageActions>
         {canEditClients && (
           <Button onClick={openAddDialog}>
             <Plus className="h-4 w-4 mr-2" />
             Novo Cliente
           </Button>
         )}
-      </div>
+      </PageActions>
 
       <Card>
         <CardHeader>

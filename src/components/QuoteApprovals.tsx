@@ -137,14 +137,6 @@ export const QuoteApprovals = () => {
 
   return (
     <div className="space-y-6 p-6">
-      <div>
-        <h1 className="flex items-center gap-2 text-2xl font-bold">
-          <FileCheck2 className="h-6 w-6" /> Aprovação de orçamentos
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Gere um link público expirável para o cliente aprovar ou recusar o orçamento.
-        </p>
-      </div>
 
       {!canManage && (
         <Alert>

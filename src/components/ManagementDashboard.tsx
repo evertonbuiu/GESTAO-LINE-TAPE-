@@ -20,6 +20,7 @@ import {
 import { Loader2, BarChart3, Download } from "lucide-react";
 import { downloadCsv } from "@/lib/csv";
 
+import { PageActions } from "@/components/layout/PageHeader";
 const brl = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 const firstDayOfYear = () => `${new Date().getFullYear()}-01-01`;
@@ -232,15 +233,7 @@ export const ManagementDashboard = () => {
 
   return (
     <div className="space-y-6 p-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="flex items-center gap-2 text-2xl font-bold">
-            <BarChart3 className="h-6 w-6" /> Painel gerencial
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Ocupação, rentabilidade, manutenção e recebimentos.
-          </p>
-        </div>
+      <PageActions>
         <div className="flex flex-wrap items-end gap-2">
           <div className="space-y-1">
             <Label>De</Label>
@@ -254,7 +247,7 @@ export const ManagementDashboard = () => {
             Aplicar
           </Button>
         </div>
-      </div>
+      </PageActions>
 
       {error && (
         <Alert variant="destructive">

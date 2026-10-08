@@ -19,6 +19,7 @@ import { useCustomAuth } from "@/hooks/useCustomAuth";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
+import { PageActions } from "@/components/layout/PageHeader";
 export const Equipment = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
@@ -533,11 +534,7 @@ export const Equipment = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground">Equipamentos</h2>
-          <p className="text-muted-foreground">Gerencie todos os equipamentos do almoxarifado</p>
-        </div>
+      <PageActions>
         <div className="flex gap-2">
           <Button 
             variant="outline" 
@@ -701,7 +698,7 @@ export const Equipment = () => {
             </Dialog>
           )}
         </div>
-      </div>
+      </PageActions>
 
       {/* Tabs para Categorias */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">

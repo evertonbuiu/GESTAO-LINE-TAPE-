@@ -21,6 +21,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { isSameMonth, addMonths } from 'date-fns';
 
+import { PageActions } from "@/components/layout/PageHeader";
 interface Event {
   id: string;
   name: string;
@@ -1626,11 +1627,7 @@ export const EventEquipment = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground">Equipamentos dos Eventos</h2>
-          <p className="text-muted-foreground">Gerencie equipamentos para cada evento</p>
-        </div>
+      <PageActions>
         <div className="flex gap-2">
           <Button
             variant="outline"
@@ -1641,7 +1638,7 @@ export const EventEquipment = () => {
             Relatório de Faltantes
           </Button>
         </div>
-      </div>
+      </PageActions>
 
       <div className="space-y-4">
         {/* Year Selection */}

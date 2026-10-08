@@ -22,6 +22,7 @@ import { useCompanySettings } from '@/hooks/useCompanySettings';
 import { HexColorPicker, HexColorInput } from 'react-colorful';
 import { hslToHex, hexToHsl } from '@/utils/colorConversion';
 
+import { PageActions } from "@/components/layout/PageHeader";
 export const SettingsPage = () => {
   const { userRole, user } = useCustomAuth();
   const { rolePermissions, loading, updateRolePermission } = usePermissions();
@@ -460,16 +461,7 @@ export const SettingsPage = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground flex items-center gap-2">
-            <Settings2 className="h-8 w-8" />
-            Configurações
-          </h2>
-          <p className="text-muted-foreground">
-            Gerencie configurações do sistema e da empresa
-          </p>
-        </div>
+      <PageActions>
         
         {hasAnyChanges && (
           <div className="flex gap-2">
@@ -493,7 +485,7 @@ export const SettingsPage = () => {
             )}
           </div>
         )}
-      </div>
+      </PageActions>
 
       <Tabs defaultValue="empresa" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">

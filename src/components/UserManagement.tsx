@@ -349,17 +349,6 @@ export const UserManagement = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground flex items-center gap-2">
-            <Users className="h-8 w-8" />
-            Gerenciar Usuários
-          </h2>
-          <p className="text-muted-foreground">
-            Gerencie usuários cadastrados e suas permissões
-          </p>
-        </div>
-      </div>
 
       <Card>
         <CardHeader>

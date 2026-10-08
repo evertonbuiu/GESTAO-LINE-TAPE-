@@ -18,6 +18,7 @@ import { getStatusVariant } from '@/lib/utils';
 import { format, parseISO, addDays, isBefore, isAfter } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
+import { PageActions } from "@/components/layout/PageHeader";
 interface MaintenanceRecord {
   id: string;
   equipment_id: string;
@@ -418,11 +419,7 @@ export const Maintenance = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground">Manutenção</h2>
-          <p className="text-muted-foreground">Gerencie a manutenção de equipamentos</p>
-        </div>
+      <PageActions>
         <div className="flex items-center gap-4">
           <Button
             variant="outline"
@@ -629,7 +626,7 @@ export const Maintenance = () => {
             </DialogContent>
           </Dialog>
         </div>
-      </div>
+      </PageActions>
 
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>

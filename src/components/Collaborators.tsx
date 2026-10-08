@@ -31,6 +31,7 @@ import * as pdfjsLib from 'pdfjs-dist';
 import { FoodAllowanceCalendar } from './FoodAllowanceCalendar';
 import { buildReceiptPath, resolveReceiptDisplayUrl, validateReceiptUpload } from '@/lib/storageUrls';
 
+import { PageActions } from "@/components/layout/PageHeader";
 interface CollaboratorPayment {
   id: string;
   collaborator_id: string;
@@ -1781,18 +1782,14 @@ export const Collaborators = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Colaboradores</h1>
-          <p className="text-muted-foreground">Gerencie pagamentos por evento</p>
-        </div>
+      <PageActions>
         {canEdit && (
           <Button onClick={() => setAddCollaboratorDialog(true)}>
             <Plus className="w-4 h-4 mr-2" />
             Adicionar Colaborador
           </Button>
         )}
-      </div>
+      </PageActions>
 
       {/* Month/Year filter */}
       <Card>

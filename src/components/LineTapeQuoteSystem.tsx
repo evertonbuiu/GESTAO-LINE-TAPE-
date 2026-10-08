@@ -52,6 +52,7 @@ import { QuoteTotalsPanel } from "./quotes/QuoteTotalsPanel";
 import { QuotesToolbar } from "./quotes/QuotesToolbar";
 import { QuoteCard } from "./quotes/QuoteCard";
 import { QuotePreviewDialog } from "./quotes/QuotePreviewDialog";
+import { PageActions } from "@/components/layout/PageHeader";
 import { fileExtension, resolveProductImageDisplayUrl, validateProductImageUpload } from "@/lib/storageUrls";
 
 
@@ -2704,20 +2705,8 @@ Formas de pagamento aceitas: PIX, Transferência Bancária ou Dinheiro.`;
   const totals = calculateTotals();
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      {/* Header da empresa */}
-      <Card className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-        <CardHeader className="pb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-white rounded-lg p-2">
-                <Building className="w-full h-full text-blue-600" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold">{COMPANY_DATA.name}</h1>
-                <p className="text-blue-100">Sistema de Orçamentos</p>
-              </div>
-            </div>
+    <div className="p-4 sm:p-6 space-y-6">
+      <PageActions>
             {canManage && (
               <div className="flex gap-2">
                 {/* Input file hidden para importar JSON */}
@@ -2733,7 +2722,6 @@ Formas de pagamento aceitas: PIX, Transferência Bancária ou Dinheiro.`;
                 <Button 
                   onClick={() => document.getElementById('import-json-input')?.click()}
                   variant="outline"
-                  className="bg-white text-blue-600 hover:bg-blue-50 border-blue-600"
                 >
                   <Upload className="h-4 w-4 mr-2" />
                   Abrir JSON
@@ -2742,36 +2730,18 @@ Formas de pagamento aceitas: PIX, Transferência Bancária ou Dinheiro.`;
                 {/* Botão para criar novo orçamento */}
                 <Button 
                   onClick={() => setIsDialogOpen(true)}
-                  className="bg-white text-blue-600 hover:bg-blue-50"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Novo Orçamento
                 </Button>
               </div>
             )}
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-sm">
-            <div className="flex items-center space-x-2">
-              <MapPin className="h-4 w-4" />
-              <span>{COMPANY_DATA.address}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Phone className="h-4 w-4" />
-              <span>{COMPANY_DATA.phone}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Mail className="h-4 w-4" />
-              <span>{COMPANY_DATA.email}</span>
-            </div>
-          </div>
-        </CardHeader>
-      </Card>
+      </PageActions>
 
       {/* Lista de orçamentos */}
       <Card>
         <CardHeader className="space-y-4">
-          <CardTitle>Orçamentos LINE TAPE</CardTitle>
+          <CardTitle>Orçamentos</CardTitle>
           <QuotesToolbar
             search={searchTerm}
             onSearchChange={setSearchTerm}

@@ -194,9 +194,9 @@ export function EquipmentPicker({ items, onChange, onEditItem, canViewValues = t
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium">{row.name}</p>
                   <p className="truncate text-xs text-muted-foreground">
-                    {row.category} â€¢ DisponÃ­vel: {row.available}/{row.total_stock}
+                    {row.category} • Disponível: {row.available}/{row.total_stock}
                     {canViewValues
-                      ? ` â€¢ ${Number(row.price_per_day || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
+                      ? ` • ${Number(row.price_per_day || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
                       : ''}
                   </p>
                 </div>
@@ -213,7 +213,7 @@ export function EquipmentPicker({ items, onChange, onEditItem, canViewValues = t
       <div className="flex items-center justify-between">
         <h4 className="flex items-center gap-2 text-sm font-semibold">
           <Package className="h-4 w-4" aria-hidden="true" />
-          Itens do orÃ§amento ({items.length})
+          Itens do orçamento ({items.length})
         </h4>
         <Button type="button" size="sm" variant="outline" onClick={addCustomItem}>
           <Plus className="mr-1 h-4 w-4" aria-hidden="true" />
@@ -285,7 +285,7 @@ export function EquipmentPicker({ items, onChange, onEditItem, canViewValues = t
                     </div>
                     <div>
                       <Label htmlFor={`item-price-${item.id}`} className="text-xs">
-                        PreÃ§o unitÃ¡rio
+                        Preço unitário
                       </Label>
                       <Input
                         id={`item-price-${item.id}`}
@@ -330,11 +330,11 @@ export function EquipmentPicker({ items, onChange, onEditItem, canViewValues = t
                     {conflict ? (
                       <Badge variant="outline" className="border-amber-500/40 text-amber-600 dark:text-amber-400">
                         <AlertTriangle className="mr-1 h-3.5 w-3.5" aria-hidden="true" />
-                        Quantidade acima do disponÃ­vel ({available})
+                        Quantidade acima do disponível ({available})
                       </Badge>
                     ) : (
                       <span className="text-xs text-muted-foreground">
-                        {available !== null ? `DisponÃ­vel em estoque: ${available}` : 'Item avulso'}
+                        {available !== null ? `Disponível em estoque: ${available}` : 'Item avulso'}
                       </span>
                     )}
                     {canViewValues && (

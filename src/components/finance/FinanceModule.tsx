@@ -21,6 +21,7 @@ import { downloadCsv } from "@/lib/csv";
 import { useFinance } from "@/hooks/useFinance";
 import { TitleFormDialog } from "./TitleFormDialog";
 import { TitleDetailsDialog } from "./TitleDetailsDialog";
+import { PageActions } from "@/components/layout/PageHeader";
 import {
   buildBudgetVsActual,
   buildProjection,
@@ -218,18 +219,12 @@ export const FinanceModule = () => {
 
   return (
     <div className="space-y-6">
-      <header className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold">Contas a Pagar e Receber</h1>
-          <p className="text-sm text-muted-foreground">
-            Títulos, parcelas, pagamentos parciais e estornos com rastreio no livro-caixa.
-          </p>
-        </div>
+      <PageActions>
         <Button variant="outline" onClick={refresh} disabled={loading}>
           {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
           Atualizar
         </Button>
-      </header>
+      </PageActions>
 
       {error && (
         <Alert variant="destructive">

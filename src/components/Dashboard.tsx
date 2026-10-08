@@ -211,30 +211,9 @@ export const Dashboard = ({ onNavigate }: { onNavigate?: (tab: string) => void }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 p-8 rounded-b-3xl mb-8">
-        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-        <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-primary/20 rounded-xl">
-              <BarChart3 className="w-6 h-6 text-primary" />
-            </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Dashboard
-            </h1>
-          </div>
-          <p className="text-muted-foreground text-lg">Visão geral do sistema de controle de almoxarifado</p>
-          
-          {/* Live Stats Indicator */}
-          <div className="flex items-center gap-2 mt-4">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-sm text-muted-foreground">Dados atualizados em tempo real</span>
-          </div>
-        </div>
-      </div>
+    <div>
 
-      <div className="px-8 space-y-8">
+      <div className="p-4 sm:p-6 space-y-6">
         {/* Controls Section */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-6 bg-card/60 backdrop-blur-sm rounded-2xl border border-border/50">
           <div className="flex items-center gap-4">

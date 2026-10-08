@@ -14,6 +14,7 @@ import { HslColorPicker } from "react-colorful";
 import { AppearanceSettings } from "@/components/theme/AppearanceSettings";
 
 
+import { PageActions } from "@/components/layout/PageHeader";
 interface ColorInputProps {
   label: string;
   value: string;
@@ -181,16 +182,7 @@ export const UserThemeSettings = () => {
 
   return (
     <div className="p-6 space-y-6 max-w-4xl mx-auto">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Palette className="h-8 w-8 text-primary" />
-            Configurações de Tema
-          </h1>
-          <p className="text-muted-foreground">
-            Personalize a aparência da sua interface
-          </p>
-        </div>
+      <PageActions>
         <div className="flex gap-2">
           <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
             <DialogTrigger asChild>
@@ -233,7 +225,7 @@ export const UserThemeSettings = () => {
             Salvar Tema
           </Button>
         </div>
-      </div>
+      </PageActions>
 
       <Tabs defaultValue="appearance" className="space-y-6">
         <TabsList className="grid w-full grid-cols-3">

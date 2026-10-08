@@ -25,6 +25,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useBulkSelection } from "@/hooks/useBulkSelection";
 import { BulkActionsBar } from "@/components/ui/BulkActionsBar";
 
+import { PageActions } from "@/components/layout/PageHeader";
 interface DailyExpense {
   id: string;
   date: string;
@@ -835,13 +836,7 @@ export const ExpenseSpreadsheet = () => {
   
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Planilha de Despesas</h1>
-          <p className="text-muted-foreground">
-            Controle detalhado de todas as despesas
-          </p>
-        </div>
+      <PageActions>
         
         <div className="flex gap-2">
           <Select value={selectedMonth.toString()} onValueChange={(value) => setSelectedMonth(parseInt(value))}>
@@ -878,7 +873,7 @@ export const ExpenseSpreadsheet = () => {
             placeholder="Filtrar por dia"
           />
         </div>
-      </div>
+      </PageActions>
 
       <Tabs defaultValue="monthly" className="space-y-4">
         <TabsList>

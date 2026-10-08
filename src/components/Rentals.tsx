@@ -53,6 +53,7 @@ import {
 import { useBulkSelection } from '@/hooks/useBulkSelection';
 import { BulkActionsBar } from '@/components/ui/BulkActionsBar';
 
+import { PageActions } from "@/components/layout/PageHeader";
 interface Event {
   id: string;
   name: string;
@@ -1010,7 +1011,7 @@ export const Rentals = () => {
       if (error || !data) {
         toast({
           title: 'Erro ao abrir PDF',
-          description: 'NÃ£o foi possÃ­vel carregar o arquivo.',
+          description: 'Não foi possível carregar o arquivo.',
           variant: 'destructive',
         });
         return;
@@ -2486,18 +2487,14 @@ export const Rentals = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground">Locações</h2>
-          <p className="text-muted-foreground">Gerencie eventos e locações</p>
-        </div>
+      <PageActions>
         <div className="flex gap-2">
           <Button onClick={() => setEventDialog(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Novo Evento
           </Button>
         </div>
-      </div>
+      </PageActions>
 
       <div className="space-y-4">
         {/* Year Selection */}

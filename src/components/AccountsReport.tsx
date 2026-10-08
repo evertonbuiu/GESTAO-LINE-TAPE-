@@ -12,6 +12,7 @@ import { FileText, Download, Filter, ArrowUpCircle, ArrowDownCircle, Calendar, R
 import { format } from 'date-fns';
 import { useValueVisibility } from '@/hooks/useValueVisibility';
 import { findBankAccountByName } from '@/utils/bankAccountMatch';
+import { PageActions } from "@/components/layout/PageHeader";
 import { formatTransactionDateTime } from '@/lib/transactionDateTime';
 
 
@@ -638,15 +639,8 @@ export const AccountsReport = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <FileText className="h-8 w-8 text-primary" />
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">Relatório de Contas</h1>
-            <p className="text-muted-foreground">Visualize e filtre suas transações</p>
-          </div>
-        </div>
+    <div className="space-y-6 p-4 sm:p-6">
+      <PageActions>
         <div className="flex gap-2">
           <Button onClick={() => refetch()} variant="outline" className="gap-2">
             <RefreshCw className="h-4 w-4" />
@@ -657,7 +651,7 @@ export const AccountsReport = () => {
             Exportar CSV
           </Button>
         </div>
-      </div>
+      </PageActions>
 
 
       {/* Filters */}

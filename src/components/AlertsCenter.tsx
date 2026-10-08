@@ -11,6 +11,7 @@ import { useCustomAuth } from "@/hooks/useCustomAuth";
 import { downloadCsv } from "@/lib/csv";
 import type { OperationalAlert } from "@/lib/alerts";
 
+import { PageActions } from "@/components/layout/PageHeader";
 const CATEGORY_META = {
   estoque: { label: "Estoque abaixo do mínimo", icon: PackageX },
   devolucao: { label: "Devoluções atrasadas", icon: RotateCcw },
@@ -128,13 +129,7 @@ export const AlertsCenter = ({ onNavigate }: { onNavigate?: (tab: string) => voi
 
   return (
     <div className="space-y-6 p-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h1 className="text-2xl font-bold">Central de alertas</h1>
-          <p className="text-sm text-muted-foreground">
-            Estoque, devoluções, manutenção e eventos próximos.
-          </p>
-        </div>
+      <PageActions>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={() => void reload()}>
             Atualizar
@@ -156,7 +151,7 @@ export const AlertsCenter = ({ onNavigate }: { onNavigate?: (tab: string) => voi
             Exportar CSV
           </Button>
         </div>
-      </div>
+      </PageActions>
 
       {error && (
         <Alert variant="destructive">

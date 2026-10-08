@@ -203,3 +203,38 @@ All colors MUST be HSL.
     line-height: 1.35;
   }
 }
+
+/* Acabamento visual geral */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  /* números alinhados em tabelas e valores */
+  table, .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+  /* barras de rolagem discretas */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  /* tabelas largas rolam dentro do próprio quadro, não a página inteira */
+  [role="tabpanel"], .rounded-lg.border, .rounded-xl.border {
+    min-width: 0;
+  }
+}

@@ -16,6 +16,7 @@ import { MessageSquare, Paperclip, Link2, Check, X, RefreshCw, Copy, ExternalLin
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
+import { PageActions } from "@/components/layout/PageHeader";
 interface WhatsAppMessage {
   id: string;
   sender_phone: string;
@@ -511,21 +512,12 @@ export const WhatsAppMessages = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
-            <MessageSquare className="w-8 h-8 text-green-600" />
-            WhatsApp
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Receba mensagens e comprovantes via webhook
-          </p>
-        </div>
+      <PageActions>
         <Button onClick={fetchMessages} variant="outline" size="sm">
           <RefreshCw className="w-4 h-4 mr-2" />
           Atualizar
         </Button>
-      </div>
+      </PageActions>
 
       {/* Webhook Configuration Card */}
       <Card>
