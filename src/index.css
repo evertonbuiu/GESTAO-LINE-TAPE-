@@ -256,3 +256,13 @@ All colors MUST be HSL.
     flex: 0 0 auto;
   }
 }
+
+/* Celular: abas que não cabem rolam para o lado começando pela primeira. */
+@media (max-width: 639px) {
+  [role="tablist"]:not(.months-grid) {
+    justify-content: flex-start;
+  }
+  [role="tablist"]:not(.months-grid) > [role="tab"] {
+    flex-shrink: 0;
+  }
+}
