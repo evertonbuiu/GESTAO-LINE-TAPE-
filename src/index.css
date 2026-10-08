@@ -242,17 +242,17 @@ All colors MUST be HSL.
 /* Abas: em telas menores, as abas em grade viram uma faixa que rola para o lado
    (antes os textos se sobrepunham). */
 @media (max-width: 1279px) {
-  [role="tablist"].grid {
+  [role="tablist"].grid:not(.months-grid) {
     display: flex !important;
     max-width: 100%;
     overflow-x: auto;
     justify-content: flex-start;
     scrollbar-width: none;
   }
-  [role="tablist"].grid::-webkit-scrollbar {
+  [role="tablist"].grid:not(.months-grid)::-webkit-scrollbar {
     display: none;
   }
-  [role="tablist"].grid > [role="tab"] {
+  [role="tablist"].grid:not(.months-grid) > [role="tab"] {
     flex: 0 0 auto;
   }
 }

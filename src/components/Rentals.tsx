@@ -2516,7 +2516,7 @@ export const Rentals = () => {
 
         {/* Month Tabs */}
         <Tabs value={selectedMonth.toISOString()} onValueChange={(value) => setSelectedMonth(new Date(value))}>
-          <TabsList className="grid w-full grid-cols-12 gap-1">
+          <TabsList className="months-grid grid h-auto w-full grid-cols-6 gap-1 md:grid-cols-12">
             {generateYearsAndMonths()
               .find(({ year }) => year === selectedYear)
               ?.months.map((month) => (

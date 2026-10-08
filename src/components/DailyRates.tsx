@@ -51,6 +51,7 @@ import { useBulkSelection } from "@/hooks/useBulkSelection";
 import { BulkActionsBar } from "@/components/ui/BulkActionsBar";
 import { buildReceiptPath, resolveReceiptDisplayUrl, validateReceiptUpload, fileExtension, FINANCE_RECEIPT_BUCKET } from '@/lib/storageUrls';
 
+import { PageActions } from "@/components/layout/PageHeader";
 interface DailyRate {
   id: string;
   worker_name: string;
@@ -2292,12 +2293,12 @@ export const DailyRates = () => {
   };
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return <div className="p-6 text-sm text-muted-foreground">Carregando...</div>;
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap gap-2">
+    <div className="space-y-6 p-4 sm:p-6">
+      <PageActions>
         <Button variant="outline" onClick={() => setAvailabilityOpen(true)}>
           <CalendarDays className="h-4 w-4 mr-2" aria-hidden="true" />
           Disponibilidade
@@ -2306,7 +2307,7 @@ export const DailyRates = () => {
           <BarChart3 className="h-4 w-4 mr-2" aria-hidden="true" />
           Relatórios
         </Button>
-      </div>
+      </PageActions>
 
       {/* Month/Year Filter Bar */}
       <Card>
@@ -2335,15 +2336,16 @@ export const DailyRates = () => {
             </div>
             
             
-            <div className="flex gap-2 overflow-x-auto pb-2">
+            <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 xl:grid-cols-12">
               {months.map((month, index) => (
                 <Button
                   key={month}
+                  size="sm"
                   variant={selectedMonthFilter === index ? "default" : "outline"}
                   onClick={() => setSelectedMonthFilter(index)}
-                  className="min-w-[70px]"
+                  title={month}
                 >
-                  {month}
+                  {month.slice(0, 3)}
                 </Button>
               ))}
             </div>

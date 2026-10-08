@@ -236,14 +236,14 @@ export const Dashboard = ({ onNavigate }: { onNavigate?: (tab: string) => void }
 
         {/* Month Navigation */}
         <Tabs value={selectedMonth.toISOString()} onValueChange={(value) => setSelectedMonth(new Date(value))}>
-          <TabsList className="grid w-full grid-cols-12 gap-1 bg-card/40 backdrop-blur-sm p-2 rounded-2xl border border-border/30">
+          <TabsList className="months-grid grid h-auto w-full grid-cols-6 gap-1 rounded-2xl border border-border/30 bg-card/40 p-2 backdrop-blur-sm md:grid-cols-12">
             {yearsAndMonths
               .find(({ year }) => year === selectedYear)
               ?.months.map((month) => (
                 <TabsTrigger
                   key={month.toISOString()}
                   value={month.toISOString()}
-                  className="text-xs p-3 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-200 hover:bg-primary/10"
+                  className="text-xs px-1 py-2 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-200 hover:bg-primary/10"
                 >
                   {format(month, 'MMM', { locale: ptBR })}
                 </TabsTrigger>

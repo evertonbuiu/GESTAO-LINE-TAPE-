@@ -960,7 +960,7 @@ export const FinancialDashboard = () => {
                   </DialogHeader>
                   
                   <Tabs defaultValue="0" className="w-full" onValueChange={(value) => setSelectedMonth(Number(value))}>
-                    <TabsList className="grid grid-cols-6 lg:grid-cols-12">
+                    <TabsList className="months-grid grid h-auto w-full grid-cols-6 gap-1 md:grid-cols-12">
                       {monthlyFinancialData.map((data, index) => (
                         <TabsTrigger key={index} value={index.toString()}>
                           {data.month}
