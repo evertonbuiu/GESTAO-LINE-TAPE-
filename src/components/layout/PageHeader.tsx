@@ -17,7 +17,17 @@ export function ActionsSlotProvider({ target, children }: { target: HTMLElement 
 /** Botões que aparecem à direita do título da página. */
 export function PageActions({ children, className }: { children: ReactNode; className?: string }) {
   const target = useContext(ActionsSlotContext);
-  const content = <div className={cn("flex flex-wrap items-center gap-2", className)}>{children}</div>;
+  // Grupos internos também quebram linha, para nada ficar fora da tela.
+  const content = (
+    <div
+      className={cn(
+        "flex min-w-0 max-w-full flex-wrap items-center gap-2 [&>div]:flex-wrap [&>div]:max-w-full [&_label]:whitespace-nowrap",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
   if (!target) return content;
   return createPortal(content, target);
 }
@@ -54,7 +64,7 @@ export function PageHeader({ icon: Icon, group, title, description, onActionsSlo
             {description && <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>}
           </div>
         </div>
-        <div ref={setSlot} className="flex shrink-0 flex-wrap items-center gap-2 empty:hidden">
+        <div ref={setSlot} className="flex min-w-0 max-w-full flex-wrap items-center gap-2 empty:hidden lg:shrink-0">
           {actions}
         </div>
       </div>

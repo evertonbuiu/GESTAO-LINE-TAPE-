@@ -101,7 +101,7 @@ export const ActivityHistory = () => {
           <CardTitle className="text-lg">Filtros</CardTitle>
           <CardDescription>{total} registro(s) exibido(s)</CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-3 md:grid-cols-5">
+        <CardContent className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
           <div>
             <Label htmlFor="audit-from">De</Label>
             <Input id="audit-from" type="date" value={from} onChange={(e) => setFrom(e.target.value)} />

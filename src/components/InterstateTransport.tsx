@@ -1917,7 +1917,7 @@ export const InterstateTransport = () => {
                   {/* Informações Básicas */}
                   <div className="space-y-4">
                     <h5 className="font-medium text-sm text-muted-foreground">Informações Básicas</h5>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="material_name">Nome do Material *</Label>
                         <Input
@@ -1974,7 +1974,7 @@ export const InterstateTransport = () => {
                   {/* Especificações Técnicas */}
                   <div className="space-y-4">
                     <h5 className="font-medium text-sm text-muted-foreground">Especificações Técnicas</h5>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="material_brand">Marca</Label>
                         <Input
@@ -2021,7 +2021,7 @@ export const InterstateTransport = () => {
                   {/* Peso e Valores */}
                   <div className="space-y-4">
                     <h5 className="font-medium text-sm text-muted-foreground">Peso e Valores</h5>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="material_unit_weight">Peso Unitário (kg)</Label>
                         <Input
@@ -2167,7 +2167,7 @@ export const InterstateTransport = () => {
                           </div>
                           
                           {/* Grade de informações */}
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                          <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-4 text-sm">
                             <div>
                               <span className="text-muted-foreground">Quantidade:</span>
                               <div className="font-medium">{material.quantity} un</div>
@@ -2198,7 +2198,7 @@ export const InterstateTransport = () => {
                           
                           {/* Informações técnicas */}
                           {(material.brand || material.model || material.serial_number) && (
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm pt-2 border-t">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm pt-2 border-t">
                               {material.brand && (
                                 <div>
                                   <span className="text-muted-foreground">Marca:</span>

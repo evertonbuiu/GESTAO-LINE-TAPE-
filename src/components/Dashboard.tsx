@@ -405,7 +405,7 @@ export const Dashboard = ({ onNavigate }: { onNavigate?: (tab: string) => void }
 
                   {/* Quick Actions */}
                   {stats.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
                       <Card 
                         className="p-6 bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-200/50 hover:border-blue-400/50 transition-all duration-300 cursor-pointer group"
                         onClick={() => onNavigate?.('inventory')}

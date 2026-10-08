@@ -648,7 +648,7 @@ export const EventTaxReportModal = ({ open, onOpenChange }: EventTaxReportModalP
             </Card>
 
             {/* Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>Evento</Label>
                 <Select value={selectedEvent} onValueChange={setSelectedEvent}>
@@ -700,7 +700,7 @@ export const EventTaxReportModal = ({ open, onOpenChange }: EventTaxReportModalP
             </div>
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-4">
               <Card>
                 <CardContent className="pt-4">
                   <div className="flex items-center gap-2">
@@ -757,7 +757,7 @@ export const EventTaxReportModal = ({ open, onOpenChange }: EventTaxReportModalP
                   <CardTitle className="text-sm">Composição dos Impostos</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-sm">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-6 gap-4 text-sm">
                     {taxRegime !== 'reforma_2026' && taxRegime !== 'simples' && (
                       <>
                         <div>

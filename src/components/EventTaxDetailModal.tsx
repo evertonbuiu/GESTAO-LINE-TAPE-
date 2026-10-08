@@ -569,7 +569,7 @@ export const EventTaxDetailModal = ({
             {/* Event Info */}
             <Card>
               <CardContent className="pt-4">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-4 text-sm">
                   <div>
                     <p className="text-muted-foreground">Cliente</p>
                     <p className="font-medium">{clientName}</p>
@@ -593,7 +593,7 @@ export const EventTaxDetailModal = ({
             </Card>
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-5 gap-3">
               <Card className="bg-green-500/10 border-green-500/30">
                 <CardContent className="pt-3 pb-3">
                   <div className="flex items-center gap-2">
