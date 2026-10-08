@@ -1,4 +1,29 @@
-import { useState, useCallback, lazy, Suspense, useEffect } from "react";
+import { useState, useCallback, lazy as reactLazy, Suspense, useEffect, type ComponentType } from "react";
+
+// Depois de uma atualização, a aba aberta pode pedir arquivos que já não
+// existem. Nesse caso recarrega a página uma vez para pegar a versão nova.
+const RELOAD_FLAG = "lt-chunk-reload";
+function lazy<T extends ComponentType<any>>(load: () => Promise<{ default: T }>) {
+  return reactLazy(() =>
+    load()
+      .then((m) => {
+        try { sessionStorage.removeItem(RELOAD_FLAG); } catch { /* sem armazenamento */ }
+        return m;
+      })
+      .catch((err: unknown) => {
+        const msg = String((err as Error)?.message || err);
+        const stale = /dynamically imported module|Importing a module script failed|ChunkLoadError|Loading chunk/i.test(msg);
+        let already = false;
+        try { already = sessionStorage.getItem(RELOAD_FLAG) === "1"; } catch { /* idem */ }
+        if (stale && !already) {
+          try { sessionStorage.setItem(RELOAD_FLAG, "1"); } catch { /* idem */ }
+          window.location.reload();
+          return new Promise<{ default: T }>(() => {});
+        }
+        throw err;
+      }),
+  );
+}
 import { Sidebar } from "@/components/Sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { QuickThemeToggle } from "@/components/QuickThemeToggle";
