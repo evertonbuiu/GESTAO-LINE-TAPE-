@@ -19,6 +19,7 @@ import { format, parseISO, addDays, isBefore, isAfter } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 import { PageActions } from "@/components/layout/PageHeader";
+import { confirmDelete } from "@/components/ConfirmHost";
 interface MaintenanceRecord {
   id: string;
   equipment_id: string;
@@ -295,6 +296,7 @@ export const Maintenance = () => {
 
   // Delete maintenance
   const deleteMaintenance = async (maintenanceId: string) => {
+    if (!(await confirmDelete({ title: "Excluir este registro de manutenção?" }))) return;
     try {
       const { error } = await supabase
         .from('maintenance_records')

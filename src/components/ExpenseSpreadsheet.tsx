@@ -26,6 +26,7 @@ import { useBulkSelection } from "@/hooks/useBulkSelection";
 import { BulkActionsBar } from "@/components/ui/BulkActionsBar";
 
 import { PageActions } from "@/components/layout/PageHeader";
+import { confirmDelete } from "@/components/ConfirmHost";
 interface DailyExpense {
   id: string;
   date: string;
@@ -667,6 +668,7 @@ export const ExpenseSpreadsheet = () => {
   };
 
   const handleDeleteExpense = async (id: string) => {
+    if (!(await confirmDelete({ title: "Excluir este gasto?" }))) return;
     try {
       // Buscar dados da despesa antes de deletar
       const { data: expenseData } = await supabase

@@ -20,6 +20,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 import { PageActions } from "@/components/layout/PageHeader";
+import { confirmDelete } from "@/components/ConfirmHost";
 export const Equipment = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
@@ -430,6 +431,7 @@ export const Equipment = () => {
 
   // Delete equipment
   const deleteEquipment = async (equipmentId: string) => {
+    if (!(await confirmDelete({ title: "Excluir este equipamento?", description: "O equipamento sai do cadastro. Esta ação não pode ser desfeita." }))) return;
     try {
       const { error } = await supabase
         .from('equipment')

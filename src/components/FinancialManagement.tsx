@@ -37,6 +37,7 @@ import { EventTaxReportModal } from "@/components/EventTaxReportModal";
 
 import { PageActions } from "@/components/layout/PageHeader";
 
+import { confirmDelete } from "@/components/ConfirmHost";
 // Evita criar as contas padrão duas vezes quando a tela carrega em paralelo.
 let defaultAccountsCreation: Promise<{ error: unknown }> | null = null;
 interface CashFlowEntry {
@@ -1904,6 +1905,7 @@ export const FinancialManagement = () => {
   };
 
   const handleDeleteEntry = async (entryId: string) => {
+    if (!(await confirmDelete({ title: "Excluir este lançamento?" }))) return;
     try {
       const realId = entryId.startsWith('bank-') ? entryId.replace('bank-', '') : entryId;
 
@@ -2421,6 +2423,7 @@ export const FinancialManagement = () => {
   };
 
   const handleDeleteInventoryItem = async (itemId: string) => {
+    if (!(await confirmDelete({ title: "Excluir este item do patrimônio?" }))) return;
     try {
       const { error } = await supabase
         .from('patrimony_inventory')

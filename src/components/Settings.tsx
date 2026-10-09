@@ -23,6 +23,7 @@ import { HexColorPicker, HexColorInput } from 'react-colorful';
 import { hslToHex, hexToHsl } from '@/utils/colorConversion';
 
 import { PageActions } from "@/components/layout/PageHeader";
+import { confirmDelete } from "@/components/ConfirmHost";
 export const SettingsPage = () => {
   const { userRole, user } = useCustomAuth();
   const { rolePermissions, loading, updateRolePermission } = usePermissions();
@@ -392,6 +393,7 @@ export const SettingsPage = () => {
 
   // Delete logo
   const deleteLogo = async (fileName: string) => {
+    if (!(await confirmDelete({ title: "Remover a logo?" }))) return;
     try {
       const { error } = await supabase.storage
         .from('logos')

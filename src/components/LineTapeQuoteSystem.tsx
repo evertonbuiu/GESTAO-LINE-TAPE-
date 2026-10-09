@@ -56,6 +56,7 @@ import { PageActions } from "@/components/layout/PageHeader";
 import { fileExtension, resolveProductImageDisplayUrl, validateProductImageUpload } from "@/lib/storageUrls";
 
 
+import { confirmDelete } from "@/components/ConfirmHost";
 interface QuoteProduct {
   id: string;
   name: string;
@@ -356,6 +357,7 @@ export const LineTapeQuoteSystem = () => {
   };
 
   const deleteBankAccount = async (id: string) => {
+    if (!(await confirmDelete({ title: "Excluir esta conta bancária?" }))) return;
     try {
       const { error } = await supabase
         .from('saved_bank_accounts')

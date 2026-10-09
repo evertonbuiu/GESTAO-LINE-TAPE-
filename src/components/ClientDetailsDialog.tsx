@@ -18,6 +18,7 @@ import { normalizeLineTapeBrand } from '@/lib/brand';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
+import { confirmDelete } from "@/components/ConfirmHost";
 interface ClientEvent {
   id: string;
   name: string;
@@ -202,6 +203,7 @@ export const ClientDetailsDialog = ({ clientId, clientName, open, onOpenChange }
   };
 
   const deleteAdvance = async (advanceId: string) => {
+    if (!(await confirmDelete({ title: "Excluir este adiantamento?" }))) return;
     try {
       const { error } = await supabase
         .from('client_advances')
@@ -280,6 +282,7 @@ export const ClientDetailsDialog = ({ clientId, clientName, open, onOpenChange }
   };
 
   const deleteCustomItem = async (itemId: string) => {
+    if (!(await confirmDelete({ title: "Excluir este item?" }))) return;
     try {
       const { error } = await supabase
         .from('client_custom_items')

@@ -17,6 +17,7 @@ import { ptBR } from 'date-fns/locale';
 import { formatPhone, handlePhoneInput } from '@/lib/utils';
 
 import { PageActions } from "@/components/layout/PageHeader";
+import { confirmDelete } from "@/components/ConfirmHost";
 interface Client {
   id: string;
   name: string;
@@ -174,6 +175,7 @@ export const Clients = () => {
 
   // Delete client
   const deleteClient = async (clientId: string) => {
+    if (!(await confirmDelete({ title: "Excluir este cliente?" }))) return;
     try {
       const { error } = await supabase
         .from('clients')

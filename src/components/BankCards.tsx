@@ -31,6 +31,7 @@ import { useValueVisibility } from "@/hooks/useValueVisibility";
 
 import { useCustomAuth } from "@/hooks/useCustomAuth";
 
+import { confirmDelete } from "@/components/ConfirmHost";
 interface BankCard {
   id: string;
   name: string;
@@ -270,6 +271,7 @@ export const BankCards = () => {
   };
 
   const handleDeleteCard = async (cardId: string) => {
+    if (!(await confirmDelete({ title: "Excluir este cartão?" }))) return;
     try {
       const { error } = await supabase
         .from('bank_cards')

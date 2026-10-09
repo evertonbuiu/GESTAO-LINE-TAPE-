@@ -19,6 +19,7 @@ import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from "
 import { ptBR } from "date-fns/locale";
 import { useCustomAuth } from "@/hooks/useCustomAuth";
 
+import { confirmDelete } from "@/components/ConfirmHost";
 interface PersonalExpense {
   id: string;
   date: string;
@@ -300,6 +301,7 @@ export const PersonalExpenseSpreadsheet = () => {
   };
 
   const handleDeleteExpense = async (id: string) => {
+    if (!(await confirmDelete({ title: "Excluir este gasto?" }))) return;
     try {
       const storageKey = `personal_expenses_${selectedMonth}_${selectedYear}`;
       const existingExpenses = JSON.parse(localStorage.getItem(storageKey) || '[]');

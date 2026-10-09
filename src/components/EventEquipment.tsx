@@ -22,6 +22,7 @@ import { ptBR } from 'date-fns/locale';
 import { isSameMonth, addMonths } from 'date-fns';
 
 import { PageActions } from "@/components/layout/PageHeader";
+import { confirmDelete } from "@/components/ConfirmHost";
 interface Event {
   id: string;
   name: string;
@@ -456,6 +457,7 @@ export const EventEquipment = () => {
 
   // Delete equipment
   const deleteEquipment = async (equipmentId: string) => {
+    if (!(await confirmDelete({ title: "Remover este equipamento do evento?" }))) return;
     try {
       const { error } = await supabase
         .from('event_equipment')
@@ -924,6 +926,7 @@ export const EventEquipment = () => {
 
   // Remove collaborator from event
   const removeCollaborator = async (collaboratorId: string) => {
+    if (!(await confirmDelete({ title: "Remover esta pessoa do evento?" }))) return;
     try {
       const { error } = await supabase
         .from('event_collaborators')

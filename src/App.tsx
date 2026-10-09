@@ -17,6 +17,7 @@ import { PWAUpdateBanner } from "@/components/PWAUpdateBanner";
 import { Loader2 } from "lucide-react";
 import { RealtimeQuerySync } from "@/components/RealtimeQuerySync";
 
+import { ConfirmHost } from "@/components/ConfirmHost";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -74,6 +75,7 @@ const App = () => (
           <ThemeProvider>
             <Toaster />
             <Sonner />
+            <ConfirmHost />
             <PWAUpdateBanner />
             <AppRoutes />
           </ThemeProvider>

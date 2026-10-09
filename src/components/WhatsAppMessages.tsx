@@ -17,6 +17,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 import { PageActions } from "@/components/layout/PageHeader";
+import { confirmDelete } from "@/components/ConfirmHost";
 interface WhatsAppMessage {
   id: string;
   sender_phone: string;
@@ -445,6 +446,7 @@ export const WhatsAppMessages = () => {
   };
 
   const handleDeleteMessage = async (messageId: string) => {
+    if (!(await confirmDelete({ title: "Excluir esta mensagem?" }))) return;
     try {
       const { error } = await supabase
         .from('whatsapp_messages')

@@ -54,6 +54,7 @@ import { useBulkSelection } from '@/hooks/useBulkSelection';
 import { BulkActionsBar } from '@/components/ui/BulkActionsBar';
 
 import { PageActions } from "@/components/layout/PageHeader";
+import { confirmDelete } from "@/components/ConfirmHost";
 interface Event {
   id: string;
   name: string;
@@ -644,6 +645,7 @@ export const Rentals = () => {
   };
 
   const removeEventTeamMember = async (memberId: string) => {
+    if (!(await confirmDelete({ title: "Remover esta pessoa da equipe do evento?" }))) return;
     if (!selectedEventForView) return;
     try {
       const { error } = await supabase.from('event_collaborators').delete().eq('id', memberId);
@@ -696,6 +698,7 @@ export const Rentals = () => {
   };
 
   const removeEventVehicle = async (vehicleId: string) => {
+    if (!(await confirmDelete({ title: "Remover este veículo do evento?" }))) return;
     if (!selectedEventForView) return;
     try {
       const { error } = await (supabase.from('event_transport_vehicles' as any) as any).delete().eq('id', vehicleId);
@@ -831,6 +834,7 @@ export const Rentals = () => {
   };
 
   const deleteBudget = async (id: string) => {
+    if (!(await confirmDelete({ title: "Excluir este orçamento?" }))) return;
     try {
       const { error } = await supabase
         .from('event_budgets' as any)
@@ -1185,6 +1189,7 @@ export const Rentals = () => {
   };
 
   const deleteEvent = async (id: string) => {
+    if (!(await confirmDelete({ title: "Excluir este evento?", description: "Também serão apagados as despesas do evento, os vales e notinhas ligados a ele e os lançamentos financeiros com o nome do evento ou do cliente. Esta ação não pode ser desfeita." }))) return;
     try {
       // 1) Buscar todas as despesas do evento para limpar bank_transactions relacionadas
       const { data: eventExpenses } = await supabase
@@ -1521,6 +1526,7 @@ export const Rentals = () => {
   };
 
   const deleteExpense = async (id: string) => {
+    if (!(await confirmDelete({ title: "Excluir esta despesa?", description: "O lançamento financeiro ligado a ela também será apagado. Esta ação não pode ser desfeita." }))) return;
     try {
       // Buscar dados da despesa antes de deletar para sincronizar com bank_transactions
       const { data: expenseData } = await supabase
