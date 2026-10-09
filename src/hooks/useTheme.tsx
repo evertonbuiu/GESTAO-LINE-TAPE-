@@ -167,6 +167,15 @@ const darkColorSchemes: ColorScheme[] = [
   },
 ];
 
+
+// Texto legível sobre uma cor HSL ("h s% l%"): branco em cores escuras/médias,
+// quase preto em cores claras.
+function contrastOn(hsl: string): string {
+  const m = /([\d.]+)%\s*$/.exec(hsl.trim());
+  const l = m ? parseFloat(m[1]) : 50;
+  return l < 62 ? '0 0% 100%' : '222.2 47.4% 11.2%';
+}
+
 // Light theme color schemes
 const lightColorSchemes: ColorScheme[] = [
   {
@@ -392,7 +401,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     
     // Also apply primary since it's important for the theme
     root.style.setProperty('--primary', scheme.primary);
-    root.style.setProperty('--primary-foreground', scheme.foreground);
+    root.style.setProperty('--primary-foreground', contrastOn(scheme.primary));
   };
 
   // Helper to generate a custom color scheme based on custom colors
