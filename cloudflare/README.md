@@ -89,7 +89,11 @@ Informe o `SETUP_TOKEN`, seu nome, um usuário e uma senha. Isso só funciona en
   - As permissões dos arquivos seguem as do banco real (`worker/src/storagePolicies.js`): certificado digital só para administrador, comprovantes só para financeiro/administrador ou para quem enviou, e assim por diante.
   - Como no original, marcar um evento como pago não lança no financeiro na hora: o lançamento aparece quando a sincronização roda (ícone de sincronizar no saldo da Gestão financeira).
   - Melhoria: no original ninguém conseguia enviar arquivos para `company_files` (anexos da planilha de gastos) e `worker-photos` (foto do diarista), porque faltava a permissão. Na cópia, administrador e financeiro podem.
-- **Regra herdada do original:** o banco exige que cada origem (`reference_id`) tenha um único lançamento bancário. Um evento com pagamento principal **e** restante gera dois lançamentos com a mesma origem, e a sincronização automática falha em silêncio. Isso acontece igual no sistema atual. Dá para corrigir depois, se você quiser.
+- **Regras de valor único e validações:** a cópia segue o banco real. Algumas regras do histórico de migrações (lançamento bancário único por origem, número de orçamento único, um pagamento de despesa fixa e um salário por mês, e 8 validações de status/mês) não existem no Supabase atual e foram retiradas (`worker/migrations/0006_align_constraints.sql`).
+
+## Importação dos dados do Supabase
+
+Feita em 08/10/2026 com `src/importer.js` (rota `/import/*`): o próprio Supabase envia as linhas (extensão pg_net) para uma área de espera; a gravação acontece com as regras automáticas desligadas, na ordem das chaves estrangeiras, e as regras são religadas no fim. Os arquivos públicos são baixados direto do Supabase. Usuários entram sem senha (o Supabase guarda senhas em bcrypt, pesado demais para o plano gratuito do Workers): o administrador define uma nova senha na tela Usuários.
 
 ## Para quem for mexer no código
 

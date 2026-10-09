@@ -108,6 +108,7 @@ async function start(request, db, ctx) {
     remap: body.remap || {},
     skipUsers: body.skipUsers || [],
     replace: body.replace || [],
+    noWipe: !!body.noWipe,
   };
   await db.d1.batch([
     db.d1.prepare('DELETE FROM _import_rows'),
@@ -197,7 +198,7 @@ async function apply(request, db) {
     const drops = trig.results.map((t) => db.d1.prepare(`DROP TRIGGER IF EXISTS "${t.name}"`));
     for (let i = 0; i < drops.length; i += 50) await db.d1.batch(drops.slice(i, i + 50));
     // 2) limpa as tabelas que serão importadas (na ordem inversa)
-    const wipe = [...order].reverse().filter((t) => !KEEP_TABLES.has(t));
+    const wipe = cfg.noWipe ? [] : [...order].reverse().filter((t) => !KEEP_TABLES.has(t));
     const dels = wipe.map((t) => db.d1.prepare(`DELETE FROM "${t}"`));
     for (let i = 0; i < dels.length; i += 50) await db.d1.batch(dels.slice(i, i + 50));
     state = { phase: 'applying', triggers: trig.results.length };

@@ -33,6 +33,24 @@ TODAY_SQL = "(date('now'))"
 TODAY_BR_SQL = "(date('now','-3 hours'))"
 
 
+# Regras de valor único que estão no histórico de migrações mas NÃO existem no
+# banco real (conferido em pg_constraint/pg_indexes em 08/10/2026).
+NOT_IN_REAL = {
+    "bank_transactions_reference_id_unique_idx",
+    "uq_external_quotes_quote_number",
+    "recurring_expense_monthly_payments_recurring_expense_id_payment_month_payment_year_key",
+    "collaborator_monthly_salaries_collaborator_id_salary_month_salary_year_key",
+    # validações (CHECK) que o banco real não tem
+    "bank_card_transactions_transaction_type_check",
+    "bank_cards_card_type_check",
+    "collaborator_monthly_salaries_salary_month_check",
+    "due_day_range",
+    "interstate_transports_status_check",
+    "recurring_expense_monthly_payments_payment_month_check",
+    "recurring_expense_monthly_payments_payment_year_check",
+    "recurring_expense_payment_plans_status_check",
+}
+
 EXTRA_RELATIONS = {
     "recurring_expense_monthly_payments": [
         {"name": "recurring_expense_monthly_payments_recurring_expense_id_fkey",
@@ -266,6 +284,9 @@ def main():
             cols_sql.append(f"  PRIMARY KEY ({', '.join(q(c) for c in t['pk'])})")
         fks = []
         for cnm, k in t["constraints"].items():
+            if k["kind"] == "unique" and cnm in NOT_IN_REAL:
+                report.append(f"UNIQUE fora do banco real ignorado: {tname}.{cnm}")
+                continue
             if k["kind"] == "unique":
                 cols_sql.append(f"  CONSTRAINT {q(cnm)} UNIQUE ({', '.join(q(c) for c in k['cols'])})")
             elif k["kind"] == "fk":
@@ -283,6 +304,8 @@ def main():
                     f"  CONSTRAINT {q(cnm)} FOREIGN KEY ({', '.join(q(c) for c in k['cols'])}) REFERENCES {q(ref)} ({', '.join(q(c) for c in k['ref_cols'])}){od}"
                 )
                 fks.append({"name": cnm, "cols": k["cols"], "ref": ref, "refCols": k["ref_cols"]})
+            elif k["kind"] == "check" and cnm in NOT_IN_REAL:
+                report.append(f"CHECK fora do banco real ignorado: {tname}.{cnm}")
             elif k["kind"] == "check":
                 try:
                     ex = translate_check(k["expr"])
@@ -328,6 +351,9 @@ def main():
                 where = " WHERE " + translate_check(ix["where"])
             except Exception:  # noqa: BLE001
                 ok = False
+        if iname in NOT_IN_REAL:
+            report.append(f"índice fora do banco real ignorado: {iname}")
+            continue
         if not ok:
             report.append(f"índice não traduzido {iname}: {ix['exprs']} where={ix.get('where')}")
             continue
@@ -337,8 +363,8 @@ def main():
             meta[ix["table"]].setdefault("uniques", []).append([e.strip('"') for e in exprs])
 
     for tname, t in tables.items():
-        for k in t["constraints"].values():
-            if k["kind"] == "unique":
+        for cnm, k in t["constraints"].items():
+            if k["kind"] == "unique" and cnm not in NOT_IN_REAL:
                 meta[tname].setdefault("uniques", []).append(k["cols"])
         if t["pk"]:
             meta[tname].setdefault("uniques", []).insert(0, t["pk"])

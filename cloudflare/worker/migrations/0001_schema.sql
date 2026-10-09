@@ -414,7 +414,6 @@ CREATE TABLE IF NOT EXISTS "interstate_transports" (
   "cancel_reason" TEXT,
   "cancelled_at" TEXT,
   "completed_at" TEXT,
-  CONSTRAINT "interstate_transports_status_check" CHECK (status IN ('planned', 'in_transit', 'delivered', 'cancelled')),
   CONSTRAINT "interstate_transports_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "events" ("id") ON DELETE SET NULL
 );
 
@@ -436,8 +435,7 @@ CREATE TABLE IF NOT EXISTS "recurring_expenses" (
   "selected_months" TEXT,
   "selected_year" INTEGER,
   "due_day" INTEGER,
-  "receipt_path" TEXT,
-  CONSTRAINT "due_day_range" CHECK (due_day >= 1 AND due_day <= 31)
+  "receipt_path" TEXT
 );
 
 CREATE TABLE IF NOT EXISTS "recurring_expense_payment_plans" (
@@ -452,7 +450,6 @@ CREATE TABLE IF NOT EXISTS "recurring_expense_payment_plans" (
   "created_at" TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%f+00:00','now')),
   "updated_at" TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%f+00:00','now')),
   CONSTRAINT "recurring_expense_payment_plans_recurring_expense_id_fkey" FOREIGN KEY ("recurring_expense_id") REFERENCES "recurring_expenses" ("id") ON DELETE CASCADE,
-  CONSTRAINT "recurring_expense_payment_plans_status_check" CHECK (status IN ('planned', 'paid', 'cancelled')),
   CONSTRAINT "recurring_expense_payment_plans_bank_account_id_fkey" FOREIGN KEY ("bank_account_id") REFERENCES "bank_accounts" ("id")
 );
 
@@ -467,10 +464,7 @@ CREATE TABLE IF NOT EXISTS "recurring_expense_monthly_payments" (
   "created_by" TEXT NOT NULL,
   "created_at" TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%f+00:00','now')),
   "updated_at" TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%f+00:00','now')),
-  "receipt_path" TEXT,
-  CONSTRAINT "recurring_expense_monthly_payments_payment_month_check" CHECK (payment_month >= 1 AND payment_month <= 12),
-  CONSTRAINT "recurring_expense_monthly_payments_payment_year_check" CHECK (payment_year >= 2020),
-  CONSTRAINT "recurring_expense_monthly_payments_recurring_expense_id_payment_month_payment_year_key" UNIQUE ("recurring_expense_id", "payment_month", "payment_year")
+  "receipt_path" TEXT
 );
 
 CREATE TABLE IF NOT EXISTS "event_budgets" (
@@ -504,8 +498,7 @@ CREATE TABLE IF NOT EXISTS "bank_cards" (
   "is_active" INTEGER NOT NULL DEFAULT 1,
   "created_by" TEXT,
   "created_at" TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%f+00:00','now')),
-  "updated_at" TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%f+00:00','now')),
-  CONSTRAINT "bank_cards_card_type_check" CHECK (card_type IN ('credit', 'debit'))
+  "updated_at" TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%f+00:00','now'))
 );
 
 CREATE TABLE IF NOT EXISTS "contracts" (
@@ -630,8 +623,7 @@ CREATE TABLE IF NOT EXISTS "bank_card_transactions" (
   "transaction_type" TEXT NOT NULL,
   "created_at" TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%f+00:00','now')),
   "updated_at" TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%f+00:00','now')),
-  CONSTRAINT "bank_card_transactions_card_id_fkey" FOREIGN KEY ("card_id") REFERENCES "bank_cards" ("id") ON DELETE CASCADE,
-  CONSTRAINT "bank_card_transactions_transaction_type_check" CHECK (transaction_type IN ('credit', 'debit'))
+  CONSTRAINT "bank_card_transactions_card_id_fkey" FOREIGN KEY ("card_id") REFERENCES "bank_cards" ("id") ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "daily_rates" (
@@ -760,8 +752,6 @@ CREATE TABLE IF NOT EXISTS "collaborator_monthly_salaries" (
   "payment_date" TEXT,
   "bank_account_id" TEXT,
   CONSTRAINT "collaborator_monthly_salaries_collaborator_id_fkey" FOREIGN KEY ("collaborator_id") REFERENCES "collaborators" ("id") ON DELETE CASCADE,
-  CONSTRAINT "collaborator_monthly_salaries_salary_month_check" CHECK (salary_month >= 0 AND salary_month <= 11),
-  CONSTRAINT "collaborator_monthly_salaries_collaborator_id_salary_month_salary_year_key" UNIQUE ("collaborator_id", "salary_month", "salary_year"),
   CONSTRAINT "collaborator_monthly_salaries_bank_account_id_fkey" FOREIGN KEY ("bank_account_id") REFERENCES "bank_accounts" ("id")
 );
 
@@ -1670,7 +1660,6 @@ CREATE INDEX IF NOT EXISTS "idx_collaborator_expense_advances_advance_date" ON "
 CREATE INDEX IF NOT EXISTS "idx_client_advances_client_id" ON "client_advances" ("client_id");
 CREATE INDEX IF NOT EXISTS "idx_client_advances_advance_date" ON "client_advances" ("advance_date");
 CREATE INDEX IF NOT EXISTS "idx_client_custom_items_client_id" ON "client_custom_items" ("client_id");
-CREATE UNIQUE INDEX IF NOT EXISTS "bank_transactions_reference_id_unique_idx" ON "bank_transactions" ("reference_id") WHERE reference_id IS NOT NULL;
 CREATE INDEX IF NOT EXISTS "idx_collaborator_food_allowances_collaborator_id" ON "collaborator_food_allowances" ("collaborator_id");
 CREATE INDEX IF NOT EXISTS "idx_collaborator_food_allowances_date" ON "collaborator_food_allowances" ("allowance_date");
 CREATE INDEX IF NOT EXISTS "idx_collaborator_food_allowances_event_id" ON "collaborator_food_allowances" ("event_id");
@@ -1693,7 +1682,6 @@ CREATE INDEX IF NOT EXISTS "idx_event_checklist_items_checklist" ON "event_check
 CREATE INDEX IF NOT EXISTS "idx_quote_approvals_quote" ON "quote_approvals" ("quote_id");
 CREATE INDEX IF NOT EXISTS "idx_quote_approvals_token" ON "quote_approvals" ("token");
 CREATE INDEX IF NOT EXISTS "idx_event_budgets_source_item_id" ON "event_budgets" ("source_item_id");
-CREATE UNIQUE INDEX IF NOT EXISTS "uq_external_quotes_quote_number" ON "external_quotes" ("quote_number") WHERE quote_number IS NOT NULL;
 CREATE UNIQUE INDEX IF NOT EXISTS "contract_templates_name_version_key" ON "contract_templates" ("name", "version");
 CREATE INDEX IF NOT EXISTS "contract_history_contract_id_idx" ON "contract_history" ("contract_id", "created_at");
 CREATE UNIQUE INDEX IF NOT EXISTS "person_sensitive_data_unique" ON "person_sensitive_data" ("person_type", "person_id");
