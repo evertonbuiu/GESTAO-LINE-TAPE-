@@ -13,6 +13,7 @@ import { Db } from './db.js';
 import { handleRest } from './rest.js';
 import { handleRpc } from './rpc.js';
 import { handleStorage } from './storage.js';
+import { handleImport } from './importer.js';
 import { handleFunction } from './functions/index.js';
 import { handleChanges } from './realtime.js';
 import { ApiError, corsHeaders, errorResponse, json } from './util.js';
@@ -130,6 +131,9 @@ async function route(request, env, ctxExec) {
   }
   if ((m = path.match(/^\/rest\/v1\/(\w+)$/))) {
     return handleRest(request, db, ctx, m[1]);
+  }
+  if ((m = path.match(/^\/import\/(\w+)$/))) {
+    return handleImport(m[1], request, env, db, ctx);
   }
   if ((m = path.match(/^\/storage\/v1\/(.+)$/))) {
     return handleStorage(request, env, db, ctx, m[1]);
