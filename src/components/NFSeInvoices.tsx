@@ -89,7 +89,7 @@ import {
   AlertTriangle,
   Loader2
 } from "lucide-react";
-import { lookupTaker } from "@/lib/documentLookup";
+import { lookupTaker, lookupCep } from "@/lib/documentLookup";
 
 import { PageActions } from "@/components/layout/PageHeader";
 interface NFSeInvoice {
@@ -335,6 +335,38 @@ export const NFSeInvoices = () => {
       setTakerLookup({ state: 'found', source: res.source });
     });
   }, [formData.taker_document, formData.taker_type]);
+
+  // Endereço pelo CEP: completa cidade (código IBGE) e UF; a rua e o bairro
+  // entram no endereço só se ele ainda estiver vazio.
+  const [cepLookup, setCepLookup] = useState<'idle' | 'loading' | 'found' | 'notfound'>('idle');
+  const lastCepRef = React.useRef('');
+  useEffect(() => {
+    const digits = formData.taker_cep.replace(/\D/g, '');
+    if (digits.length !== 8) {
+      lastCepRef.current = '';
+      setCepLookup('idle');
+      return;
+    }
+    if (lastCepRef.current === digits) return;
+    lastCepRef.current = digits;
+    setCepLookup('loading');
+    lookupCep(digits).then((c) => {
+      if (lastCepRef.current !== digits) return;
+      if (!c) {
+        setCepLookup('notfound');
+        return;
+      }
+      setFormData((prev) => ({
+        ...prev,
+        taker_city_code: c.city_code || prev.taker_city_code,
+        taker_state: c.state || prev.taker_state,
+        taker_address: prev.taker_address.trim()
+          ? prev.taker_address
+          : [c.street, c.district, c.city].filter(Boolean).join(', '),
+      }));
+      setCepLookup('found');
+    });
+  }, [formData.taker_cep]);
 
   const calculateValues = useCallback(() => {
     const baseCalculation = formData.service_value - formData.deduction_value;
@@ -1451,7 +1483,7 @@ Série: ${invoice.rps_series || 'RPS'}
                     <p className="text-xs text-muted-foreground">
                       {formData.taker_type === '1'
                         ? 'CNPJ não encontrado. Preencha os dados abaixo.'
-                        : 'CPF sem cadastro anterior no sistema. Preencha os dados abaixo.'}
+                        : 'CPF sem cadastro anterior no sistema. Preencha o nome e digite o CEP que o endereço se completa.'}
                     </p>
                   )}
                 </div>
@@ -1517,9 +1549,19 @@ Série: ${invoice.rps_series || 'RPS'}
                   <Label>CEP</Label>
                   <Input
                     value={formData.taker_cep}
-                    onChange={(e) => setFormData({ ...formData, taker_cep: e.target.value })}
+                    onChange={(e) => {
+                      const d = e.target.value.replace(/\D/g, '').slice(0, 8);
+                      setFormData({ ...formData, taker_cep: d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5)}` : d });
+                    }}
                     placeholder="74000-000"
+                    inputMode="numeric"
                   />
+                  {cepLookup === 'loading' && (
+                    <p className="text-xs text-muted-foreground flex items-center gap-1">
+                      <Loader2 className="h-3 w-3 animate-spin" /> Buscando CEP...
+                    </p>
+                  )}
+                  {cepLookup === 'notfound' && <p className="text-xs text-muted-foreground">CEP não encontrado.</p>}
                 </div>
               </div>
             </TabsContent>

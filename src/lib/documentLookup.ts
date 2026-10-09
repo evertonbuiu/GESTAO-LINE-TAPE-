@@ -195,3 +195,30 @@ export async function lookupTaker(document: string): Promise<LookupResult | null
   }
   return null;
 }
+
+export interface CepData {
+  street: string;
+  district: string;
+  city: string;
+  state: string;
+  city_code: string;
+}
+
+/** Endereço pelo CEP (ViaCEP, com a OpenCEP de reserva). */
+export async function lookupCep(cep: string): Promise<CepData | null> {
+  const d = onlyDigits(cep);
+  if (d.length !== 8) return null;
+  for (const url of [`https://viacep.com.br/ws/${d}/json/`, `https://opencep.com/v1/${d}`]) {
+    const r = await fetchJson(url, 6000);
+    if (r && !r.erro && r.localidade) {
+      return {
+        street: r.logradouro || "",
+        district: r.bairro || "",
+        city: r.localidade || "",
+        state: r.uf || "",
+        city_code: r.ibge ? String(r.ibge) : "",
+      };
+    }
+  }
+  return null;
+}
