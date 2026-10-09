@@ -1062,6 +1062,17 @@ Série: ${invoice.rps_series || 'RPS'}
               {validating ? 'Validando...' : 'Validar certificado e conexão'}
             </Button>
           )}
+          <Button variant="outline" asChild>
+            <a
+              href="https://sistema.notagoiania.com.br/notas/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Abre as notas fiscais no NotaGoiânia em outra aba"
+            >
+              <ExternalLink className="h-4 w-4 mr-2" />
+              Abrir NotaGoiânia
+            </a>
+          </Button>
           <Button variant="outline" onClick={() => setIsConfigDialogOpen(true)}>
             <Settings className="h-4 w-4 mr-2" />
             Configurações
