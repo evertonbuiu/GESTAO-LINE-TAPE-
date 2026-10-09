@@ -17,7 +17,7 @@ export interface AppearancePrefs {
 }
 
 export const DEFAULT_APPEARANCE: AppearancePrefs = {
-  mode: 'system',
+  mode: 'dark',
   primary_hsl: null,
   density: 'comfortable',
   font_scale: 1,

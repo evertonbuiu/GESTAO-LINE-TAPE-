@@ -336,7 +336,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       if (!user) return;
       const { error } = await supabase
         .from('user_theme_preferences')
-        .upsert(toDbPayload(next, user.id), { onConflict: 'user_id' });
+        .upsert({ ...toDbPayload(next, user.id), theme: next.mode }, { onConflict: 'user_id' });
       if (error) throw error;
     },
     [appearance, user],
@@ -357,11 +357,16 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       if (!user) return;
       const { data, error } = await supabase
         .from('user_theme_preferences')
-        .select('mode, primary_hsl, density, font_scale, radius_scale, reduced_motion, high_contrast')
+        .select('theme, mode, primary_hsl, density, font_scale, radius_scale, reduced_motion, high_contrast')
         .eq('user_id', user.id)
         .maybeSingle();
       if (cancelled || error || !data) return;
-      setAppearance(normalizeAppearance(data));
+      const loaded = normalizeAppearance(data);
+      // "theme" é o que o menu Tema grava; "mode" tinha valor padrão "system"
+      // mesmo sem a pessoa escolher. O tema salvo é a referência.
+      const savedTheme = (data as { theme?: string }).theme;
+      if (savedTheme === 'light' || savedTheme === 'dark' || savedTheme === 'system') loaded.mode = savedTheme;
+      setAppearance(loaded);
     };
     load();
     return () => {
@@ -433,7 +438,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Save theme preferences to Supabase
-  const saveThemePreferences = async () => {
+  const saveThemePreferences = async (over: { theme?: string; color_scheme?: string } = {}) => {
     try {
       if (!user) {
         console.log('No authenticated user, skipping theme preference saving');
@@ -446,12 +451,14 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         custom_colors: customColors
       });
 
-      const themeData = {
+      const themeData: Record<string, unknown> = {
         user_id: user.id,
-        theme,
-        color_scheme: colorScheme,
+        theme: over.theme ?? theme,
+        color_scheme: over.color_scheme ?? colorScheme,
         custom_colors: customColors
       };
+      // o modo de aparência acompanha o tema escolhido no menu
+      if (over.theme) themeData.mode = over.theme;
 
       // Use UPSERT to handle duplicates gracefully
       const { error } = await supabase
@@ -512,7 +519,10 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       }
 
       if (prefs) {
-        const newTheme = prefs.theme as Theme;
+        const savedTheme = prefs.theme as string;
+        const newTheme: Theme = savedTheme === 'system'
+          ? resolveMode('system', systemPrefersDark)
+          : (savedTheme === 'light' ? 'light' : 'dark');
         const newColorScheme = prefs.color_scheme;
         
         setTheme(newTheme);
@@ -582,8 +592,10 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Theme change handler
-  const handleThemeChange = async (newTheme: Theme) => {
+  const handleThemeChange = async (newTheme: Theme, opts: { persist?: boolean } = {}) => {
+    const persist = opts.persist !== false;
     setTheme(newTheme);
+    if (persist) setAppearance(prev => (prev.mode === newTheme ? prev : { ...prev, mode: newTheme }));
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
     
     // If we're using custom scheme, regenerate it with the new theme
@@ -604,8 +616,16 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       }
     }
 
-    await saveThemePreferences();
+    if (persist) await saveThemePreferences({ theme: newTheme });
   };
+
+  // Modo efetivo (Aparência / sistema) e cores sempre juntos
+  useEffect(() => {
+    if (effectiveMode !== theme) {
+      void handleThemeChange(effectiveMode, { persist: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [effectiveMode]);
 
   // Color scheme change handler
   const handleColorSchemeChange = async (schemeId: string) => {
@@ -617,7 +637,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       applyColorScheme(scheme);
     }
 
-    await saveThemePreferences();
+    await saveThemePreferences({ color_scheme: schemeId });
   };
 
   // Custom color scheme handler
