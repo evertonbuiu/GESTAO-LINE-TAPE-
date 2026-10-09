@@ -86,8 +86,10 @@ import {
   FileCheck,
   Printer,
   ExternalLink,
-  AlertTriangle
+  AlertTriangle,
+  Loader2
 } from "lucide-react";
+import { lookupTaker } from "@/lib/documentLookup";
 
 import { PageActions } from "@/components/layout/PageHeader";
 interface NFSeInvoice {
@@ -195,6 +197,10 @@ export const NFSeInvoices = () => {
   const [manualEmitData, setManualEmitData] = useState<NFSeInvoice | null>(null);
   const [emitConfirmInvoice, setEmitConfirmInvoice] = useState<NFSeInvoice | null>(null);
   
+  // Busca automática do tomador pelo CNPJ/CPF
+  const [takerLookup, setTakerLookup] = useState<{ state: 'idle' | 'loading' | 'found' | 'notfound'; source?: string }>({ state: 'idle' });
+  const lastLookupRef = React.useRef('');
+
   // Form state
   const [formData, setFormData] = useState({
     taker_type: '2',
@@ -296,6 +302,39 @@ export const NFSeInvoices = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    const digits = formData.taker_document.replace(/\D/g, '');
+    const complete = (formData.taker_type === '1' && digits.length === 14) || (formData.taker_type === '2' && digits.length === 11);
+    if (!complete) {
+      lastLookupRef.current = '';
+      setTakerLookup({ state: 'idle' });
+      return;
+    }
+    if (lastLookupRef.current === digits) return;
+    lastLookupRef.current = digits;
+    setTakerLookup({ state: 'loading' });
+    lookupTaker(digits).then((res) => {
+      // ignora respostas de um documento que já foi trocado
+      if (lastLookupRef.current !== digits) return;
+      if (!res) {
+        setTakerLookup({ state: 'notfound' });
+        return;
+      }
+      const d = res.data;
+      setFormData((prev) => ({
+        ...prev,
+        taker_name: d.name || prev.taker_name,
+        taker_email: d.email || prev.taker_email,
+        taker_phone: d.phone || prev.taker_phone,
+        taker_address: d.address || prev.taker_address,
+        taker_city_code: d.city_code || prev.taker_city_code,
+        taker_state: d.state || prev.taker_state,
+        taker_cep: d.cep || prev.taker_cep,
+      }));
+      setTakerLookup({ state: 'found', source: res.source });
+    });
+  }, [formData.taker_document, formData.taker_type]);
 
   const calculateValues = useCallback(() => {
     const baseCalculation = formData.service_value - formData.deduction_value;
@@ -1384,14 +1423,37 @@ Série: ${invoice.rps_series || 'RPS'}
                   <Label>{formData.taker_type === '1' ? 'CNPJ' : 'CPF'} *</Label>
                   <Input
                     value={formData.taker_document}
-                    onChange={(e) => setFormData({ 
-                      ...formData, 
-                      taker_document: formData.taker_type === '1' 
-                        ? formatCNPJ(e.target.value) 
-                        : formatCPF(e.target.value) 
-                    })}
+                    onChange={(e) => {
+                      // mais de 11 dígitos só pode ser CNPJ: troca o tipo sozinho
+                      const type = e.target.value.replace(/\D/g, '').length > 11 ? '1' : formData.taker_type;
+                      setFormData({
+                        ...formData,
+                        taker_type: type,
+                        taker_document: type === '1' ? formatCNPJ(e.target.value) : formatCPF(e.target.value),
+                      });
+                    }}
                     placeholder={formData.taker_type === '1' ? '00.000.000/0000-00' : '000.000.000-00'}
                   />
+                  {takerLookup.state === 'loading' && (
+                    <p className="text-xs text-muted-foreground flex items-center gap-1">
+                      <Loader2 className="h-3 w-3 animate-spin" /> Buscando dados...
+                    </p>
+                  )}
+                  {takerLookup.state === 'found' && (
+                    <p className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
+                      <CheckCircle className="h-3 w-3" />
+                      {takerLookup.source === 'sistema'
+                        ? 'Dados preenchidos com o último cadastro no sistema'
+                        : 'Dados preenchidos pela Receita Federal'}
+                    </p>
+                  )}
+                  {takerLookup.state === 'notfound' && (
+                    <p className="text-xs text-muted-foreground">
+                      {formData.taker_type === '1'
+                        ? 'CNPJ não encontrado. Preencha os dados abaixo.'
+                        : 'CPF sem cadastro anterior no sistema. Preencha os dados abaixo.'}
+                    </p>
+                  )}
                 </div>
               </div>
 
