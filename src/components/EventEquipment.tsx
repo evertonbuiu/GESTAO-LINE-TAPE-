@@ -1697,8 +1697,8 @@ export const EventEquipment = () => {
                       filteredEvents.map((event) => (
                         <Card key={event.id} className="hover:shadow-lg transition-shadow">
                           <CardHeader>
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1">
+                            <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                              <div className="min-w-0 flex-1">
                                 <CardTitle className="flex items-center gap-2">
                                   <Calendar className="h-5 w-5 text-primary" />
                                   {event.name}
@@ -1734,7 +1734,7 @@ export const EventEquipment = () => {
                                   )}
                                 </CardDescription>
                               </div>
-                              <div className="flex items-center gap-2">
+                              <div className="flex flex-wrap items-center gap-2">
                                 <Badge variant={getStatusVariant(event.status) as any}>
                                   {getStatusText(event.status)}
                                 </Badge>
