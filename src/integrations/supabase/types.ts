@@ -3253,6 +3253,18 @@ export type Database = {
       }
       nfse_invoices: {
         Row: {
+          event_city: string | null
+          event_city_code: string | null
+          event_code: string | null
+          event_complement: string | null
+          event_description: string | null
+          event_district: string | null
+          event_end_date: string | null
+          event_number: string | null
+          event_start_date: string | null
+          event_state: string | null
+          event_street: string | null
+          event_cep: string | null
           authorized_at: string | null
           base_calculation: number
           cancelled_at: string | null
@@ -3317,6 +3329,18 @@ export type Database = {
           xml_rps: string | null
         }
         Insert: {
+          event_city?: string | null
+          event_city_code?: string | null
+          event_code?: string | null
+          event_complement?: string | null
+          event_description?: string | null
+          event_district?: string | null
+          event_end_date?: string | null
+          event_number?: string | null
+          event_start_date?: string | null
+          event_state?: string | null
+          event_street?: string | null
+          event_cep?: string | null
           authorized_at?: string | null
           base_calculation: number
           cancelled_at?: string | null
@@ -3381,6 +3405,18 @@ export type Database = {
           xml_rps?: string | null
         }
         Update: {
+          event_city?: string | null
+          event_city_code?: string | null
+          event_code?: string | null
+          event_complement?: string | null
+          event_description?: string | null
+          event_district?: string | null
+          event_end_date?: string | null
+          event_number?: string | null
+          event_start_date?: string | null
+          event_state?: string | null
+          event_street?: string | null
+          event_cep?: string | null
           authorized_at?: string | null
           base_calculation?: number
           cancelled_at?: string | null

@@ -51,6 +51,16 @@ NOT_IN_REAL = {
     "recurring_expense_payment_plans_status_check",
 }
 
+# Colunas criadas depois, por migrações próprias do D1 (0007 em diante).
+# Entram nos metadados da API, mas não no 0001_schema.sql.
+ADDED_LATER = {
+    "nfse_invoices": [
+        "event_start_date", "event_end_date", "event_code", "event_description",
+        "event_cep", "event_street", "event_number", "event_district",
+        "event_complement", "event_state", "event_city", "event_city_code",
+    ],
+}
+
 EXTRA_RELATIONS = {
     "recurring_expense_monthly_payments": [
         {"name": "recurring_expense_monthly_payments_recurring_expense_id_fkey",
@@ -198,6 +208,10 @@ def main():
                 tables[tname]["columns"][c] = {"type": info["type"], "notnull": False, "default": None, "generated": None}
                 report.append(f"coluna criada fora das migrações: {tname}.{c} ({info['type']})")
 
+    for tname, cols in ADDED_LATER.items():
+        for c in cols:
+            tables[tname]["columns"].setdefault(c, {"type": "text", "notnull": False, "default": None, "generated": None})
+
     ddl = [
         "-- Esquema gerado automaticamente por cloudflare/tools/gen_d1_schema.py",
         "-- a partir das migrações do Supabase. Não edite à mão.",
@@ -266,7 +280,8 @@ def main():
             if kind.startswith("enum:"):
                 vals = ",".join("'" + v + "'" for v in enums[kind[5:]])
                 parts.append(f"CHECK ({q(cname)} IS NULL OR {q(cname)} IN ({vals}))")
-            cols_sql.append("  " + " ".join(parts))
+            if cname not in ADDED_LATER.get(tname, []):
+                cols_sql.append("  " + " ".join(parts))
             cm = {"t": kind.split(":")[0] if not kind.startswith("enum") else "text"}
             if c["notnull"]:
                 cm["nn"] = 1

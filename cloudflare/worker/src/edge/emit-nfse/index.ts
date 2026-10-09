@@ -45,6 +45,16 @@ interface NFSeInvoice {
   taker_city_code: string | null;
   taker_state: string | null;
   taker_cep: string | null;
+  event_start_date?: string | null;
+  event_end_date?: string | null;
+  event_code?: string | null;
+  event_description?: string | null;
+  event_street?: string | null;
+  event_number?: string | null;
+  event_district?: string | null;
+  event_city?: string | null;
+  event_state?: string | null;
+  event_city_code?: string | null;
   service_code: string;
   cnae_code: string | null;
   service_description: string;
@@ -261,8 +271,25 @@ function buildRpsXml(invoice: NFSeInvoice, config: NFSeConfig): string {
     `;
   }
 
+  // Serviços do item 12: os dados do evento vão no fim da discriminação
+  // (o layout ABRASF de Goiânia não tem bloco próprio de evento).
+  const br = (d?: string | null) => (d ? d.slice(0, 10).split('-').reverse().join('/') : '');
+  let eventText = '';
+  if (invoice.event_start_date) {
+    const period = invoice.event_end_date && invoice.event_end_date !== invoice.event_start_date
+      ? `${br(invoice.event_start_date)} A ${br(invoice.event_end_date)}`
+      : br(invoice.event_start_date);
+    const place = [
+      [invoice.event_street, invoice.event_number].filter(Boolean).join(', '),
+      invoice.event_district,
+      [invoice.event_city, invoice.event_state].filter(Boolean).join('-'),
+    ].filter(Boolean).join(', ');
+    eventText = `\nEVENTO: ${invoice.event_description || ''}${invoice.event_code ? ` (COD. ${invoice.event_code})` : ''}` +
+      ` - DATA: ${period}${place ? ` - LOCAL: ${place}` : ''}`;
+  }
+
   // Format discriminacao - replace line breaks with \s\n as per Goiânia spec
-  const discriminacao = escapeXml(invoice.service_description)
+  const discriminacao = escapeXml((invoice.service_description + eventText).normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
     .replace(/\n/g, '\\s\\n')
     .replace(/[^ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&$%()/+\-.,;:=* \\SN]/g, '');
 
@@ -288,7 +315,7 @@ function buildRpsXml(invoice: NFSeInvoice, config: NFSeConfig): string {
         </Valores>
         <CodigoTributacaoMunicipio>${invoice.service_code}</CodigoTributacaoMunicipio>
         <Discriminacao>${discriminacao}</Discriminacao>
-        <CodigoMunicipio>${config.municipality_code.padStart(7, '0')}</CodigoMunicipio>
+        <CodigoMunicipio>${(invoice.event_city_code || config.municipality_code).padStart(7, '0')}</CodigoMunicipio>
       </Servico>
       <Prestador>
         <CpfCnpj>

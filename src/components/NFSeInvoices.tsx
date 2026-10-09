@@ -91,6 +91,10 @@ import {
 } from "lucide-react";
 import { lookupTaker, lookupCep } from "@/lib/documentLookup";
 
+/** Serviços do item 12 (diversão, lazer, entretenimento) exigem os dados do evento. */
+const isEventService = (code: string) => /^12[.]?\d/.test((code || '').trim());
+const formatDateBR = (d?: string | null) => (d ? d.slice(0, 10).split('-').reverse().join('/') : '');
+
 import { PageActions } from "@/components/layout/PageHeader";
 interface NFSeInvoice {
   id: string;
@@ -115,6 +119,18 @@ interface NFSeInvoice {
   nfse_link: string | null;
   error_message: string | null;
   event_id: string | null;
+  event_start_date?: string | null;
+  event_end_date?: string | null;
+  event_code?: string | null;
+  event_description?: string | null;
+  event_cep?: string | null;
+  event_street?: string | null;
+  event_number?: string | null;
+  event_district?: string | null;
+  event_complement?: string | null;
+  event_state?: string | null;
+  event_city?: string | null;
+  event_city_code?: string | null;
   created_at: string;
 }
 
@@ -224,6 +240,18 @@ export const NFSeInvoices = () => {
     simple_national: PROVIDER_FISCAL_DEFAULTS.simple_national,
     event_id: '',
     competence_date: new Date(),
+    event_start_date: '',
+    event_end_date: '',
+    event_code: '',
+    event_description: '',
+    event_cep: '',
+    event_street: '',
+    event_number: '',
+    event_district: '',
+    event_complement: '',
+    event_state: '',
+    event_city: '',
+    event_city_code: '',
   });
 
   // Config form state
@@ -368,6 +396,37 @@ export const NFSeInvoices = () => {
     });
   }, [formData.taker_cep]);
 
+  // Endereço do evento pelo CEP (igual à lupa do NotaGoiânia)
+  const [eventCepLookup, setEventCepLookup] = useState<'idle' | 'loading' | 'notfound'>('idle');
+  const lastEventCepRef = React.useRef('');
+  useEffect(() => {
+    const digits = formData.event_cep.replace(/\D/g, '');
+    if (digits.length !== 8) {
+      lastEventCepRef.current = '';
+      setEventCepLookup('idle');
+      return;
+    }
+    if (lastEventCepRef.current === digits) return;
+    lastEventCepRef.current = digits;
+    setEventCepLookup('loading');
+    lookupCep(digits).then((c) => {
+      if (lastEventCepRef.current !== digits) return;
+      if (!c) {
+        setEventCepLookup('notfound');
+        return;
+      }
+      setFormData((prev) => ({
+        ...prev,
+        event_street: c.street || prev.event_street,
+        event_district: c.district || prev.event_district,
+        event_state: c.state || prev.event_state,
+        event_city: c.city || prev.event_city,
+        event_city_code: c.city_code || prev.event_city_code,
+      }));
+      setEventCepLookup('idle');
+    });
+  }, [formData.event_cep]);
+
   const calculateValues = useCallback(() => {
     const baseCalculation = formData.service_value - formData.deduction_value;
     const issValue = baseCalculation * (formData.iss_rate / 100);
@@ -383,6 +442,24 @@ export const NFSeInvoices = () => {
         variant: "destructive",
       });
       return;
+    }
+
+    if (isEventService(formData.service_code)) {
+      const missing = [
+        !formData.event_start_date && 'data do evento',
+        !formData.event_description.trim() && 'descrição do evento',
+        !formData.event_cep.replace(/\D/g, '') && 'CEP do evento',
+        !formData.event_street.trim() && 'endereço do evento',
+        !formData.event_city_code && 'cidade do evento',
+      ].filter(Boolean);
+      if (missing.length) {
+        toast({
+          title: "Dados do evento",
+          description: `Serviços do item 12 exigem os dados do evento. Falta: ${missing.join(', ')} (aba Serviço).`,
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
     if (!settings?.cnpj) {
@@ -435,6 +512,22 @@ export const NFSeInvoices = () => {
         simple_national: formData.simple_national,
         net_value: netValue,
         event_id: formData.event_id || null,
+        ...(isEventService(formData.service_code)
+          ? {
+              event_start_date: formData.event_start_date || null,
+              event_end_date: formData.event_end_date || formData.event_start_date || null,
+              event_code: formData.event_code.trim() || null,
+              event_description: formData.event_description.trim() || null,
+              event_cep: formData.event_cep || null,
+              event_street: formData.event_street.trim() || null,
+              event_number: formData.event_number.trim() || null,
+              event_district: formData.event_district.trim() || null,
+              event_complement: formData.event_complement.trim() || null,
+              event_state: formData.event_state || null,
+              event_city: formData.event_city || null,
+              event_city_code: formData.event_city_code || null,
+            }
+          : {}),
       };
 
       const { error: insertError } = await supabase
@@ -528,6 +621,18 @@ export const NFSeInvoices = () => {
       simple_national: config?.simple_national ?? PROVIDER_FISCAL_DEFAULTS.simple_national,
       event_id: '',
       competence_date: new Date(),
+      event_start_date: '',
+      event_end_date: '',
+      event_code: '',
+      event_description: '',
+      event_cep: '',
+      event_street: '',
+      event_number: '',
+      event_district: '',
+      event_complement: '',
+      event_state: '',
+      event_city: '',
+      event_city_code: '',
     });
   };
 
@@ -849,6 +954,10 @@ export const NFSeInvoices = () => {
         taker_phone: event.client_phone || prev.taker_phone,
         service_value: totalValue,
         service_description: serviceDescription,
+        event_start_date: event.event_date ? String(event.event_date).slice(0, 10) : prev.event_start_date,
+        event_end_date: event.event_date ? String(event.event_date).slice(0, 10) : prev.event_end_date,
+        event_description: event.name || prev.event_description,
+        event_street: prev.event_street || event.location || '',
       }));
 
       toast({
@@ -888,7 +997,18 @@ Competência: ${format(new Date(invoice.competence_date), 'MM/yyyy', { locale: p
 🔢 RPS:
 Número: ${invoice.rps_number}
 Série: ${invoice.rps_series || 'RPS'}
-`;
+${invoice.event_start_date ? `
+🎉 EVENTO:
+Data do evento: ${formatDateBR(invoice.event_start_date)} - ${formatDateBR(invoice.event_end_date || invoice.event_start_date)}
+Código do Evento: ${invoice.event_code || ''}
+Descrição do Evento: ${invoice.event_description || ''}
+CEP: ${invoice.event_cep || ''}
+Endereço: ${invoice.event_street || ''}
+Número: ${invoice.event_number || ''}
+Bairro: ${invoice.event_district || ''}
+Estado / Cidade: ${invoice.event_state || ''} / ${invoice.event_city || ''}
+Complemento: ${invoice.event_complement || ''}
+` : ''}`;
   };
 
   const handleOpenPortalManual = (invoice: NFSeInvoice) => {
@@ -912,7 +1032,7 @@ Série: ${invoice.rps_series || 'RPS'}
     }
 
     // Abre o portal em nova aba
-    window.open('https://www.notaeletronica.com.br/goiania/Default/Master2.aspx', '_blank');
+    window.open('https://sistema.notagoiania.com.br/notas/', '_blank');
     setIsManualEmitDialogOpen(false);
   };
 
@@ -1695,6 +1815,140 @@ Série: ${invoice.rps_series || 'RPS'}
                 />
                 <Label htmlFor="simple_national">Optante pelo Simples Nacional</Label>
               </div>
+
+              {isEventService(formData.service_code) && (
+                <Card className="border-primary/30">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <CalendarIcon className="h-4 w-4 text-primary" />
+                      Evento
+                    </CardTitle>
+                    <CardDescription>
+                      Obrigatório para serviços do item 12. O ISS é devido na cidade onde o evento acontece.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Data do evento *</Label>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            type="date"
+                            aria-label="Início do evento"
+                            value={formData.event_start_date}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                event_start_date: e.target.value,
+                                event_end_date:
+                                  !formData.event_end_date || formData.event_end_date < e.target.value
+                                    ? e.target.value
+                                    : formData.event_end_date,
+                              })
+                            }
+                          />
+                          <span className="text-muted-foreground">-</span>
+                          <Input
+                            type="date"
+                            aria-label="Fim do evento"
+                            min={formData.event_start_date || undefined}
+                            value={formData.event_end_date}
+                            onChange={(e) => setFormData({ ...formData, event_end_date: e.target.value })}
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Código do Evento</Label>
+                        <Input
+                          value={formData.event_code}
+                          onChange={(e) => setFormData({ ...formData, event_code: e.target.value })}
+                          placeholder="Só se a Prefeitura informou um código"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Descrição do Evento *</Label>
+                      <Input
+                        value={formData.event_description}
+                        onChange={(e) => setFormData({ ...formData, event_description: e.target.value })}
+                        placeholder="Ex.: aniversário, casamento, formatura"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label>CEP *</Label>
+                        <Input
+                          value={formData.event_cep}
+                          inputMode="numeric"
+                          placeholder="74000-000"
+                          onChange={(e) => {
+                            const d = e.target.value.replace(/\D/g, '').slice(0, 8);
+                            setFormData({ ...formData, event_cep: d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5)}` : d });
+                          }}
+                        />
+                        {eventCepLookup === 'loading' && (
+                          <p className="text-xs text-muted-foreground flex items-center gap-1">
+                            <Loader2 className="h-3 w-3 animate-spin" /> Buscando CEP...
+                          </p>
+                        )}
+                        {eventCepLookup === 'notfound' && <p className="text-xs text-muted-foreground">CEP não encontrado.</p>}
+                      </div>
+                      <div className="space-y-2 sm:col-span-2">
+                        <Label>Endereço *</Label>
+                        <Input
+                          value={formData.event_street}
+                          onChange={(e) => setFormData({ ...formData, event_street: e.target.value })}
+                          placeholder="Rua, avenida..."
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label>Número</Label>
+                        <Input
+                          value={formData.event_number}
+                          onChange={(e) => setFormData({ ...formData, event_number: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-2 sm:col-span-2">
+                        <Label>Bairro</Label>
+                        <Input
+                          value={formData.event_district}
+                          onChange={(e) => setFormData({ ...formData, event_district: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label>Estado</Label>
+                        <Input value={formData.event_state} readOnly placeholder="Pelo CEP" className="bg-muted" />
+                      </div>
+                      <div className="space-y-2 sm:col-span-2">
+                        <Label>Cidade *</Label>
+                        <Input
+                          value={formData.event_city ? `${formData.event_city} (IBGE ${formData.event_city_code})` : ''}
+                          readOnly
+                          placeholder="Preenchida pelo CEP"
+                          className="bg-muted"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Complemento</Label>
+                      <Input
+                        value={formData.event_complement}
+                        onChange={(e) => setFormData({ ...formData, event_complement: e.target.value })}
+                        placeholder="Salão, chácara, bloco..."
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
 
             <TabsContent value="valores" className="space-y-4">
