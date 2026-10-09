@@ -323,12 +323,19 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   // Aplica preferências de aparência sempre que mudarem
   useEffect(() => {
     applyAppearance(document.documentElement, appearance, systemPrefersDark);
+    // Sem cor personalizada, vale a cor principal do esquema escolhido
+    // (applyAppearance limpa a cor principal nesse caso).
+    if (!appearance.primary_hsl) {
+      const scheme = getActiveSchemes().find((s) => s.id === colorScheme);
+      if (scheme) applyColorScheme(scheme);
+    }
     try {
       window.localStorage.setItem('lt_appearance', JSON.stringify(appearance));
     } catch {
       /* storage indisponível */
     }
-  }, [appearance, systemPrefersDark]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appearance, systemPrefersDark, theme, colorScheme]);
 
   const saveAppearance = useCallback(
     async (prefs?: AppearancePrefs) => {
