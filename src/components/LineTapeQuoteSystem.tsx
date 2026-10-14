@@ -2293,11 +2293,25 @@ Formas de pagamento aceitas: PIX, Transferência Bancária ou Dinheiro.`;
     // Marca d'água central em todas as páginas
     if (logoDataUrl) {
       const currentPage = pdf.getCurrentPageInfo().pageNumber;
+      // Marca d'água grande: ocupa a página (15 mm de margem), sem distorcer o logo
+      let wmW = pageWidth - 30;
+      let wmH = wmW * 0.78;
+      try {
+        const props = pdf.getImageProperties(logoDataUrl);
+        if (props.width && props.height) wmH = wmW * (props.height / props.width);
+      } catch {
+        /* usa a proporção padrão */
+      }
+      const maxH = pageHeight - 60;
+      if (wmH > maxH) {
+        wmW = wmW * (maxH / wmH);
+        wmH = maxH;
+      }
       for (let page = 1; page <= pdf.getNumberOfPages(); page++) {
         pdf.setPage(page);
         pdf.saveGraphicsState();
-        pdf.setGState(pdf.GState({ opacity: 0.08 }));
-        pdf.addImage(logoDataUrl, logoFormat, pageWidth / 2 - 45, pageHeight / 2 - 35, 90, 70, undefined, 'MEDIUM');
+        pdf.setGState(pdf.GState({ opacity: 0.06 }));
+        pdf.addImage(logoDataUrl, logoFormat, (pageWidth - wmW) / 2, (pageHeight - wmH) / 2, wmW, wmH, undefined, 'MEDIUM');
         pdf.restoreGraphicsState();
       }
       pdf.setPage(currentPage);
