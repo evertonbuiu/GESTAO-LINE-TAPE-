@@ -45,6 +45,65 @@ function requireUser(ctx) {
   if (!ctx.uid && !ctx.service) throw new ApiError(403, 'Unauthorized', 'new row violates row-level security policy');
 }
 
+/** Primeiro arquivo de um corpo multipart/form-data (aceita campo sem nome). */
+export function extractMultipartFile(bytes, contentType) {
+  const m = /boundary=(?:"([^"]+)"|([^;]+))/i.exec(contentType);
+  if (!m) return null;
+  const enc = new TextEncoder();
+  const delim = enc.encode('--' + (m[1] || m[2]).trim());
+  // busca nativa pelo 1º byte (rápida; o plano gratuito tem 10 ms de CPU)
+  const indexOf = (needle, from) => {
+    let i = bytes.indexOf(needle[0], from);
+    while (i !== -1 && i <= bytes.length - needle.length) {
+      let j = 1;
+      while (j < needle.length && bytes[i + j] === needle[j]) j++;
+      if (j === needle.length) return i;
+      i = bytes.indexOf(needle[0], i + 1);
+    }
+    return -1;
+  };
+  const lastIndexOf = (needle) => {
+    let i = bytes.lastIndexOf(needle[0], bytes.length - needle.length);
+    while (i !== -1) {
+      let j = 1;
+      while (j < needle.length && bytes[i + j] === needle[j]) j++;
+      if (j === needle.length) return i;
+      i = i === 0 ? -1 : bytes.lastIndexOf(needle[0], i - 1);
+    }
+    return -1;
+  };
+  const sep = enc.encode('\r\n\r\n');
+  const dec = new TextDecoder();
+  let pos = indexOf(delim, 0);
+  let fallback = null;
+  while (pos !== -1) {
+    const start = pos + delim.length;
+    if (bytes[start] === 45 && bytes[start + 1] === 45) break; // "--" final
+    const headEnd = indexOf(sep, start);
+    if (headEnd === -1) break;
+    const headers = dec.decode(bytes.subarray(start, headEnd));
+    // o arquivo costuma ser a última parte: acha o separador final de trás para
+    // frente em vez de percorrer o arquivo inteiro
+    let next = -1;
+    if (/filename=|content-type:/i.test(headers)) {
+      const last = lastIndexOf(delim);
+      if (last > headEnd && bytes[last + delim.length] === 45) next = last;
+    }
+    if (next === -1) next = indexOf(delim, headEnd + 4);
+    if (next === -1) break;
+    let end = next;
+    if (bytes[end - 2] === 13 && bytes[end - 1] === 10) end -= 2; // CRLF antes do separador
+    const data = bytes.slice(headEnd + 4, end);
+    const type = (/content-type:\s*([^\r\n]+)/i.exec(headers) || [])[1]?.trim() || '';
+    const isFile = /filename=/i.test(headers) || (type && !/^text\/plain/i.test(type));
+    const part = { data: data.buffer, type };
+    if (isFile) return part;
+    if (!/name="cacheControl"/i.test(headers) && !fallback) fallback = part;
+    pos = next;
+  }
+  return fallback;
+}
+
 async function putObject(request, env, db, ctx, bucket, path, upsert) {
   requireUser(ctx);
   const k = key(bucket, path);
@@ -61,9 +120,11 @@ async function putObject(request, env, db, ctx, bucket, path, upsert) {
   let body;
   let contentType = request.headers.get('Content-Type') || 'application/octet-stream';
   if (contentType.startsWith('multipart/form-data')) {
-    const form = await request.formData();
-    const file = form.get('') || [...form.values()].find((v) => typeof v === 'object');
-    body = await file.arrayBuffer();
+    // O supabase-js envia o arquivo num campo SEM nome (formData.append('', file)),
+    // que o request.formData() do Workers recusa. Por isso a leitura é manual.
+    const file = extractMultipartFile(new Uint8Array(await request.arrayBuffer()), contentType);
+    if (!file) throw new ApiError(400, 'InvalidRequest', 'Arquivo não encontrado no envio');
+    body = file.data;
     contentType = file.type || 'application/octet-stream';
   } else {
     body = await request.arrayBuffer();
