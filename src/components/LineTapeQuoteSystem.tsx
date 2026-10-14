@@ -1869,14 +1869,6 @@ Formas de pagamento aceitas: PIX, Transferência Bancária ou Dinheiro.`;
     const addNewPage = () => {
       pdf.addPage();
       pageNumber++;
-      currentY = 20;
-      
-      // Adicionar número da página
-      pdf.setFont('helvetica', 'normal');
-      pdf.setFontSize(8);
-      pdf.setTextColor(100, 100, 100);
-      pdf.text(`Página ${pageNumber}`, pageWidth - 20, pageHeight - 10, { align: 'right' });
-      
       currentY = 30;
     };
 
@@ -2078,13 +2070,7 @@ Formas de pagamento aceitas: PIX, Transferência Bancária ou Dinheiro.`;
           3: { cellWidth: 35, halign: 'right' }, // Subtotal
         },
         showHead: 'everyPage',
-        didDrawPage: (data) => {
-          // Adicionar número da página em cada página
-          pdf.setFont('helvetica', 'normal');
-          pdf.setFontSize(8);
-          pdf.setTextColor(100, 100, 100);
-          pdf.text(`Página ${pdf.getCurrentPageInfo().pageNumber}`, pageWidth - 20, pageHeight - 10, { align: 'right' });
-        },
+        // números de página são escritos no fim, em todas as páginas
         didDrawCell: (data) => {
           // Desenhar conteúdo customizado na primeira coluna
           if (data.column.index === 0 && data.cell.section === 'body') {
@@ -2143,11 +2129,12 @@ Formas de pagamento aceitas: PIX, Transferência Bancária ou Dinheiro.`;
         margin: { left: 15, right: 15 }
       });
 
-      currentY = (pdf as any).lastAutoTable.finalY + 15;
+      currentY = (pdf as any).lastAutoTable.finalY + 10;
     }
 
-    // Verificar se há espaço para o resumo financeiro
-    checkPageBreak(80);
+    // O quadro do resumo tem 50 mm: só passa para outra página se não couber
+    // acima do rodapé (o rodapé fica a 25 mm do fim da folha).
+    checkPageBreak(55);
 
     // === RESUMO FINANCEIRO ===
     const summaryX = pageWidth - 80;
@@ -2316,11 +2303,17 @@ Formas de pagamento aceitas: PIX, Transferência Bancária ou Dinheiro.`;
       pdf.setPage(currentPage);
     }
 
-    // Adicionar numeração na primeira página também
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(8);
-    pdf.setTextColor(100, 100, 100);
-    pdf.text(`Página 1 de ${pdf.getNumberOfPages()}`, pageWidth - 20, pageHeight - 10, { align: 'right' });
+    // Numeração "Página X de N" em todas as páginas
+    const totalPages = pdf.getNumberOfPages();
+    const lastPage = pdf.getCurrentPageInfo().pageNumber;
+    for (let page = 1; page <= totalPages; page++) {
+      pdf.setPage(page);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(8);
+      pdf.setTextColor(100, 100, 100);
+      pdf.text(`Página ${page} de ${totalPages}`, pageWidth - 20, pageHeight - 10, { align: 'right' });
+    }
+    pdf.setPage(lastPage);
 
     // Salvar PDF
     pdf.save(`orcamento-${quote.quote_number}-${quote.client_name.replace(/\s+/g, '-')}.pdf`);
