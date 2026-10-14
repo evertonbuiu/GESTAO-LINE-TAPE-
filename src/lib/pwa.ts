@@ -68,5 +68,8 @@ export const registerServiceWorker = (): void => {
 
   window.addEventListener("load", () => {
     navigator.serviceWorker.register(SW_URL, { scope: "/" }).catch(() => undefined);
+    // cache antigo de arquivos guardava respostas opacas que quebravam as fotos
+    // do orçamento; foi trocado por "arquivos-v2"
+    if ("caches" in window) void caches.delete("supabase-anexos").catch(() => undefined);
   });
 };

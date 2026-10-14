@@ -152,8 +152,12 @@ export default defineConfig(({ mode }) => {
             method: 'GET',
             handler: 'CacheFirst',
             options: {
-              cacheName: 'supabase-anexos',
-              cacheableResponse: { statuses: [0, 200, 206] },
+              // Só respostas completas (200/206). Uma resposta "opaca" (status 0),
+              // gravada quando a imagem é aberta por <img>, era devolvida depois
+              // para o fetch() que monta o PDF/visualização do orçamento e
+              // quebrava a leitura — a foto do item não aparecia.
+              cacheName: 'arquivos-v2',
+              cacheableResponse: { statuses: [200, 206] },
               expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },
